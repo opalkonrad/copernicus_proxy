@@ -3,6 +3,7 @@ from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from downloader.apps import TEMPLATES_DIR
 import os
+import json
 
 
 def index(request):
@@ -14,4 +15,22 @@ class SeaLevelView(FormView):
     success_url = '/downloader/'
 
     def form_valid(self, form):
-        return super().form_valid(form)
+        result = {
+            "years": [],
+            "months": [],
+            "days": [],
+            "format": ""
+        }
+        tmp_format = ""
+
+        for row in form.cleaned_data:
+            for field in form.cleaned_data['%s' % row]:
+                if row == 'format':
+                    tmp_format += field
+                    continue
+
+                result['%s' % row].append(int(field))
+
+        result['format'] = tmp_format
+
+        return HttpResponse(json.dumps(result))
