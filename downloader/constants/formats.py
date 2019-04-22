@@ -3,4 +3,5 @@ class Format:
         self.name = name
         self.extension = extension
 
-formats = [Format('.zip file', '.zip'), Format('compressed .tar file', '.tar.gz')]
+
+list = [Format('.zip file', '.zip'), Format('compressed .tar file', '.tar.gz')]

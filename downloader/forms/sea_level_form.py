@@ -1,10 +1,9 @@
 from django import forms
+import downloader.forms.sea_level_choices as options
 
 
 class SeaLevelForm(forms.Form):
-    year_choice = (
-        ("1", "1"),
-        ("2", "2"),
-        ("3", "3"),
-        )
-    years = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=year_choice)
+    years = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=options.years, required=True)
+    months = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=options.months, required=True)
+    days = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=options.days, required=True)
+    format = forms.ChoiceField(widget=forms.Select, choices=options.formats, required=True)
