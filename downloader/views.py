@@ -5,6 +5,7 @@ from downloader.apps import TEMPLATES_DIR
 import os
 import json
 import cdsapi
+from downloader.constants import formats
 
 
 def index(request):
@@ -23,15 +24,17 @@ class SeaLevelView(FormView):
             "days": [],
             "format": ""
         }
-        tmp_format = ""
+        tmp_format_api = ""     # Api format e.g. "tgz"
+        tmp_format_ext = ""     # File extension e.g. ".tar.gz"
         tmp_years = ""
         tmp_months = ""
         tmp_days = ""
 
+        # Filling the dictionary with a completed form
         for key, values in form.cleaned_data.items():
             for value in values:
                 if key == 'format':
-                    tmp_format += value
+                    tmp_format_ext += value
                     continue
 
                 result[key].append(value)
@@ -41,30 +44,37 @@ class SeaLevelView(FormView):
                     tmp_years += ","
 
                 if key == 'months':
-                    tmp_months += "%d" % int(value)
+                    tmp_months += "{:02d}".format(int(value))
                     tmp_months += ","
 
                 if key == 'days':
-                    tmp_days += "%d" % int(value)
+                    tmp_days += "{:02d}".format(int(value))
                     tmp_days += ","
 
-        result['format'] = tmp_format
+        result['format'] = tmp_format_ext
 
+        # Find the right notation for the given format (needed for api -> format)
+        for f in formats.list:
+            if f.extension[0] == result['format']:
+                tmp_format_api = f.extension[1]
+
+        # Delete the comma at the end of string
         tmp_years = tmp_years[:-1]
         tmp_months = tmp_months[:-1]
         tmp_days = tmp_days[:-1]
 
+        # API REQUEST
         c = cdsapi.Client()
 
         c.retrieve(
             'satellite-sea-level-mediterranean',
             {
                 'variable': 'all',
-                'format': 'zip',
+                'format': tmp_format_api,
                 'year': tmp_years.split(','),
                 'month': tmp_months.split(','),
                 'day': tmp_days.split(',')
             },
-            'download.zip')
+            "download" + result['format'])
 
         return HttpResponse(json.dumps(result))

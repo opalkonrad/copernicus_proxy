@@ -1,7 +1,10 @@
 class Format:
     def __init__(self, name, extension):
         self.name = name
-        self.extension = extension
+        self.extension = tuple((extension[0], extension[1]))
 
 
-list = [Format('.zip file', '.zip'), Format('compressed .tar file', '.tar.gz')]
+list = [
+    Format('.zip file', ('.zip', 'zip')),
+    Format('compressed .tar file', ('.tar.gz', 'tgz'))
+]

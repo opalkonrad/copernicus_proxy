@@ -8,14 +8,14 @@ formats_list = []
 for i in range(years.MIN, years.MAX + 1):
     years_list.append((i, i))
 
-for i in range(0, 12):
-    months_list.append((i + 1, months.names[i]))
+for i in range(months.MIN, months.MAX + 1):
+    months_list.append((i, months.names[i - 1]))
 
 for i in range(days.MIN, days.MAX + 1):
     days_list.append((i, i))
 
 for f in formats.list:
-    formats_list.append((f.extension, f.name))
+    formats_list.append((f.extension[0], f.name))
 
 years = tuple(years_list)
 months = tuple(months_list)
