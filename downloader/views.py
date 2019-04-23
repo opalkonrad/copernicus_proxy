@@ -9,6 +9,7 @@ import json
 def index(request):
     return HttpResponse("Hello, world. You're at the downloader index.")
 
+
 class SeaLevelView(FormView):
     template_name = 'sea_level/sea_level.html'
     form_class = SeaLevelForm
@@ -23,13 +24,13 @@ class SeaLevelView(FormView):
         }
         tmp_format = ""
 
-        for row in form.cleaned_data:
-            for field in form.cleaned_data['%s' % row]:
-                if row == 'format':
-                    tmp_format += field
+        for key, values in form.cleaned_data.items():
+            for value in values:
+                if key == 'format':
+                    tmp_format += value
                     continue
 
-                result['%s' % row].append(int(field))
+                result[key].append(int(value))
 
         result['format'] = tmp_format
 
