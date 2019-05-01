@@ -1,5 +1,82 @@
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
+    <div class="selection__form">
+        <div class="field">
+            {{ form.years.as_hidden }}
+            <div class="field__name">
+                {{ form.years.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+
+            </ul>
+            <div class="field__footer">
+            <span class="field__errors">
+                {{ form.years.errors }}
+            </span>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+        <div class="field">
+            {{ form.months.as_hidden }}
+            <div class="field__name">
+                {{ form.months.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+
+            </ul>
+            <div class="field__footer">
+            <span class="field__errors">
+                {{ form.months.errors }}
+            </span>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+        <div class="field">
+            {{ form.days.as_hidden }}
+            <div class="field__name">
+                {{ form.days.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+
+            </ul>
+            <div class="field__footer">
+            <span class="field__errors">
+                {{ form.days.errors }}
+            </span>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <div class="field__name">
+            {{ form.format.label_tag }}
+        </div>
+        <ul class="selection__container--list">
+            {% for value, format in form.format.field.choices %}
+                <li class="selection__format">
+                    <label>
+                        <input name="format" type="radio" {% if value == '.zip' %} checked {% endif %}
+                               value="{{ value }}">
+                        <span class="selection__label">{{ format }}</span>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="field__errors">
+            {{ form.format.errors }}
+        </div>
+    </div>
+    <div class="submission">
+        <button type="button" class="field__button field__button--submit" value="Submit">Submit</button>
+        <button type="button" class="field__button field__button--submit">Save draft</button>
+    </div>
 </form>
