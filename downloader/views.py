@@ -6,6 +6,7 @@ import os
 import json
 import cdsapi
 from downloader.constants import formats
+import downloader.forms.sea_level_choices as options
 
 
 def index(request):
@@ -17,6 +18,13 @@ class SeaLevelView(FormView):
     form_class = SeaLevelForm
     success_url = '/downloader/'
 
+    def get_context_data(self, **kwargs):
+        context = super(SeaLevelView, self).get_context_data(**kwargs)
+        context['yearOptions'] = options.years
+        context['monthOptions'] = options.months
+        context['dayOptions'] = options.days
+        return context
+
     def form_valid(self, form):
         result = {
             "years": [],
@@ -24,8 +32,8 @@ class SeaLevelView(FormView):
             "days": [],
             "format": ""
         }
-        tmp_format_api = ""     # Api format e.g. "tgz"
-        tmp_format_ext = ""     # File extension e.g. ".tar.gz"
+        tmp_format_api = ""  # Api format e.g. "tgz"
+        tmp_format_ext = ""  # File extension e.g. ".tar.gz"
         tmp_years = ""
         tmp_months = ""
         tmp_days = ""

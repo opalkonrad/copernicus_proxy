@@ -20,7 +20,23 @@
                 {{ form.years.label_tag }}
             </div>
             <ul class="selection__container selection__container--list">
-
+                <div class="selection__row selection__row--first">
+                    {% for num in yearOptions|rest_range:5 %}
+                        <li class="selection__year--invisible"></li>
+                    {% endfor %}
+                    {% for value, year in yearOptions %}
+                        <li class="drop selection__year">
+                            {{ year }}
+                        </li>
+                        {% if year|modulo:5 == 0 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    {% for num in 2|times %}
+                        <li class="selection__year--invisible"></li>
+                    {% endfor %}
+                    </div>
             </ul>
             <div class="field__footer">
             <span class="field__errors">
@@ -38,7 +54,17 @@
                 {{ form.months.label_tag }}
             </div>
             <ul class="selection__container selection__container--list">
-
+                <div class="selection__row">
+                    {% for value, month in monthOptions %}
+                        <li class="drop selection__month">
+                            {{ month }}
+                        </li>
+                        {% if value|modulo:3 == 0 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
             </ul>
             <div class="field__footer">
             <span class="field__errors">
@@ -56,7 +82,20 @@
                 {{ form.days.label_tag }}
             </div>
             <ul class="selection__container selection__container--list">
-
+                <div class="selection__row">
+                    {% for value, day in dayOptions %}
+                        <li class="drop">
+                            {{ day }}
+                        </li>
+                        {% if day|modulo:7 == 0 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    {% for num in 4|times %}
+                        <li class="selection__day--invisible"></li>
+                    {% endfor %}
+                    </div>
             </ul>
             <div class="field__footer">
             <span class="field__errors">
