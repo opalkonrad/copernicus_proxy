@@ -28,10 +28,10 @@
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row selection__row--first">
-                    {% for num in yearOptions|rest_range:5 %}
+                    {% for num in options.years|rest_range:5 %}
                         <li class="selection__year--invisible"></li>
                     {% endfor %}
-                    {% for value, year in yearOptions %}
+                    {% for value, year in options.years %}
                         <li class="drop selection__year" data-value="{{ value }}">
                             {{ year }}
                         </li>
@@ -62,7 +62,7 @@
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
-                    {% for value, month in monthOptions %}
+                    {% for value, month in options.months %}
                         <li class="drop selection__month" data-value="{{ value }}">
                             {{ month }}
                         </li>
@@ -90,7 +90,7 @@
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
-                    {% for value, day in dayOptions %}
+                    {% for value, day in options.days %}
                         <li class="drop" data-value="{{ day }}">
                             {{ day }}
                         </li>
@@ -135,7 +135,7 @@
         </div>
     </div>
     <div class="submission">
-        <button type="button" class="field__button field__button--submit" value="Submit">Submit</button>
+        <button type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
         <button type="button" class="field__button field__button--submit">Save draft</button>
     </div>
 </form>
