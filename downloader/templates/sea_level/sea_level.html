@@ -21,7 +21,7 @@
 <form method="post">
     {% csrf_token %}
     <div class="selection__form">
-        <div class="field">
+        <div class="field field--years">
             {{ form.years.as_hidden }}
             <div class="field__name">
                 {{ form.years.label_tag }}
@@ -32,7 +32,7 @@
                         <li class="selection__year--invisible"></li>
                     {% endfor %}
                     {% for value, year in yearOptions %}
-                        <li class="drop selection__year">
+                        <li class="drop selection__year" data-value="{{ value }}">
                             {{ year }}
                         </li>
                         {% if year|modulo:5 == 0 %}
@@ -55,7 +55,7 @@
             </span>
             </div>
         </div>
-        <div class="field">
+        <div class="field field--months">
             {{ form.months.as_hidden }}
             <div class="field__name">
                 {{ form.months.label_tag }}
@@ -63,7 +63,7 @@
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
                     {% for value, month in monthOptions %}
-                        <li class="drop selection__month">
+                        <li class="drop selection__month" data-value="{{ value }}">
                             {{ month }}
                         </li>
                         {% if value|modulo:3 == 0 %}
@@ -83,7 +83,7 @@
             </span>
             </div>
         </div>
-        <div class="field">
+        <div class="field field--days">
             {{ form.days.as_hidden }}
             <div class="field__name">
                 {{ form.days.label_tag }}
@@ -91,7 +91,7 @@
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
                     {% for value, day in dayOptions %}
-                        <li class="drop">
+                        <li class="drop" data-value="{{ day }}">
                             {{ day }}
                         </li>
                         {% if day|modulo:7 == 0 %}

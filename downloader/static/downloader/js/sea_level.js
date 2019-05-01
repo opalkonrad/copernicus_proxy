@@ -1,4 +1,26 @@
 jQuery(function ($) {
+    const sliceType = {
+        "years": -4,
+        "months": -2,
+        "days": -2,
+    };
+
+    function updateType(type) {
+        let selectedList = [];
+        let selectedOptions = $('.field--' + type).find('.dropped');
+        for (let i = 0; i < selectedOptions.length; i++) {
+            let tmpValue = selectedOptions.get(i).getAttribute('data-value');
+            selectedList.push(("0" + tmpValue).slice(sliceType[type]));
+        }
+        $('.field--' + type).find('#id_' + type).val(JSON.stringify(selectedList));
+    }
+
+    function updateFormData() {
+        updateType('years');
+        updateType('months');
+        updateType('days');
+    }
+
     $(document)
         .drag("start", function (ev, dd) {
             return $('<div class="selection" />')
@@ -23,6 +45,7 @@ jQuery(function ($) {
         .drop(function (ev, dd) {
             $(this).toggleClass("dropped");
             $(this).closest('.field').find('.field__errors').html('');
+            updateFormData();
         })
         .drop("end", function () {
             $(this)
@@ -40,15 +63,20 @@ jQuery(function ($) {
                 .toggleClass("dropped")
                 .removeClass("mouseupListener");
             $(this).closest('.field').find('.field__errors').html('');
+            updateFormData();
         });
     $.drop({multi: true});
     $('.field__button--select')
         .on('click', function () {
             $(this).closest('.field').find('.drop').addClass('dropped');
             $(this).closest('.field').find('.field__errors').html('');
+            updateFormData();
         });
     $('.field__button--clear')
         .on('click', function () {
             $(this).closest('.field').find('.drop').removeClass('dropped');
+            updateFormData();
         });
+
+
 });
