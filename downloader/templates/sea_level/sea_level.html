@@ -50,9 +50,11 @@
                     </div>
             </ul>
             <div class="field__footer">
-            <span class="field__errors">
-                {{ form.years.errors }}
-            </span>
+                <div class="field__errors">
+                    {% if form.years.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
                 <span>
                 <button class="field__button field__button--select" type="button">Select all</button>
                 <button class="field__button field__button--clear" type="button">Clear all</button>
@@ -78,9 +80,11 @@
                     </div>
             </ul>
             <div class="field__footer">
-            <span class="field__errors">
-                {{ form.months.errors }}
-            </span>
+                <div class="field__errors">
+                    {% if form.months.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
                 <span>
                 <button class="field__button field__button--select" type="button">Select all</button>
                 <button class="field__button field__button--clear" type="button">Clear all</button>
@@ -109,9 +113,11 @@
                     </div>
             </ul>
             <div class="field__footer">
-            <span class="field__errors">
-                {{ form.days.errors }}
-            </span>
+                <div class="field__errors">
+                    {% if form.days.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
                 <span>
                 <button class="field__button field__button--select" type="button">Select all</button>
                 <button class="field__button field__button--clear" type="button">Clear all</button>

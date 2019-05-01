@@ -22,6 +22,7 @@
 
 .field__errors {
     color: #ff0000;
+    margin: 0.5em 0;
 }
 
 .field__name {
@@ -124,8 +125,10 @@
 
 .field__footer {
     display: flex;
+    flex-direction: column;
     align-self: flex-end;
-    justify-content: space-between;
+    justify-content: flex-end;
+    text-align: right;
     margin: 0.5em;
     padding: 1em;
     padding-bottom: 0;
