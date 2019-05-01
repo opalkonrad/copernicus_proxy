@@ -1,11 +1,15 @@
 from django.http import HttpResponse
 from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
+from django.views.generic import ListView
+from django.shortcuts import render
 from downloader.apps import TEMPLATES_DIR
 import os
 import json
 import cdsapi
 from downloader.constants import formats
+from downloader.models import Request
+from django.db import models
 
 
 def index(request):
@@ -77,4 +81,13 @@ class SeaLevelView(FormView):
             },
             "download" + result['format'])
 
+        to_db = Request(json_content = json.dumps(result))
+        to_db.save()
         return HttpResponse(json.dumps(result))
+
+class DatabaseBrowser(ListView):
+    template_name = 'sea_level/db_browser.html'
+    context_object_name = 'requests'
+
+    def get_queryset(self):
+        return Request.objects.all()

@@ -1,3 +1,7 @@
 from django.db import models
+from django.utils import timezone
+import jsonfield
 
-# Create your models here.
+class Request(models.Model):
+    request_date = models.DateTimeField(default=timezone.now)
+    json_content = jsonfield.JSONField()

@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>DB Records</title>
+</head>
+
+<body>
+
+    <table border="1" width="600">
+        <tr>
+            <td>Id</td>
+            <td>Date</td>
+            <td>Json</td>
+        </tr>
+
+
+        {% for request in requests %}
+        <tr>
+            <td>{{ request.id }}</td>
+            <td>{{ request.request_date }}</td>
+            <td>
+                {{ request.json_content }}</td>
+        </tr>
+        {% endfor %}
+
+
+</body>
+
+</html>
