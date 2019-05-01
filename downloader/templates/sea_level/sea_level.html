@@ -18,6 +18,10 @@
 </head>
 <body>
 
+<div class="link">
+    <a href="{% url 'db_browser' %}">Browse requests</a>
+</div>
+
 <form method="post">
     {% csrf_token %}
     <div class="selection__form">

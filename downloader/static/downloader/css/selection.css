@@ -142,3 +142,8 @@
     font-size: 14px;
     margin: 1px;
 }
+
+.link {
+    margin: 1em;
+    margin-bottom: 0;
+}

@@ -7,7 +7,11 @@
 
 <body>
 
-    <table border="1" width="600">
+    <div>
+        <a href="{% url 'sea_level' %}">Create another request</a>
+    </div>
+
+    <table border="1" width="600" style="margin-top: 1em">
         <tr>
             <td>Id</td>
             <td>Date</td>
@@ -23,7 +27,6 @@
                 {{ request.json_content }}</td>
         </tr>
         {% endfor %}
-
 
 </body>
 
