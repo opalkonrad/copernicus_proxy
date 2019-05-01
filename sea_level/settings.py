@@ -101,7 +101,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+<<<<<<< HEAD
 TIME_ZONE = 'Europe/Warsaw'
+=======
+TIME_ZONE = 'CET'
+>>>>>>> 1ed4c180f32c35b106a9129ce900aa7f82a0b864
 
 USE_I18N = True
 
