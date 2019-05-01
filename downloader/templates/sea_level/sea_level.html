@@ -1,5 +1,144 @@
+{% load static %}
+{% load downloader_extras %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'downloader/css/reset.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'downloader/css/normalize.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'downloader/css/selection.css' %}"/>
+    <script src="{% static 'downloader/js/jquery/jquery-1.12.4.min.js' %}"></script>
+    <script src="{% static 'downloader/js/jquery/jquery.event.drag-2.2.js' %}"></script>
+    <script src="{% static 'downloader/js/jquery/jquery.event.drag.live-2.2.js' %}"></script>
+    <script src="{% static 'downloader/js/jquery/jquery.event.drop-2.2.js' %}"></script>
+    <script src="{% static 'downloader/js/jquery/jquery.event.drop.live-2.2.js' %}"></script>
+    <script src="{% static 'downloader/js/jquery/excanvas.min.js' %}"></script>
+    <script src="{% static 'downloader/js/sea_level.js' %}"></script>
+</head>
+<body>
+
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
+    <div class="selection__form">
+        <div class="field field--years">
+            {{ form.years.as_hidden }}
+            <div class="field__name">
+                {{ form.years.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                <div class="selection__row selection__row--first">
+                    {% for num in options.years|rest_range:5 %}
+                        <li class="selection__year--invisible"></li>
+                    {% endfor %}
+                    {% for value, year in options.years %}
+                        <li class="drop selection__year" data-value="{{ value }}">
+                            {{ year }}
+                        </li>
+                        {% if year|modulo:5 == 0 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    {% for num in 2|times %}
+                        <li class="selection__year--invisible"></li>
+                    {% endfor %}
+                    </div>
+            </ul>
+            <div class="field__footer">
+            <span class="field__errors">
+                {{ form.years.errors }}
+            </span>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+        <div class="field field--months">
+            {{ form.months.as_hidden }}
+            <div class="field__name">
+                {{ form.months.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                <div class="selection__row">
+                    {% for value, month in options.months %}
+                        <li class="drop selection__month" data-value="{{ value }}">
+                            {{ month }}
+                        </li>
+                        {% if value|modulo:3 == 0 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+            </ul>
+            <div class="field__footer">
+            <span class="field__errors">
+                {{ form.months.errors }}
+            </span>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+        <div class="field field--days">
+            {{ form.days.as_hidden }}
+            <div class="field__name">
+                {{ form.days.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                <div class="selection__row">
+                    {% for value, day in options.days %}
+                        <li class="drop" data-value="{{ day }}">
+                            {{ day }}
+                        </li>
+                        {% if day|modulo:7 == 0 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    {% for num in 4|times %}
+                        <li class="selection__day--invisible"></li>
+                    {% endfor %}
+                    </div>
+            </ul>
+            <div class="field__footer">
+            <span class="field__errors">
+                {{ form.days.errors }}
+            </span>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <div class="field__name">
+            {{ form.format.label_tag }}
+        </div>
+        <ul class="selection__container--list">
+            {% for value, format in form.format.field.choices %}
+                <li class="selection__format">
+                    <label>
+                        <input name="format" type="radio" {% if value == '.zip' %} checked {% endif %}
+                               value="{{ value }}">
+                        <span class="selection__label">{{ format }}</span>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="field__errors">
+            {{ form.format.errors }}
+        </div>
+    </div>
+    <div class="submission">
+        <button type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
+        <button type="button" class="field__button field__button--submit">Save draft</button>
+    </div>
 </form>
+
+</body>
+</html>
