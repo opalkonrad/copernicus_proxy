@@ -1,0 +1,144 @@
+.selection__form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: lightgray;
+    flex-shrink: 1;
+    min-width: 350px;
+    max-width: 350px;
+    margin: 1em;
+    padding: 1em;
+    color: #635A53;
+    font-family: "Open Sans", "Helvetica";
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.field__errors {
+    color: #ff0000;
+}
+
+.field__name {
+    font-size: 20px;
+    margin: 0.5em;
+    margin-top: 0;
+}
+
+.selection__container--list {
+    list-style: none;
+}
+
+.selection__container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: left;
+    margin: 0.5em 0;
+}
+
+.selection__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.submission {
+    margin: 1em;
+}
+
+.selection {
+    position: absolute;
+    border: 1px solid #6C98FE;
+    background-color: #9EBBFE;
+}
+
+.size2 {
+    height: 118px;
+    line-height: 118px;
+}
+
+.size3 {
+    height: 178px;
+    line-height: 178px;
+}
+
+.drop {
+    flex: 0 0 2em;
+    margin: 2px;
+    border: 1px dashed #888;
+    background: #EEEEEE;
+    text-align: center;
+    padding: 0.5em;
+    color: #635A53;
+    font-family: "Open Sans", "Helvetica";
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.selection__year {
+    flex: 0 0 3em;
+}
+
+.selection__year--invisible {
+    flex: 0 0 3em;
+    margin: 3px;
+    padding: 0.5em;
+}
+
+.selection__day--invisible {
+    flex: 0 0 2em;
+    margin: 3px;
+    padding: 0.5em;
+}
+
+.selection__month {
+    flex: 0 0 6em;
+}
+
+.selection__format {
+    font-size: 14px;
+    font-weight: normal;
+    margin: 2px;
+    color: #554D47;
+    padding: 0.5em;
+}
+
+.selection__label {
+    margin-left: 3px;
+}
+
+.dropped {
+    background-color: #FFB033;
+}
+
+.active {
+    background-color: #B7CDFE;
+}
+
+.field__footer {
+    display: flex;
+    align-self: flex-end;
+    justify-content: space-between;
+    margin: 0.5em;
+    padding: 1em;
+    padding-bottom: 0;
+}
+
+.field__button {
+    font-family: "Open Sans", "Helvetica";
+    font-weight: bold;
+    color: #554D47;
+    font-size: 11px;
+}
+
+.field__button--submit {
+    font-size: 14px;
+    margin: 1px;
+}
