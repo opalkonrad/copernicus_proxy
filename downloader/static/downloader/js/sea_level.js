@@ -21,7 +21,7 @@ jQuery(function ($) {
         updateType('days');
     }
 
-    $(document)
+    $('.selection__form')
         .drag("start", function (ev, dd) {
             return $('<div class="selection" />')
                 .css('opacity', .65)
@@ -38,6 +38,7 @@ jQuery(function ($) {
         .drag("end", function (ev, dd) {
             $(dd.proxy).remove();
         });
+
     $('.drop')
         .drop("start", function () {
             $(this).addClass("active");
@@ -65,7 +66,9 @@ jQuery(function ($) {
             $(this).closest('.field').find('.field__errors').html('');
             updateFormData();
         });
+
     $.drop({multi: true});
+    
     $('.field__button--select')
         .on('click', function () {
             $(this).closest('.field').find('.drop').addClass('dropped');
@@ -77,6 +80,4 @@ jQuery(function ($) {
             $(this).closest('.field').find('.drop').removeClass('dropped');
             updateFormData();
         });
-
-
 });
