@@ -16,6 +16,7 @@
             <td>Id</td>
             <td>Date</td>
             <td>Json</td>
+            <td>Button</td>
         </tr>
 
 
@@ -25,6 +26,12 @@
             <td>{{ request.request_date }}</td>
             <td>
                 {{ request.json_content }}</td>
+                <td><form class='Product-Form' method='post'>
+                        {% csrf_token %}
+                        <input name="download" hidden>
+                        <input name="id" value="{{ request.id }}" hidden>
+                        <button type="submit" class="btn">Download {{ request.id }}</button>
+                    </form></td>
         </tr>
         {% endfor %}
 
