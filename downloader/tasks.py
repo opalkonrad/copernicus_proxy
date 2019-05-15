@@ -1,8 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 from downloader.constants import formats
 from celery import shared_task
-from downloader.models import Request
 from django.db import models
+from downloader.models import Request
 from django.http import HttpResponse
 from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
