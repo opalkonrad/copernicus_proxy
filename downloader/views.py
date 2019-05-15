@@ -12,6 +12,7 @@ from downloader.models import Request
 from django.db import models
 import downloader.forms.sea_level_choices as options
 from django.http import HttpResponseRedirect
+from .tasks import download_from_cdsapi
 
 
 def index(request):
@@ -57,11 +58,12 @@ class DatabaseBrowser(ListView):
             data = json.loads(req.json_content)
 
             result = {
-            "years": [],
-            "months": [],
-            "days": [],
-            "format": ""
+                "years": [],
+                "months": [],
+                "days": [],
+                "format": ""
             }
+
             tmp_format_api = ""     # Api format e.g. "tgz"
             tmp_format_ext = ""     # File extension e.g. ".tar.gz"
             tmp_years = ""
@@ -101,18 +103,5 @@ class DatabaseBrowser(ListView):
             tmp_months = tmp_months[:-1]
             tmp_days = tmp_days[:-1]
 
-            # API REQUEST
-            c = cdsapi.Client()
-
-            c.retrieve(
-                'satellite-sea-level-mediterranean',
-                {
-                    'variable': 'all',
-                    'format': tmp_format_api,
-                    'year': tmp_years.split(','),
-                    'month': tmp_months.split(','),
-                    'day': tmp_days.split(',')
-                },
-                "download" + result['format'])
-
-        return redirect('db_browser')
+            download_from_cdsapi.delay(result, tmp_format_api, tmp_years, tmp_months, tmp_days)
+            return HttpResponse("Works")
