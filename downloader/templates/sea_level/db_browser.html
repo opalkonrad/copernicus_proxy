@@ -17,6 +17,7 @@
             <td>Date</td>
             <td>Json</td>
             <td>Button</td>
+            <td>Status</td>
         </tr>
 
 
@@ -32,6 +33,7 @@
                         <input name="id" value="{{ request.id }}" hidden>
                         <button type="submit" class="btn">Download {{ request.id }}</button>
                     </form></td>
+            <td>{{ request.status }}</td>
         </tr>
         {% endfor %}
 

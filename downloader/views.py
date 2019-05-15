@@ -48,6 +48,10 @@ class DatabaseBrowser(ListView):
         req = Request.objects.get(id=pk)
 
         if "download" in request.POST:
-            download_from_cdsapi.delay(req.json_content)
+            download_from_cdsapi.delay(req.json_content, pk)
 
+            # update request's status in database
+            req.status = "being downloaded"
+            req.save()
+            
             return HttpResponse("Works")

@@ -1,12 +1,19 @@
 from __future__ import absolute_import, unicode_literals
 from downloader.constants import formats
 from celery import shared_task
+from downloader.models import Request
+from django.db import models
+from django.http import HttpResponse
+from downloader.forms.sea_level_form import SeaLevelForm
+from django.views.generic.edit import FormView
+from django.views.generic import ListView
+import downloader.forms.sea_level_choices as options
 import cdsapi
 import json
 
 
 @shared_task
-def download_from_cdsapi(form_content):
+def download_from_cdsapi(form_content, pk):
     data = json.loads(form_content)
 
     result = {
@@ -68,3 +75,8 @@ def download_from_cdsapi(form_content):
             'day': tmp_days.split(',')
         },
         "download" + result['format'])
+
+    # update request's status in database
+    to_update = Request.objects.get(id=pk)
+    to_update.status = 'downloaded'    
+    to_update.save()
