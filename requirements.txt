@@ -1,5 +1,6 @@
-cdsapi==0.1.4
-Django==2.1.7
-django-heroku==0.3.1
-gunicorn==19.9.0
-jsonfield==2.0.2
+cdsapi
+Django
+django-heroku
+gunicorn
+jsonfield
+celery
