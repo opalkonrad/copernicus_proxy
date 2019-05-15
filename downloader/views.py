@@ -2,17 +2,10 @@ from django.http import HttpResponse
 from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
-from django.shortcuts import render, redirect
-from downloader.apps import TEMPLATES_DIR
-import os
-import json
-import cdsapi
-from downloader.constants import formats
 from downloader.models import Request
-from django.db import models
 import downloader.forms.sea_level_choices as options
-from django.http import HttpResponseRedirect
 from .tasks import download_from_cdsapi
+import json
 
 
 def index(request):
@@ -55,53 +48,6 @@ class DatabaseBrowser(ListView):
         req = Request.objects.get(id=pk)
 
         if "download" in request.POST:
-            data = json.loads(req.json_content)
+            download_from_cdsapi.delay(req.json_content)
 
-            result = {
-                "years": [],
-                "months": [],
-                "days": [],
-                "format": ""
-            }
-
-            tmp_format_api = ""     # Api format e.g. "tgz"
-            tmp_format_ext = ""     # File extension e.g. ".tar.gz"
-            tmp_years = ""
-            tmp_months = ""
-            tmp_days = ""
-
-            # Filling the dictionary with a completed form
-            for key, values in data.items():
-                for value in values:
-                    if key == 'format':
-                        tmp_format_ext += value
-                        continue
-
-                    result[key].append(value)
-
-                    if key == 'years':
-                        tmp_years += "%d" % int(value)
-                        tmp_years += ","
-
-                    if key == 'months':
-                        tmp_months += "{:02d}".format(int(value))
-                        tmp_months += ","
-
-                    if key == 'days':
-                        tmp_days += "{:02d}".format(int(value))
-                        tmp_days += ","
-
-            result['format'] = tmp_format_ext
-
-            # Find the right notation for the given format (needed for api -> format)
-            for f in formats.list:
-                if f.extension[0] == result['format']:
-                    tmp_format_api = f.extension[1]
-
-            # Delete the comma at the end of string
-            tmp_years = tmp_years[:-1]
-            tmp_months = tmp_months[:-1]
-            tmp_days = tmp_days[:-1]
-
-            download_from_cdsapi.delay(result, tmp_format_api, tmp_years, tmp_months, tmp_days)
             return HttpResponse("Works")

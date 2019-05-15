@@ -1,13 +1,60 @@
-# Create your tasks here
 from __future__ import absolute_import, unicode_literals
+from downloader.constants import formats
 from celery import shared_task
 import cdsapi
 import json
-import os
 
 
 @shared_task
-def download_from_cdsapi(result, tmp_format_api, tmp_years, tmp_months, tmp_days):
+def download_from_cdsapi(form_content):
+    data = json.loads(form_content)
+
+    result = {
+        "years": [],
+        "months": [],
+        "days": [],
+        "format": ""
+    }
+
+    tmp_format_api = ""  # Api format e.g. "tgz"
+    tmp_format_ext = ""  # File extension e.g. ".tar.gz"
+    tmp_years = ""
+    tmp_months = ""
+    tmp_days = ""
+
+    # Filling the dictionary with a completed form
+    for key, values in data.items():
+        for value in values:
+            if key == 'format':
+                tmp_format_ext += value
+                continue
+
+            result[key].append(value)
+
+            if key == 'years':
+                tmp_years += "%d" % int(value)
+                tmp_years += ","
+
+            if key == 'months':
+                tmp_months += "{:02d}".format(int(value))
+                tmp_months += ","
+
+            if key == 'days':
+                tmp_days += "{:02d}".format(int(value))
+                tmp_days += ","
+
+    result['format'] = tmp_format_ext
+
+    # Find the right notation for the given format (needed for api -> format)
+    for f in formats.list:
+        if f.extension[0] == result['format']:
+            tmp_format_api = f.extension[1]
+
+    # Delete the comma at the end of string
+    tmp_years = tmp_years[:-1]
+    tmp_months = tmp_months[:-1]
+    tmp_days = tmp_days[:-1]
+
     # API REQUEST
     c = cdsapi.Client()
 
@@ -21,10 +68,3 @@ def download_from_cdsapi(result, tmp_format_api, tmp_years, tmp_months, tmp_days
             'day': tmp_days.split(',')
         },
         "download" + result['format'])
-
-    print("Pobralem") # temporary
-
-    # on tutaj pobral pliczek, zajmij sie obsluga bazy danych ;)
-
-
-
