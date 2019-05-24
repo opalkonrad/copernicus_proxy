@@ -53,5 +53,5 @@ class DatabaseBrowser(ListView):
             # update request's status in database
             req.status = "being downloaded"
             req.save()
-            
+
             return HttpResponse("Works")

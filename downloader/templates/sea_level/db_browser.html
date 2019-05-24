@@ -11,13 +11,14 @@
         <a href="{% url 'sea_level' %}">Create another request</a>
     </div>
 
-    <table border="1" width="600" style="margin-top: 1em">
+    <table border="1" width="950" style="margin-top: 1em">
         <tr>
             <td>Id</td>
             <td>Date</td>
             <td>Json</td>
             <td>Button</td>
             <td>Status</td>
+            <td>Message</td>
         </tr>
 
 
@@ -32,8 +33,10 @@
                         <input name="download" hidden>
                         <input name="id" value="{{ request.id }}" hidden>
                         <button type="submit" class="btn">Download {{ request.id }}</button>
-                    </form></td>
+                    </form>
+            </td>
             <td>{{ request.status }}</td>
+            <td>{{ request.msg }}</td>
         </tr>
         {% endfor %}
 

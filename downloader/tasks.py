@@ -1,13 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from downloader.constants import formats
 from celery import shared_task
-from django.db import models
 from downloader.models import Request
-from django.http import HttpResponse
-from downloader.forms.sea_level_form import SeaLevelForm
-from django.views.generic.edit import FormView
-from django.views.generic import ListView
-import downloader.forms.sea_level_choices as options
 import cdsapi
 import json
 
@@ -65,18 +59,28 @@ def download_from_cdsapi(form_content, pk):
     # API REQUEST
     c = cdsapi.Client()
 
-    c.retrieve(
-        'satellite-sea-level-mediterranean',
-        {
-            'variable': 'all',
-            'format': tmp_format_api,
-            'year': tmp_years.split(','),
-            'month': tmp_months.split(','),
-            'day': tmp_days.split(',')
-        },
-        "download" + result['format'])
+    try:
+        c.retrieve(
+            'satellite-sea-level-mediterranean',
+            {
+                'variable': 'all',
+                'format': tmp_format_api,
+                # 'year': tmp_years.split(','),
+                'year': '2020',
+                'month': tmp_months.split(','),
+                'day': tmp_days.split(',')
+            },
+            "download" + result['format'])
+    except Exception as e:
+        # update request's status in database to error
+        to_update = Request.objects.get(id=pk)
+        to_update.status = 'error'
+        to_update.msg = e
+        to_update.save()
+        return
 
-    # update request's status in database
+    # update request's status in database to downloaded
     to_update = Request.objects.get(id=pk)
-    to_update.status = 'downloaded'    
+    to_update.status = 'downloaded'
+    to_update.msg = 'success'
     to_update.save()

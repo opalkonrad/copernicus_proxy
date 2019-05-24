@@ -6,6 +6,7 @@ class Request(models.Model):
     request_date = models.DateTimeField(default=timezone.now)
     json_content = jsonfield.JSONField()
     status = models.TextField(default="pending")
+    msg = models.TextField()
 
     def set_downloaded(self):
         self.status = "downloaded"
