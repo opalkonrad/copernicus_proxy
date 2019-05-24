@@ -65,8 +65,7 @@ def download_from_cdsapi(form_content, pk):
             {
                 'variable': 'all',
                 'format': tmp_format_api,
-                # 'year': tmp_years.split(','),
-                'year': '2020',
+                'year': tmp_years.split(','),
                 'month': tmp_months.split(','),
                 'day': tmp_days.split(',')
             },
