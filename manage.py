@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 import os
 import sys
+import subprocess
+
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sea_level.settings')
+    os.system("celery -A sea_level control shutdown &")
+    os.system("celery -A sea_level worker --loglevel=INFO --concurrency=2 -n seaworker &")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

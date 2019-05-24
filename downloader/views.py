@@ -5,6 +5,7 @@ from django.views.generic import ListView
 from downloader.models import Request
 import downloader.forms.sea_level_choices as options
 from .tasks import download_from_cdsapi
+from django.shortcuts import redirect
 import json
 
 
@@ -54,4 +55,4 @@ class DatabaseBrowser(ListView):
             req.status = "being downloaded"
             req.save()
             
-            return HttpResponse("Works")
+            return redirect("/downloader/db_browser")
