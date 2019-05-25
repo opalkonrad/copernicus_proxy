@@ -134,3 +134,7 @@ django_heroku.settings(locals())
 CELERY_RESULT_BACKEND = 'django-db'
 
 CELERY_CACHE_BACKEND = 'django-cache'
+
+# Disabling slash appending
+
+APPEND_SLASH = False
