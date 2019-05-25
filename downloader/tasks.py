@@ -2,11 +2,12 @@ from __future__ import absolute_import, unicode_literals
 from downloader.constants import formats
 from celery import shared_task
 from django.db import models
-from downloader.models import Request
+from downloader.models import Task#, DownloadedFile
 from django.http import HttpResponse
 from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
+from django.utils import timezone
 import downloader.forms.sea_level_choices as options
 import cdsapi
 import json
@@ -15,6 +16,8 @@ import json
 @shared_task
 def download_from_cdsapi(form_content, pk):
     data = json.loads(form_content)
+    the_task = Task.objects.get(id=pk)
+    data_set = the_task.data_set
 
     result = {
         "years": [],
@@ -66,7 +69,7 @@ def download_from_cdsapi(form_content, pk):
     c = cdsapi.Client()
 
     c.retrieve(
-        'satellite-sea-level-mediterranean',
+        data_set,
         {
             'variable': 'all',
             'format': tmp_format_api,
@@ -76,7 +79,11 @@ def download_from_cdsapi(form_content, pk):
         },
         "download" + result['format'])
 
-    # update request's status in database
-    to_update = Request.objects.get(id=pk)
+    # update task's status in database
+    to_update = Task.objects.get(id=pk)
     to_update.status = 'downloaded'    
     to_update.save()
+
+    # file_downloaded = DownloadedFile(fk=int(pk))
+    # file_downloaded.set_path('satellite-sea-level-mediterranean')
+    # file_downloaded.save()

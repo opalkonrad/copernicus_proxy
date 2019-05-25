@@ -14,6 +14,7 @@
     <table border="1" width="600" style="margin-top: 1em">
         <tr>
             <td>Id</td>
+            <td>Task</td>
             <td>Date</td>
             <td>Json</td>
             <td>Button</td>
@@ -21,19 +22,20 @@
         </tr>
 
 
-        {% for request in requests %}
+        {% for task in tasks %}
         <tr>
-            <td>{{ request.id }}</td>
-            <td>{{ request.request_date }}</td>
+            <td>{{ task.id }}</td>
+            <td>{{ task.data_set }}</td>
+            <td>{{ task.task_date }}</td>
             <td>
-                {{ request.json_content }}</td>
+                {{ task.json_content }}</td>
                 <td><form class='Product-Form' method='post'>
                         {% csrf_token %}
                         <input name="download" hidden>
-                        <input name="id" value="{{ request.id }}" hidden>
-                        <button type="submit" class="btn">Download {{ request.id }}</button>
+                        <input name="id" value="{{ task.id }}" hidden>
+                        <button type="submit" class="btn">Download {{ task.id }}</button>
                     </form></td>
-            <td>{{ request.status }}</td>
+            <td>{{ task.status }}</td>
         </tr>
         {% endfor %}
 
