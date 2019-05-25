@@ -6,6 +6,7 @@ import cdsapi
 import json
 import datetime
 import os
+from .models import DataSets
 
 
 @shared_task

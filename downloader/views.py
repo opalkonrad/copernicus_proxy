@@ -6,6 +6,7 @@ from downloader.models import Request
 import downloader.forms.sea_level_choices as options
 from .tasks import download_from_cdsapi
 import json
+from .models import DataSets
 
 
 def index(request):
@@ -54,4 +55,4 @@ class DatabaseBrowser(ListView):
             req.status = "being downloaded"
             req.save()
 
-            return HttpResponse("Works")
+        return HttpResponse('Works')
