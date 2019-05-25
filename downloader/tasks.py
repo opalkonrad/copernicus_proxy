@@ -4,6 +4,8 @@ from celery import shared_task
 from downloader.models import Request
 import cdsapi
 import json
+import datetime
+import os
 
 
 @shared_task
@@ -56,12 +58,16 @@ def download_from_cdsapi(form_content, pk):
     tmp_months = tmp_months[:-1]
     tmp_days = tmp_days[:-1]
 
+    # Create file directory
+    data_set = 'satellite-sea-level-mediterranean'
+    os.makedirs("./files/" + data_set, exist_ok=True)
+
     # API REQUEST
     c = cdsapi.Client()
 
     try:
         c.retrieve(
-            'satellite-sea-level-mediterranean',
+            data_set,
             {
                 'variable': 'all',
                 'format': tmp_format_api,
@@ -69,7 +75,7 @@ def download_from_cdsapi(form_content, pk):
                 'month': tmp_months.split(','),
                 'day': tmp_days.split(',')
             },
-            "download" + result['format'])
+            "./files/" + data_set + "/file_id_" + pk + result['format'])
     except Exception as e:
         # update request's status in database to error
         to_update = Request.objects.get(id=pk)
