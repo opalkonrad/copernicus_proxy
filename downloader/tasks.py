@@ -2,19 +2,24 @@ from __future__ import absolute_import, unicode_literals
 from downloader.constants import formats
 from celery import shared_task
 from django.db import models
-from downloader.models import Request
 from django.http import HttpResponse
 from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
+from django.utils import timezone
+from downloader.models import DataSets, Task
 import downloader.forms.sea_level_choices as options
 import cdsapi
 import json
+import datetime
+import os
 
 
 @shared_task
 def download_from_cdsapi(form_content, pk):
     data = json.loads(form_content)
+    the_task = Task.objects.get(id=pk)
+    data_set = the_task.data_set
 
     result = {
         "years": [],
@@ -62,21 +67,34 @@ def download_from_cdsapi(form_content, pk):
     tmp_months = tmp_months[:-1]
     tmp_days = tmp_days[:-1]
 
+    # Create file directory
+    data_set = 'satellite-sea-level-mediterranean'
+    os.makedirs("./files/" + data_set, exist_ok=True)
+
     # API REQUEST
     c = cdsapi.Client()
 
-    c.retrieve(
-        'satellite-sea-level-mediterranean',
-        {
-            'variable': 'all',
-            'format': tmp_format_api,
-            'year': tmp_years.split(','),
-            'month': tmp_months.split(','),
-            'day': tmp_days.split(',')
-        },
-        "download" + result['format'])
+    try:
+        c.retrieve(
+            data_set,
+            {
+                'variable': 'all',
+                'format': tmp_format_api,
+                'year': tmp_years.split(','),
+                'month': tmp_months.split(','),
+                'day': tmp_days.split(',')
+            },
+            "./files/" + data_set + "/file_id_" + pk + result['format'])
+    except Exception as e:
+        # update request's status in database to error
+        to_update = Task.objects.get(id=pk)
+        to_update.status = 'error'
+        to_update.msg = e
+        to_update.save()
+        return
 
-    # update request's status in database
-    to_update = Request.objects.get(id=pk)
-    to_update.status = 'downloaded'    
+    # update request's status in database to downloaded
+    to_update = Task.objects.get(id=pk)
+    to_update.status = 'downloaded'
+    to_update.msg = 'success'
     to_update.save()
