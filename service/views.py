@@ -2,6 +2,8 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from sea_level.settings import BASE_DIR
+import os
 
 
 # Create your views here.
@@ -40,7 +42,26 @@ class File(View):
     """
 
     def get(self, request, url_id):
-        return HttpResponse(status=200)
+
+        file_location = os.path.join(BASE_DIR, 'files', '1.txt')
+
+        try:
+            with open(file_location, 'r') as f:
+                file_data = f.read()
+
+            # sending response
+            response = HttpResponse(file_data, content_type='text/plain ')
+            response['Content-Disposition'] = 'attachment; filename="1.txt"'
+            return response
+
+        except IOError:
+            return HttpResponse(status=404)
+        # handle file not exist case here
+        # search for file indicated by id, if none return 404
+        # try:
+        #    task = FileModel.objects.get(id=url_id)
+        # except:
+        #    return HttpResponse(status=404)
 
 
 class DataSet(CsrfFreeView):
