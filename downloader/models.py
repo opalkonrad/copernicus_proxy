@@ -17,7 +17,7 @@ class Task(models.Model):
 
 
 class DataSets(models.Model):
-    data_set = models.CharField(max_length=DATA_SET_MAX_LENGTH)
+    data_set = models.CharField(max_length=DATA_SET_MAX_LENGTH, unique=True)
     attributes = models.CharField(max_length=ATTRIBUTES_MAX_LENGTH)
 
 

@@ -13,62 +13,64 @@ import cdsapi
 import json
 import datetime
 import os
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 
 @shared_task
 def download_from_cdsapi(form_content, pk):
+    # get information about task
     data = json.loads(form_content)
-    the_task = Task.objects.get(id=pk)
-    data_set = the_task.data_set
+    curr_task = Task.objects.get(id=pk)
+    data_set = curr_task.data_set
 
-    result = {
-        "years": [],
-        "months": [],
-        "days": [],
-        "format": ""
-    }
+    # update task's status in database
+    curr_task.status = "being downloaded"
+    curr_task.msg = ""
+    curr_task.save()
 
-    tmp_format_api = ""  # Api format e.g. "tgz"
-    tmp_format_ext = ""  # File extension e.g. ".tar.gz"
-    tmp_years = ""
-    tmp_months = ""
-    tmp_days = ""
+    # check required attributes
+    try:
+        attr_check = DataSets.objects.get(data_set=data_set)
 
-    # Filling the dictionary with a completed form
-    for key, values in data.items():
-        for value in values:
-            if key == 'format':
-                tmp_format_ext += value
-                continue
+    except ObjectDoesNotExist:
+        curr_task.status = 'error'
+        curr_task.msg = 'no matching data set'
+        curr_task.save()
+        return
 
-            result[key].append(value)
+    result = json.loads(attr_check.attributes)
 
-            if key == 'years':
-                tmp_years += "%d" % int(value)
-                tmp_years += ","
+    db_cntr = 0
+    internal_cntr = 0
 
-            if key == 'months':
-                tmp_months += "{:02d}".format(int(value))
-                tmp_months += ","
+    try:
+        for attrs_db in result:
+            db_cntr += 1
 
-            if key == 'days':
-                tmp_days += "{:02d}".format(int(value))
-                tmp_days += ","
+            # look for attributes
+            for key in data:
+                if attrs_db == key:
+                    internal_cntr += 1
 
-    result['format'] = tmp_format_ext
+            # lack of attribute in form needed for Copernicus
+            if db_cntr != internal_cntr:
+                raise ValidationError('lack of argument in form - ' + attrs_db)
 
-    # Find the right notation for the given format (needed for api -> format)
+    except ValidationError as e:
+        # update request's status in database to error
+        curr_task.status = 'error'
+        curr_task.msg = e
+        curr_task.save()
+        return
+
+    save_format = data['format']
+
+    # find the right notation for the given format (needed for api -> format)
     for f in formats.list:
-        if f.extension[0] == result['format']:
-            tmp_format_api = f.extension[1]
+        if f.extension[0] == data['format']:
+            data['format'] = f.extension[1]
 
-    # Delete the comma at the end of string
-    tmp_years = tmp_years[:-1]
-    tmp_months = tmp_months[:-1]
-    tmp_days = tmp_days[:-1]
-
-    # Create file directory
-    data_set = 'satellite-sea-level-mediterranean'
+    # create file directory
     os.makedirs("./files/" + data_set, exist_ok=True)
 
     # API REQUEST
@@ -77,24 +79,18 @@ def download_from_cdsapi(form_content, pk):
     try:
         c.retrieve(
             data_set,
-            {
-                'variable': 'all',
-                'format': tmp_format_api,
-                'year': tmp_years.split(','),
-                'month': tmp_months.split(','),
-                'day': tmp_days.split(',')
-            },
-            "./files/" + data_set + "/file_id_" + pk + result['format'])
+            data,
+            "./files/" + data_set + "/file_id_" + pk + save_format
+        )
+
     except Exception as e:
         # update request's status in database to error
-        to_update = Task.objects.get(id=pk)
-        to_update.status = 'error'
-        to_update.msg = e
-        to_update.save()
+        curr_task.status = 'error'
+        curr_task.msg = e
+        curr_task.save()
         return
 
     # update request's status in database to downloaded
-    to_update = Task.objects.get(id=pk)
-    to_update.status = 'downloaded'
-    to_update.msg = 'success'
-    to_update.save()
+    curr_task.status = 'downloaded'
+    curr_task.msg = 'success'
+    curr_task.save()

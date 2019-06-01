@@ -28,9 +28,10 @@ class SeaLevelView(FormView):
     def form_valid(self, form):
         data = form.cleaned_data
         result = {
-            'years': json.loads(data.get('years')),
-            'months': json.loads(data.get('months')),
-            'days': json.loads(data.get('days')),
+            'variable': 'all',
+            'year': json.loads(data.get('years')),
+            'month': json.loads(data.get('months')),
+            'day': json.loads(data.get('days')),
             'format': data.get('format')
         }
         to_db = Task(json_content=json.dumps(result), data_set=self.data_set)
@@ -51,11 +52,10 @@ class DatabaseBrowser(ListView):
         task = Task.objects.get(id=pk)
 
         if "download" in request.POST:
+            # tmp0 = DataSets(data_set='satellite-sea-level-mediterranean', attributes='{"variable":[], "format":[], "day":[], "year":[], "month":[]}')
+            # tmp0.save()
+            # tmp1 = DataSets(data_set='reanalysis-era5-single-levels', attributes='{"product_type":[], "format":[], "variable":[], "day":[], "year":[], "month":[], "time":[]}')
+            # tmp1.save()
             download_from_cdsapi.delay(task.json_content, pk)
-
-
-            # update task's status in database
-            task.status = "being downloaded"
-            task.save()
             
-            return redirect("/downloader/db_browser")
+        return redirect("/downloader/db_browser")
