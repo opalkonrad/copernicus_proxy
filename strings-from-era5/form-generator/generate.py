@@ -59,7 +59,7 @@ for i in range(number_of_tests):
         hours.append(hour)
     hours = list(dict.fromkeys(hours)) # remove duplicates
 
-    dictionary = {"product": product, "filters": filters, "years": years, "months": months, "days": days, "hours": hours, "format": fileformat}
+    dictionary = {"product_type": product, "variable": filters, "year": years, "month": months, "day": days, "hours": hours, "format": fileformat}
     list_of_dicts.append(dictionary)
 
     with open('generated.json', 'w') as outfile:
