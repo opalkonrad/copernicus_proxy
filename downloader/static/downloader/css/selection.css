@@ -83,6 +83,10 @@
     font-size: 14px;
 }
 
+.selection__product-types {
+    flex: 0 0 18em;
+}
+
 .selection__year {
     flex: 0 0 3em;
 }
