@@ -1,5 +1,7 @@
 import json
 
+# it creates tuples with nice looking names
+
 name = 'wind'
 
 era5file = open('./strings/' + name + '.json')

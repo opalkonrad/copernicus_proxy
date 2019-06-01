@@ -1,3 +1,5 @@
+# changes ' to " so it can be interpreted like a normal json
+
 era5file = open('./strings/other.txt')
 string = era5file.read()
 
