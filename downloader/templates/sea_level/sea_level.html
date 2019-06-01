@@ -25,6 +25,34 @@
 <form method="post">
     {% csrf_token %}
     <div class="selection__form">
+
+        <div class="field field--product_types">
+            {{ form.product_types.as_hidden }}
+            <div class="field__name">
+                {{ form.product_types.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                {% for value, label in options.product_types %}
+                    <div class="selection__row selection__row--first">
+                        <li class="drop selection__product-types" data-value="{{ value }}">
+                            {{ label }}
+                        </li>
+                    </div>
+                {% endfor %}
+            </ul>
+            <div class="field__footer">
+                <div class="field__errors">
+                    {% if form.years.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+
         <div class="field field--years">
             {{ form.years.as_hidden }}
             <div class="field__name">
@@ -124,13 +152,43 @@
             </span>
             </div>
         </div>
+        <div class="field field--hours">
+            {{ form.hours.as_hidden }}
+            <div class="field__name">
+                {{ form.hours.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                <div class="selection__row">
+                    {% for iterator, hour in options.hours %}
+                        <li class="drop" data-value="{{ hour }}">
+                            {{ hour }}
+                        </li>
+                        {% if iterator|modulo:6 == 5 %}
+                            </div>
+                            <div class="selection__row">
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+            </ul>
+            <div class="field__footer">
+                <div class="field__errors">
+                    {% if form.hours.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
     </div>
     <div class="field">
         <div class="field__name">
             {{ form.format.label_tag }}
         </div>
         <ul class="selection__container--list">
-            {% for value, format in form.format.field.choices %}
+            {% for value, format in options.formats %}
                 <li class="selection__format">
                     <label>
                         <input name="format" type="radio" {% if value == '.zip' %} checked {% endif %}

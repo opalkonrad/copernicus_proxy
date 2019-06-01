@@ -7,6 +7,7 @@ import downloader.forms.sea_level_choices as options
 from .tasks import download_from_cdsapi
 from django.shortcuts import redirect
 import json
+from .models import DataSets
 
 
 def index(request):
@@ -51,6 +52,7 @@ class DatabaseBrowser(ListView):
 
         if "download" in request.POST:
             download_from_cdsapi.delay(task.json_content, pk)
+
 
             # update task's status in database
             task.status = "being downloaded"
