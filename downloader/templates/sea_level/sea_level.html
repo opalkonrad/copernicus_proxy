@@ -25,7 +25,6 @@
 <form method="post">
     {% csrf_token %}
     <div class="selection__form">
-
         <div class="field field--product_types">
             {{ form.product_types.as_hidden }}
             <div class="field__name">
@@ -42,7 +41,7 @@
             </ul>
             <div class="field__footer">
                 <div class="field__errors">
-                    {% if form.years.errors %}
+                    {% if form.product_types.errors %}
                         At least one option required.
                     {% endif %}
                 </div>
@@ -53,6 +52,34 @@
             </div>
         </div>
 
+        <div class="field field--popular-filters">
+            {{ form.popular_filters.as_hidden }}
+            <div class="field__name">
+                {{ form.popular_filters.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                {% for value, label in options.popular_filters %}
+                    <div class="selection__row selection__row--first">
+                        <li class="drop selection__popular-filters" data-value="{{ value }}">
+                            {{ label }}
+                        </li>
+                    </div>
+                {% endfor %}
+            </ul>
+            <div class="field__footer">
+                <div class="field__errors">
+                    {% if form.popular_filters.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+    </div>
+    <div class="selection__form">
         <div class="field field--years">
             {{ form.years.as_hidden }}
             <div class="field__name">
