@@ -1,0 +1,10 @@
+[
+            "clear_sky_direct_solar_radiation_at_surface","downward_uv_radiation_at_the_surface","forecast_logarithm_of_surface_roughness_for_heat",
+            "instantaneous_surface_sensible_heat_flux","near_ir_albedo_for_diffuse_radiation","near_ir_albedo_for_direct_radiation",
+            "surface_latent_heat_flux","surface_net_solar_radiation","surface_net_solar_radiation_clear_sky",
+            "surface_net_thermal_radiation","surface_net_thermal_radiation_clear_sky","surface_sensible_heat_flux",
+            "surface_solar_radiation_downward_clear_sky","surface_solar_radiation_downwards","surface_thermal_radiation_downward_clear_sky",
+            "surface_thermal_radiation_downwards","toa_incident_solar_radiation","top_net_solar_radiation",
+            "top_net_solar_radiation_clear_sky","top_net_thermal_radiation","top_net_thermal_radiation_clear_sky",
+            "total_sky_direct_solar_radiation_at_surface","uv_visible_albedo_for_diffuse_radiation","uv_visible_albedo_for_direct_radiation"
+        ]

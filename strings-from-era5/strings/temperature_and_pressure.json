@@ -1,0 +1,6 @@
+[
+            "2m_dewpoint_temperature","2m_temperature","ice_temperature_layer_1",
+            "ice_temperature_layer_2","ice_temperature_layer_3","ice_temperature_layer_4",
+            "maximum_2m_temperature_since_previous_post_processing","mean_sea_level_pressure","minimum_2m_temperature_since_previous_post_processing",
+            "sea_surface_temperature","skin_temperature","surface_pressure"
+        ]

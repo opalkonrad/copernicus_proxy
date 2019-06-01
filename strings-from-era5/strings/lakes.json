@@ -1,0 +1,5 @@
+[
+            "lake_bottom_temperature","lake_cover","lake_depth",
+            "lake_ice_depth","lake_ice_temperature","lake_mix_layer_depth",
+            "lake_mix_layer_temperature","lake_shape_factor","lake_total_layer_temperature"
+        ]

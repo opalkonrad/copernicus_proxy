@@ -1,0 +1,15 @@
+[
+            "mean_boundary_layer_dissipation","mean_convective_precipitation_rate","mean_convective_snowfall_rate",
+            "mean_eastward_gravity_wave_surface_stress","mean_eastward_turbulent_surface_stress","mean_evaporation_rate",
+            "mean_gravity_wave_dissipation","mean_large_scale_precipitation_fraction","mean_large_scale_precipitation_rate",
+            "mean_large_scale_snowfall_rate","mean_northward_gravity_wave_surface_stress","mean_northward_turbulent_surface_stress",
+            "mean_potential_evaporation_rate","mean_runoff_rate","mean_snow_evaporation_rate",
+            "mean_snowfall_rate","mean_snowmelt_rate","mean_sub_surface_runoff_rate",
+            "mean_surface_direct_short_wave_radiation_flux","mean_surface_direct_short_wave_radiation_flux_clear_sky","mean_surface_downward_long_wave_radiation_flux",
+            "mean_surface_downward_long_wave_radiation_flux_clear_sky","mean_surface_downward_short_wave_radiation_flux","mean_surface_downward_short_wave_radiation_flux_clear_sky",
+            "mean_surface_downward_uv_radiation_flux","mean_surface_latent_heat_flux","mean_surface_net_long_wave_radiation_flux",
+            "mean_surface_net_long_wave_radiation_flux_clear_sky","mean_surface_net_short_wave_radiation_flux","mean_surface_net_short_wave_radiation_flux_clear_sky",
+            "mean_surface_runoff_rate","mean_surface_sensible_heat_flux","mean_top_downward_short_wave_radiation_flux",
+            "mean_top_net_long_wave_radiation_flux","mean_top_net_long_wave_radiation_flux_clear_sky","mean_top_net_short_wave_radiation_flux",
+            "mean_top_net_short_wave_radiation_flux_clear_sky","mean_total_precipitation_rate","mean_vertically_integrated_moisture_divergence"
+        ]

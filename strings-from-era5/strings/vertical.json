@@ -1,0 +1,15 @@
+[
+            "vertical_integral_of_divergence_of_cloud_frozen_water_flux","vertical_integral_of_divergence_of_cloud_liquid_water_flux","vertical_integral_of_divergence_of_geopotential_flux",
+            "vertical_integral_of_divergence_of_kinetic_energy_flux","vertical_integral_of_divergence_of_mass_flux","vertical_integral_of_divergence_of_moisture_flux",
+            "vertical_integral_of_divergence_of_ozone_flux","vertical_integral_of_divergence_of_thermal_energy_flux","vertical_integral_of_divergence_of_total_energy_flux",
+            "vertical_integral_of_eastward_cloud_frozen_water_flux","vertical_integral_of_eastward_cloud_liquid_water_flux","vertical_integral_of_eastward_geopotential_flux",
+            "vertical_integral_of_eastward_heat_flux","vertical_integral_of_eastward_kinetic_energy_flux","vertical_integral_of_eastward_mass_flux",
+            "vertical_integral_of_eastward_ozone_flux","vertical_integral_of_eastward_total_energy_flux","vertical_integral_of_eastward_water_vapour_flux",
+            "vertical_integral_of_energy_conversion","vertical_integral_of_kinetic_energy","vertical_integral_of_mass_of_atmosphere",
+            "vertical_integral_of_mass_tendency","vertical_integral_of_northward_cloud_frozen_water_flux","vertical_integral_of_northward_cloud_liquid_water_flux",
+            "vertical_integral_of_northward_geopotential_flux","vertical_integral_of_northward_heat_flux","vertical_integral_of_northward_kinetic_energy_flux",
+            "vertical_integral_of_northward_mass_flux","vertical_integral_of_northward_ozone_flux","vertical_integral_of_northward_total_energy_flux",
+            "vertical_integral_of_northward_water_vapour_flux","vertical_integral_of_potential_and_internal_energy","vertical_integral_of_potential_internal_and_latent_energy",
+            "vertical_integral_of_temperature","vertical_integral_of_thermal_energy","vertical_integral_of_total_energy",
+            "vertically_integrated_moisture_divergence"
+        ]

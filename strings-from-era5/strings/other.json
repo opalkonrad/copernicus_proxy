@@ -1,0 +1,16 @@
+[
+            "altimeter_range_relative_correction","angle_of_sub_gridscale_orography","anisotropy_of_sub_gridscale_orography",
+            "benjamin_feir_index","boundary_layer_dissipation","boundary_layer_height",
+            "charnock","convective_available_potential_energy","convective_inhibition",
+            "duct_base_height","eastward_gravity_wave_surface_stress","eastward_turbulent_surface_stress",
+            "forecast_albedo","forecast_surface_roughness","friction_velocity",
+            "gravity_wave_dissipation","instantaneous_eastward_turbulent_surface_stress","instantaneous_moisture_flux",
+            "instantaneous_northward_turbulent_surface_stress","k_index","land_sea_mask",
+            "mean_vertical_gradient_of_refractivity_inside_trapping_layer","minimum_vertical_gradient_of_refractivity_inside_trapping_layer","model_bathymetry",
+            "northward_gravity_wave_surface_stress","northward_turbulent_surface_stress","orography",
+            "sea_ice_cover","skin_reservoir_content","slope_of_sub_gridscale_orography",
+            "standard_deviation_of_filtered_subgrid_orography","standard_deviation_of_orography","total_column_ozone",
+            "total_column_supercooled_liquid_water","total_column_water","total_column_water_vapour",
+            "total_totals_index","trapping_layer_base_height","trapping_layer_top_height",
+            "u_component_stokes_drift","v_component_stokes_drift","zero_degree_level"
+        ]

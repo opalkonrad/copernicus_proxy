@@ -1,0 +1,6 @@
+[
+            "convective_snowfall","convective_snowfall_rate_water_equivalent","large_scale_snowfall",
+            "large_scale_snowfall_rate_water_equivalent","snow_albedo","snow_density",
+            "snow_depth","snow_evaporation","snowfall",
+            "snowmelt","temperature_of_snow_layer","total_column_snow_water"
+        ]
