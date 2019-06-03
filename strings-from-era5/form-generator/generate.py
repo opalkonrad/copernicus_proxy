@@ -3,6 +3,7 @@
 import json
 import random
 from random import randint
+from django import forms
 import sys
 
 # define dataset
@@ -69,3 +70,18 @@ for i in range(number_of_tests):
 
     with open('generated.json', 'w') as outfile:
         json.dump(list_of_tuples, outfile)
+
+    # ==
+    # code below is based on sealevelfrom from views.py
+
+    # result = newtuple[1]
+
+    # # we don't want single-element lists
+    # for key in result:
+    #     if len(result[key]) == 1:
+    #         tmp = result[key][0]
+    #         del result[key]
+    #         result[key] = tmp
+
+    # to_db = Task(json_content=json.dumps(result), data_set=newtuple[0])
+    # to_db.save()
