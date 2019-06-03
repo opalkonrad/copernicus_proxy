@@ -18,7 +18,7 @@ class SeaLevelView(FormView):
     template_name = 'sea_level/sea_level.html'
     form_class = SeaLevelForm
     success_url = '/downloader/db_browser/'
-    data_set = "satellite-sea-level-mediterranean"
+    #data_set = 'reanalysis-era5-single-levels'
 
     def get_context_data(self, **kwargs):
         context = super(SeaLevelView, self).get_context_data(**kwargs)
@@ -27,14 +27,16 @@ class SeaLevelView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        result = {
-            'variable': 'all',
-            'year': json.loads(data.get('years')),
-            'month': json.loads(data.get('months')),
-            'day': json.loads(data.get('days')),
-            'format': data.get('format')
-        }
-        to_db = Task(json_content=json.dumps(result), data_set=self.data_set)
+
+        result = data[1]
+
+        for key in result:
+            if len(result[key]) == 1:
+                tmp = result[key][0]
+                del result[key]
+                result[key] = tmp
+
+        to_db = Task(json_content=json.dumps(result), data_set=data[0])
         to_db.save()
         return super().form_valid(form)
 
@@ -57,5 +59,9 @@ class DatabaseBrowser(ListView):
             # tmp1 = DataSets(data_set='reanalysis-era5-single-levels', attributes='{"product_type":[], "format":[], "variable":[], "day":[], "year":[], "month":[], "time":[]}')
             # tmp1.save()
             download_from_cdsapi.delay(task.json_content, pk)
+
+            # update task's status in database
+            task.status = "being downloaded"
+            task.save()
             
-        return redirect("/downloader/db_browser")
+            return redirect("/downloader/db_browser")

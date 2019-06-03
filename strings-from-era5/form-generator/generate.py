@@ -5,6 +5,9 @@ import random
 from random import randint
 import sys
 
+# define dataset
+data_set = 'reanalysis-era5-single-levels'
+
 # defines how many tests are generated, argument in terminal
 number_of_tests = int(sys.argv[1])
 
@@ -21,7 +24,7 @@ list_of_strings = json.loads(json_data)
 list_of_products = ['ensemble_mean','ensemble_members','ensemble_spread','reanalysis']
 list_of_formats = ['grib', 'netcdf']
 
-list_of_dicts = []
+list_of_tuples = []
 
 for i in range(number_of_tests):
     product = random.sample(set(list_of_products), 1)
@@ -60,7 +63,9 @@ for i in range(number_of_tests):
     hours = list(dict.fromkeys(hours)) # remove duplicates
 
     dictionary = {"product_type": product, "variable": filters, "year": years, "month": months, "day": days, "time": hours, "format": fileformat}
-    list_of_dicts.append(dictionary)
+    newtuple = (data_set, dictionary)
+
+    list_of_tuples.append(newtuple)
 
     with open('generated.json', 'w') as outfile:
-        json.dump(list_of_dicts, outfile)
+        json.dump(list_of_tuples, outfile)
