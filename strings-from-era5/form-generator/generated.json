@@ -1,0 +1,272 @@
+[
+  {
+    "product": [
+      "ensemble_mean"
+    ],
+    "filters": [
+      "mean_convective_precipitation_rate",
+      "eastward_gravity_wave_surface_stress",
+      "mean_period_of_total_swell"
+    ],
+    "years": [
+      "1983",
+      "2014"
+    ],
+    "months": [
+      "09",
+      "06"
+    ],
+    "days": [
+      "21"
+    ],
+    "hours": [
+      "06:00"
+    ],
+    "format": [
+      "grib"
+    ]
+  },
+  {
+    "product": [
+      "ensemble_members"
+    ],
+    "filters": [
+      "mean_surface_downward_long_wave_radiation_flux",
+      "vertical_integral_of_eastward_heat_flux",
+      "top_net_thermal_radiation"
+    ],
+    "years": [
+      "1979",
+      "2008"
+    ],
+    "months": [
+      "11",
+      "04"
+    ],
+    "days": [
+      "17"
+    ],
+    "hours": [
+      "06:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  },
+  {
+    "product": [
+      "ensemble_mean"
+    ],
+    "filters": [
+      "total_totals_index",
+      "soil_type",
+      "mean_surface_downward_short_wave_radiation_flux"
+    ],
+    "years": [
+      "2016",
+      "2010"
+    ],
+    "months": [
+      "06",
+      "01"
+    ],
+    "days": [
+      "21"
+    ],
+    "hours": [
+      "15:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  },
+  {
+    "product": [
+      "ensemble_mean"
+    ],
+    "filters": [
+      "mean_top_net_short_wave_radiation_flux_clear_sky",
+      "eastward_gravity_wave_surface_stress",
+      "10m_wind_gust_since_previous_post_processing"
+    ],
+    "years": [
+      "2001",
+      "1993"
+    ],
+    "months": [
+      "10",
+      "06"
+    ],
+    "days": [
+      "7"
+    ],
+    "hours": [
+      "06:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  },
+  {
+    "product": [
+      "reanalysis"
+    ],
+    "filters": [
+      "normalized_stress_into_ocean",
+      "convective_precipitation",
+      "mean_potential_evaporation_rate"
+    ],
+    "years": [
+      "1996",
+      "1983"
+    ],
+    "months": [
+      "03",
+      "05"
+    ],
+    "days": [
+      "6"
+    ],
+    "hours": [
+      "00:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  },
+  {
+    "product": [
+      "ensemble_mean"
+    ],
+    "filters": [
+      "runoff",
+      "model_bathymetry",
+      "volumetric_soil_water_layer_1"
+    ],
+    "years": [
+      "1992",
+      "1995"
+    ],
+    "months": [
+      "12",
+      "05"
+    ],
+    "days": [
+      "28"
+    ],
+    "hours": [
+      "18:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  },
+  {
+    "product": [
+      "reanalysis"
+    ],
+    "filters": [
+      "mean_surface_net_short_wave_radiation_flux",
+      "mean_wave_direction_of_third_swell_partition",
+      "mean_wave_period_of_first_swell_partition"
+    ],
+    "years": [
+      "1981",
+      "2009"
+    ],
+    "months": [
+      "01",
+      "12"
+    ],
+    "days": [
+      "1"
+    ],
+    "hours": [
+      "06:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  },
+  {
+    "product": [
+      "reanalysis"
+    ],
+    "filters": [
+      "surface_net_solar_radiation",
+      "vertical_integral_of_eastward_cloud_frozen_water_flux",
+      "forecast_albedo"
+    ],
+    "years": [
+      "1993",
+      "1999"
+    ],
+    "months": [
+      "08",
+      "10"
+    ],
+    "days": [
+      "26"
+    ],
+    "hours": [
+      "21:00"
+    ],
+    "format": [
+      "grib"
+    ]
+  },
+  {
+    "product": [
+      "ensemble_mean"
+    ],
+    "filters": [
+      "lake_bottom_temperature",
+      "slope_of_sub_gridscale_orography",
+      "volumetric_soil_water_layer_4"
+    ],
+    "years": [
+      "2009",
+      "2012"
+    ],
+    "months": [
+      "04",
+      "06"
+    ],
+    "days": [
+      "28"
+    ],
+    "hours": [
+      "00:00"
+    ],
+    "format": [
+      "grib"
+    ]
+  },
+  {
+    "product": [
+      "reanalysis"
+    ],
+    "filters": [
+      "mean_boundary_layer_dissipation",
+      "mean_surface_direct_short_wave_radiation_flux_clear_sky",
+      "mean_convective_precipitation_rate"
+    ],
+    "years": [
+      "1999",
+      "1993"
+    ],
+    "months": [
+      "02",
+      "05"
+    ],
+    "days": [
+      "22"
+    ],
+    "hours": [
+      "15:00"
+    ],
+    "format": [
+      "netcdf"
+    ]
+  }
+]

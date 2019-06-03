@@ -80,4 +80,17 @@ jQuery(function ($) {
             $(this).closest('.field').find('.drop').removeClass('dropped');
             updateFormData();
         });
+    $('.field--filter')
+        .on('click', '.field__button--show', function () {
+            $(this).addClass('field__button--hide');
+            $(this).removeClass('field__button--show');
+            $(this).html('Hide');
+            $(this).parent().siblings('.selection__container--filters').show();
+        })
+        .on('click', '.field__button--hide', function () {
+            $(this).addClass('field__button--show');
+            $(this).removeClass('field__button--hide');
+            $(this).html('Show');
+            $(this).parent().siblings('.selection__container--filters').hide();
+        });
 });
