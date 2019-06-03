@@ -1,5 +1,5 @@
 from downloader.constants import formats, hours, days, months, years, product_types
-from downloader.constants.reanalysis_era5_single_levels import popular
+from downloader.constants.reanalysis_era5_single_levels import popular, temperature_and_pressure
 
 years_list = []
 months_list = []
@@ -24,6 +24,7 @@ for f in formats.list:
 
 product_types = tuple(product_types.product_types_list)
 popular_filters = tuple(popular.filters)
+temperature_and_pressure_filters = tuple(temperature_and_pressure.filters)
 years = tuple(years_list)
 months = tuple(months_list)
 days = tuple(days_list)

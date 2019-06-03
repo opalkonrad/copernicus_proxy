@@ -51,7 +51,8 @@
             </span>
             </div>
         </div>
-
+    </div>
+    <div class="selection__form">
         <div class="field field--popular-filters">
             {{ form.popular_filters.as_hidden }}
             <div class="field__name">
@@ -78,6 +79,34 @@
             </span>
             </div>
         </div>
+
+        <div class="field field--temperature_and_pressure-filters">
+            {{ form.temperature_and_pressure_filters.as_hidden }}
+            <div class="field__name">
+                {{ form.temperature_and_pressure_filters.label_tag }}
+            </div>
+            <ul class="selection__container selection__container--list">
+                {% for value, label in options.temperature_and_pressure_filters %}
+                    <div class="selection__row selection__row--first">
+                        <li class="drop selection__popular-filters" data-value="{{ value }}">
+                            {{ label }}
+                        </li>
+                    </div>
+                {% endfor %}
+            </ul>
+            <div class="field__footer">
+                <div class="field__errors">
+                    {% if form.temperature_and_pressure_filters.errors %}
+                        At least one option required.
+                    {% endif %}
+                </div>
+                <span>
+                <button class="field__button field__button--select" type="button">Select all</button>
+                <button class="field__button field__button--clear" type="button">Clear all</button>
+            </span>
+            </div>
+        </div>
+
     </div>
     <div class="selection__form">
         <div class="field field--years">
