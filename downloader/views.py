@@ -27,9 +27,11 @@ class SeaLevelView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
+        # data should be a tuple consisting of a string that defines a dataset, and a dictonary that contains all required parameters
 
         result = data[1]
 
+        # we don't want single-element lists
         for key in result:
             if len(result[key]) == 1:
                 tmp = result[key][0]
