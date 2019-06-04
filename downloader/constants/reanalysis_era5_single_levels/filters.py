@@ -1,6 +1,11 @@
 from . import partials
+from . import all_filters
 
 filter_categories = [
+    {
+        'name': 'All',
+        'filters': all_filters.filters
+    },
     {
         'name': 'Popular',
         'filters': partials.popular.filters

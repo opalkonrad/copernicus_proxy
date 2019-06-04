@@ -53,38 +53,66 @@
         </div>
     </div>
     <div class="selection__form selection__form--filters">
-        {{ form.filters.as_hidden }}
-        {% for category in options.categories %}
-            <div class="selection__form">
-                <div class="field field--filter field--filters">
-                    <div class="field__title-bar">
-                        <div class="field__name">
-                            {{ category.name }}
-                        </div>
-                        <button class="field__button field__button--show" type="button">Show</button>
-                    </div>
-                    <div class="selection__container selection__container--filters" style="display: none;">
-                        <ul class="selection__container selection__container--list selection__container--filters">
-                            {% for value, label in category.filters %}
-                                <div class="selection__row selection__row--first">
-                                    <li class="drop selection__filters" data-value="{{ value }}">
-                                        {{ label }}
-                                    </li>
+        <div class="field field--filters">
+            {{ form.filters.as_hidden }}
+            <div class="field__title-bar">
+                <div class="field__name">
+                    Filters
+                </div>
+            </div>
+            <div>Category</div>
+            <select class="filter__select">
+                <option>--</option>
+                {% for category in options.categories %}
+                    <option>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <div class="filters__container" style="display: none;">
+                <div class="filters__section">
+                    <div>Options</div>
+                    <!-- <button class="field__button field__button--filters field__button--show" type="button"
+                            data-filters="options">Show
+                    </button> -->
+                    <div class="selection__container selection__container--filters filters__options">
+                        {% for category in options.categories %}
+                            <div class="selection__form filters--{{ category.name }}"
+                                 data-category="{{ category.name }}" style="display: none;">
+                                <div class="selection__container selection__container--filters">
+                                    <ul class="selection__container selection__container--list selection__container--filters">
+                                        {% for value, label in category.filters %}
+                                            <div class="selection__row selection__row--first">
+                                                <li class="drop selection__filters enabledOption"
+                                                    data-value="{{ value }}"
+                                                    data-category="{{ category.name }}">
+                                                    {{ label }}
+                                                </li>
+                                            </div>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
-                            {% endfor %}
-                        </ul>
-                        <div class="field__footer">
-                            <div class="field__errors">
                             </div>
-                            <span>
-                    <button class="field__button field__button--select" type="button">Select all</button>
-                    <button class="field__button field__button--clear" type="button">Clear all</button>
-                </span>
-                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="filters__section">
+                    <div>Selected</div>
+                    <!-- <button class="field__button field__button--filters field__button--show" type="button"
+                            data-filters="selected">Show
+                    </button> -->
+                    <div class="selection__container selection__container--filters filters__selected">
+                        {% for category in options.categories %}
+                            <div class="selection__form filters--{{ category.name }}"
+                                 data-category="{{ category.name }}" style="display: none;">
+                                <div class="selection__container selection__container--filters">
+                                    <ul class="selection__container selection__container--list selection__container--filters">
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-        {% endfor %}
+        </div>
     </div>
 
     <div class="selection__form">
