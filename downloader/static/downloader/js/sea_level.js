@@ -17,18 +17,25 @@ jQuery(function ($) {
             $('#id_' + type).val(JSON.stringify(selectedList));
         } else if (type === "filters") {
             let category = $('.filter__select').val();
-            let selectedOptions = $('.filters--' + category).find('.dropped:not(.active)');
+            let selectedOptions = $('.filters__options .filters--' + category).find('.dropped:not(.active)');
             selectedOptions.each(function () {
                 let currentValue = $(this).attr('data-value');
-                let selectedOptions = $('.filters--' + category).find('.dropped:not(.active)');
-                $('filters__container').find('');
-                $(this).parent().detach().appendTo('.filters__selected .filters--' + category + ' .selection__container--list');
-
-                let unselectedOptions = $('.filters--' + category).find('.drop:not(.dropped):not(.active)');
+                let sameSelectedOptions = $('.filters__container .filters__options').find('li[data-value="' + currentValue + '"]');
+                sameSelectedOptions.each(function () {
+                    let localCategory = $(this).attr('data-category');
+                    $(this).addClass('dropped');
+                    $(this).parent().detach().appendTo('.filters__selected .filters--' + localCategory + ' .selection__container--list');
+                });
             });
-            let unselectedOptions = $('.filters--' + category).find('.drop:not(.dropped):not(.active)');
+            let unselectedOptions = $('.filters__selected .filters--' + category).find('.drop:not(.dropped):not(.active)');
             unselectedOptions.each(function () {
-                $(this).parent().detach().appendTo('.filters__options .filters--' + category + ' .selection__container--list');
+                let currentValue = $(this).attr('data-value');
+                let sameUnselectedOptions = $('.filters__container .filters__selected').find('li[data-value="' + currentValue + '"]');
+                sameUnselectedOptions.each(function () {
+                    let localCategory = $(this).attr('data-category');
+                    $(this).removeClass('dropped');
+                    $(this).parent().detach().appendTo('.filters__options .filters--' + localCategory + ' .selection__container--list');
+                });
             });
         }
     }
@@ -57,7 +64,7 @@ jQuery(function ($) {
             $(dd.proxy).remove();
         });
 
-    $('.drop:not(.selection__filters)')
+    $('.drop')
         .drop("start", function () {
             $(this).addClass("active");
         })
@@ -69,7 +76,10 @@ jQuery(function ($) {
             $(this)
                 .removeClass("active")
                 .removeClass("mouseupListener");
-            updateFormData();
+            if ($(this).hasClass('selection__filters'))
+                updateType('filters');
+            else
+                updateFormData();
         })
         .on('mousedown', function (event) {
             if (event.which !== 1) return false;
@@ -82,35 +92,10 @@ jQuery(function ($) {
                 .toggleClass("dropped")
                 .removeClass("mouseupListener");
             $(this).closest('.field').find('.field__errors').html('');
-            updateFormData();
-        });
-
-    $('.drop.selection__filters')
-        .drop("start", function () {
-            $(this).addClass("active");
-        })
-        .drop(function (ev, dd) {
-            $(this).toggleClass("dropped");
-            $(this).closest('.field').find('.field__errors').html('');
-        })
-        .drop("end", function () {
-            $(this)
-                .removeClass("active")
-                .removeClass("mouseupListener");
-            updateType('filters');
-        })
-        .on('mousedown', function (event) {
-            if (event.which !== 1) return false;
-            $(this).addClass("active");
-            $(this).addClass("mouseupListener");
-        })
-        .on('mouseup', function () {
-            $(this).removeClass('active');
-            $('.mouseupListener')
-                .toggleClass("dropped")
-                .removeClass("mouseupListener");
-            $(this).closest('.field').find('.field__errors').html('');
-            updateType('filters');
+            if ($(this).hasClass('selection__filters'))
+                updateType('filters');
+            else
+                updateFormData();
         });
 
     $.drop({multi: true});

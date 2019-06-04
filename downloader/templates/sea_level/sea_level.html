@@ -64,7 +64,7 @@
             <select class="filter__select">
                 <option>--</option>
                 {% for category in options.categories %}
-                    <option>{{ category.name }}</option>
+                    <option value="{{ category.codename }}">{{ category.name }}</option>
                 {% endfor %}
             </select>
             <div class="filters__container" style="display: none;">
@@ -75,15 +75,15 @@
                     </button> -->
                     <div class="selection__container selection__container--filters filters__options">
                         {% for category in options.categories %}
-                            <div class="selection__form filters--{{ category.name }}"
-                                 data-category="{{ category.name }}" style="display: none;">
+                            <div class="selection__form filters--{{ category.codename }}"
+                                 data-category="{{ category.codename }}" style="display: none;">
                                 <div class="selection__container selection__container--filters">
                                     <ul class="selection__container selection__container--list selection__container--filters">
                                         {% for value, label in category.filters %}
                                             <div class="selection__row selection__row--first">
                                                 <li class="drop selection__filters enabledOption"
                                                     data-value="{{ value }}"
-                                                    data-category="{{ category.name }}">
+                                                    data-category="{{ category.codename }}">
                                                     {{ label }}
                                                 </li>
                                             </div>
@@ -101,8 +101,8 @@
                     </button> -->
                     <div class="selection__container selection__container--filters filters__selected">
                         {% for category in options.categories %}
-                            <div class="selection__form filters--{{ category.name }}"
-                                 data-category="{{ category.name }}" style="display: none;">
+                            <div class="selection__form filters--{{ category.codename }}"
+                                 data-category="{{ category.codename }}" style="display: none;">
                                 <div class="selection__container selection__container--filters">
                                     <ul class="selection__container selection__container--list selection__container--filters">
                                     </ul>
