@@ -6,5 +6,7 @@ class Format:
 
 list = [
     Format('.zip file', ('.zip', 'zip')),
-    Format('compressed .tar file', ('.tar.gz', 'tgz'))
+    Format('compressed .tar file', ('.tar.gz', 'tgz')),
+    Format('GRIB', ('.grib', 'grib')),
+    Format('NetCDF (experimental)', ('.nc', 'netcdf'))
 ]

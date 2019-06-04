@@ -29,7 +29,7 @@ list_of_tuples = []
 
 for i in range(number_of_tests):
     product = random.sample(set(list_of_products), 1)
-    filters = random.sample(set(list_of_strings), 3)
+    filters = random.sample(set(list_of_strings), 1)
     fileformat = random.sample(set(list_of_formats), 1)
 
     years = []

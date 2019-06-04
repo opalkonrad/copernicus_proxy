@@ -7,7 +7,7 @@ import downloader.forms.sea_level_choices as options
 from .tasks import download_from_cdsapi
 from django.shortcuts import redirect
 import json
-from .models import DataSets
+from .query_validation import query_validation
 
 
 def index(request):
@@ -26,21 +26,10 @@ class SeaLevelView(FormView):
         return context
 
     def form_valid(self, form):
-        data = form.cleaned_data
-        # data should be a tuple consisting of a string that defines a dataset, and a dictonary that contains all required parameters
-
-        result = data[1]
-
-        # we don't want single-element lists
-        for key in result:
-            if len(result[key]) == 1:
-                tmp = result[key][0]
-                del result[key]
-                result[key] = tmp
-
-        to_db = Task(json_content=json.dumps(result), data_set=data[0])
-        to_db.save()
+        # form.cleaned_data - tuple of dataset name and filled options of the form
+        query_validation(form.cleaned_data)
         return super().form_valid(form)
+
 
 class TestView(FormView):
     template_name = 'sea_level/testing.html'
@@ -50,21 +39,11 @@ class TestView(FormView):
     def post(self, request):
         if request.method == 'POST':
             json_text = request.POST.get('textfield', None)
-            full_data = json.loads(json_text)
+            full_data = json.loads(json_text) # json with ((dataset_name, filled_form_json), ...)
 
             for data in full_data:
-                result = data[1]
+                query_validation(data)
 
-                # we don't want single-element lists
-                for key in result:
-                    if len(result[key]) == 1:
-                        tmp = result[key][0]
-                        del result[key]
-                        result[key] = tmp
-
-                to_db = Task(json_content=json.dumps(result), data_set=data[0])
-                to_db.save()
-            # return super().form_valid(form)
         return redirect("/downloader/db_browser")
 
 
@@ -81,14 +60,9 @@ class DatabaseBrowser(ListView):
         task = Task.objects.get(id=pk)
 
         if "download" in request.POST:
-            # tmp0 = DataSets(data_set='satellite-sea-level-mediterranean', attributes='{"variable":[], "format":[], "day":[], "year":[], "month":[]}')
-            # tmp0.save()
-            # tmp1 = DataSets(data_set='reanalysis-era5-single-levels', attributes='{"product_type":[], "format":[], "variable":[], "day":[], "year":[], "month":[], "time":[]}')
-            # tmp1.save()
+            task.status = "waiting in queue"
+            task.save()
+
             download_from_cdsapi.delay(task.json_content, pk)
 
-            # update task's status in database
-            task.status = "being downloaded"
-            task.save()
-            
             return redirect("/downloader/db_browser")

@@ -1,1 +1,1 @@
-[["reanalysis-era5-single-levels", {"product_type": ["reanalysis"], "variable": ["surface_net_solar_radiation_clear_sky", "friction_velocity", "soil_temperature_level_1"], "year": ["2012", "1990"], "month": ["12", "11"], "day": ["23"], "time": ["03:00"], "format": ["grib"]}]]
+[["satellite-sea-level-mediterranean", {"variable": ["all"], "year": ["1994"], "month": ["02"], "day": ["14"], "format": ["zip"]}]]
