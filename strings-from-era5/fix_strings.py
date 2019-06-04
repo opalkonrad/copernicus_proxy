@@ -2,7 +2,7 @@ import json
 
 # it creates tuples with nice looking names
 
-name = 'wind'
+name = 'all_strings'
 
 era5file = open('./strings/' + name + '.json')
 json_data = era5file.read()

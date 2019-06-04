@@ -14,7 +14,7 @@ jQuery(function ($) {
             if (type in numericTypes) {
                 selectedList.push(("0" + tmpValue).slice(sliceType[type]));
             } else if (type === "filters") {
-                if (!(tmpValue in selectedList)) {
+                if (!selectedList.includes(tmpValue)) {
                     selectedList.push(tmpValue);
                 }
             }
@@ -22,7 +22,7 @@ jQuery(function ($) {
         $('#id_' + type).val(JSON.stringify(selectedList));
         if (type === "filters") {
             selectedList.forEach(function (selectedFilter) {
-                $('input[value=' + selectedFilter + ']').addClass('.dropped');
+                $('li[data-value="' + selectedFilter + '"]').addClass('dropped');
             });
         }
     }
