@@ -42,6 +42,31 @@ class SeaLevelView(FormView):
         to_db.save()
         return super().form_valid(form)
 
+class TestView(FormView):
+    template_name = 'sea_level/testing.html'
+    form_class = SeaLevelForm
+    success_url = '/downloader/db_browser/'
+
+    def post(self, request):
+        if request.method == 'POST':
+            json_text = request.POST.get('textfield', None)
+            full_data = json.loads(json_text)
+
+            for data in full_data:
+                result = data[1]
+
+                # we don't want single-element lists
+                for key in result:
+                    if len(result[key]) == 1:
+                        tmp = result[key][0]
+                        del result[key]
+                        result[key] = tmp
+
+                to_db = Task(json_content=json.dumps(result), data_set=data[0])
+                to_db.save()
+            # return super().form_valid(form)
+        return redirect("/downloader/db_browser")
+
 
 class DatabaseBrowser(ListView):
     template_name = 'sea_level/db_browser.html'
