@@ -52,37 +52,41 @@
             </div>
         </div>
     </div>
-    {% for category in options.categories %}
-        <div class="selection__form">
-            <div class="field field--filter field--temperature_and_pressure-filters">
-                <div class="field__title-bar">
-                    <div class="field__name">
-                        {{ category.name }}
-                    </div>
-                    <button class="field__button field__button--show" type="button">Show</button>
-                </div>
-                <div class="selection__container--filters" style="display: none;">
-                    <ul class="selection__container selection__container--list">
-                        {% for value, label in category.filters %}
-                            <div class="selection__row selection__row--first">
-                                <li class="drop selection__popular-filters" data-value="{{ value }}">
-                                    {{ label }}
-                                </li>
-                            </div>
-                        {% endfor %}
-                    </ul>
-                    <div class="field__footer">
-                        <div class="field__errors">
+    <div class="selection__form selection__form--filters">
+        {{ form.filters.as_hidden }}
+        {% for category in options.categories %}
+            <div class="selection__form">
+                <div class="field field--filter field--filters">
+                    <div class="field__title-bar">
+                        <div class="field__name">
+                            {{ category.name }}
                         </div>
-                        <span>
+                        <button class="field__button field__button--show" type="button">Show</button>
+                    </div>
+                    <div class="selection__container selection__container--filters" style="display: none;">
+                        <ul class="selection__container selection__container--list selection__container--filters">
+                            {% for value, label in category.filters %}
+                                <div class="selection__row selection__row--first">
+                                    <li class="drop selection__filters" data-value="{{ value }}">
+                                        {{ label }}
+                                    </li>
+                                </div>
+                            {% endfor %}
+                        </ul>
+                        <div class="field__footer">
+                            <div class="field__errors">
+                            </div>
+                            <span>
                     <button class="field__button field__button--select" type="button">Select all</button>
                     <button class="field__button field__button--clear" type="button">Clear all</button>
                 </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
+
     <div class="selection__form">
         <div class="field field--years">
             {{ form.years.as_hidden }}

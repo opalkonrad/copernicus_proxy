@@ -1,4 +1,5 @@
 jQuery(function ($) {
+    const numericTypes = ["years", "months", "days"];
     const sliceType = {
         "years": -4,
         "months": -2,
@@ -10,15 +11,27 @@ jQuery(function ($) {
         let selectedOptions = $('.field--' + type).find('.dropped');
         for (let i = 0; i < selectedOptions.length; i++) {
             let tmpValue = selectedOptions.get(i).getAttribute('data-value');
-            selectedList.push(("0" + tmpValue).slice(sliceType[type]));
+            if (type in numericTypes) {
+                selectedList.push(("0" + tmpValue).slice(sliceType[type]));
+            } else if (type === "filters") {
+                if (!(tmpValue in selectedList)) {
+                    selectedList.push(tmpValue);
+                }
+            }
         }
-        $('.field--' + type).find('#id_' + type).val(JSON.stringify(selectedList));
+        $('#id_' + type).val(JSON.stringify(selectedList));
+        if (type === "filters") {
+            selectedList.forEach(function (selectedFilter) {
+                $('input[value=' + selectedFilter + ']').addClass('.dropped');
+            });
+        }
     }
 
     function updateFormData() {
         updateType('years');
         updateType('months');
         updateType('days');
+        updateType('filters');
     }
 
     $('.selection__form')
@@ -68,7 +81,7 @@ jQuery(function ($) {
         });
 
     $.drop({multi: true});
-    
+
     $('.field__button--select')
         .on('click', function () {
             $(this).closest('.field').find('.drop').addClass('dropped');
