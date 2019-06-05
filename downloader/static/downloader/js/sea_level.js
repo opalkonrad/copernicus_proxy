@@ -8,14 +8,7 @@ jQuery(function ($) {
 
     function updateType(type) {
         let selectedList = [];
-        if (numericTypes.includes(type)) {
-            let selectedOptions = $('.field--' + type).find('.dropped');
-            for (let i = 0; i < selectedOptions.length; i++) {
-                let tmpValue = selectedOptions.get(i).getAttribute('data-value');
-                selectedList.push(("0" + tmpValue).slice(sliceType[type]));
-            }
-            $('#id_' + type).val(JSON.stringify(selectedList));
-        } else if (type === "filters") {
+        if (type === "filters") {
             let category = $('.filter__select').val();
             let selectedOptions = $('.filters__options .filters--' + category).find('.dropped:not(.active)');
             selectedOptions.each(function () {
@@ -37,6 +30,16 @@ jQuery(function ($) {
                     $(this).parent().detach().appendTo('.filters__options .filters--' + localCategory + ' .selection__container--list');
                 });
             });
+        } else {
+            let selectedOptions = $('.field--' + type).find('.dropped');
+            for (let i = 0; i < selectedOptions.length; i++) {
+                let tmpValue = selectedOptions.get(i).getAttribute('data-value');
+                if (numericTypes.includes(type))
+                    selectedList.push(("0" + tmpValue).slice(sliceType[type]));
+                else
+                    selectedList.push(tmpValue);
+            }
+            $('#id_' + type).val(JSON.stringify(selectedList));
         }
     }
 
@@ -44,6 +47,9 @@ jQuery(function ($) {
         updateType('years');
         updateType('months');
         updateType('days');
+        updateType('hours');
+        updateType('filters');
+        updateType('product_types');
     }
 
     $('.selection__form')
@@ -76,10 +82,7 @@ jQuery(function ($) {
             $(this)
                 .removeClass("active")
                 .removeClass("mouseupListener");
-            if ($(this).hasClass('selection__filters'))
-                updateType('filters');
-            else
-                updateFormData();
+            updateFormData();
         })
         .on('mousedown', function (event) {
             if (event.which !== 1) return false;
@@ -92,10 +95,7 @@ jQuery(function ($) {
                 .toggleClass("dropped")
                 .removeClass("mouseupListener");
             $(this).closest('.field').find('.field__errors').html('');
-            if ($(this).hasClass('selection__filters'))
-                updateType('filters');
-            else
-                updateFormData();
+            updateFormData();
         });
 
     $.drop({multi: true});
@@ -137,5 +137,19 @@ jQuery(function ($) {
             $('.filters__container').hide();
         }
     });
-})
-;
+
+    $('#dataset_select').on('change', function () {
+        let dataset = $(this).val();
+        $('#id_dataset').val(dataset);
+        if (dataset === 'reanalysis-era5-single-levels') {
+            $('.field').show();
+            $('.field--format_sea_level').hide();
+        } else if (dataset === 'satellite-sea-level-mediterranean') {
+            $('.field').show();
+            $('.field--filters').hide();
+            $('.field--product_types').hide();
+            $('.field--hours').hide();
+            $('.field--format_era5').hide();
+        }
+    });
+});

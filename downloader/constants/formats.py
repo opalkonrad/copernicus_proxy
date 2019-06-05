@@ -4,7 +4,12 @@ class Format:
         self.extension = tuple((extension[0], extension[1]))
 
 
-list = [
+list_sea_level = [
     Format('.zip file', ('.zip', 'zip')),
     Format('compressed .tar file', ('.tar.gz', 'tgz'))
+]
+
+list_era5 = [
+    Format('GRIB', ('.grib', 'grib')),
+    Format('NetCDF (experimental)', ('.nc', 'nc'))
 ]

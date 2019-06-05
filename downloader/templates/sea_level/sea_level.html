@@ -24,21 +24,22 @@
 
 <form method="post">
     {% csrf_token %}
-    <div class="selection__form form-type">
-        <input type="hidden" name="form_type" id="id_form_type">
-        <div class="field field--form-type">
-            <div class="selection__container selection__container--form-type formSelection">
+
+    <div class="selection__form">
+        <input type="hidden" name="dataset" id="id_dataset" value="reanalysis-era5-single-levels">
+        <div class="field field--dataset">
+            <div class="selection__container selection__container--dataset formSelection">
                 <div class="field__title-bar">
                     <div class="field__name">
                         Form type
                     </div>
                 </div>
-                <select>
-                    <option value="satellite-sea-level-mediterranean">Sea level daily gridded data for the Mediterranean
-                        Sea
-                        from 1993 to present
+                <select id="dataset_select">
+                    <option value="satellite-sea-level-mediterranean">
+                        Sea level daily gridded data for the Mediterranean Sea from 1993 to present
                     </option>
-                    <option value="reanalysis-era5-single-levels">ERA5 hourly data on single levels from 1979 to present
+                    <option value="reanalysis-era5-single-levels" selected>
+                        ERA5 hourly data on single levels from 1979 to present
                     </option>
                 </select>
             </div>
@@ -247,22 +248,43 @@
             </div>
         </div>
     </div>
-    <div class="field">
+
+    <div class="format__container">
         <input type="hidden" name="format" id="id_format">
-        <div class="field__name">
-            Format
+
+        <div class="field field--format_sea_level" style="display: none;">
+            <div class="field__name">
+                Format
+            </div>
+            <ul class="selection__container--list">
+                {% for value, format in options.formats_sea_level %}
+                    <li class="selection__format">
+                        <label>
+                            <input name="format" type="radio"
+                                   value="{{ value }}">
+                            <span class="selection__label">{{ format }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        <ul class="selection__container--list">
-            {% for value, format in options.formats %}
-                <li class="selection__format">
-                    <label>
-                        <input name="format" type="radio"
-                               value="{{ value }}">
-                        <span class="selection__label">{{ format }}</span>
-                    </label>
-                </li>
-            {% endfor %}
-        </ul>
+
+        <div class="field field--format_era5">
+            <div class="field__name">
+                Format
+            </div>
+            <ul class="selection__container--list">
+                {% for value, format in options.formats_era5 %}
+                    <li class="selection__format">
+                        <label>
+                            <input name="format" type="radio"
+                                   value="{{ value }}">
+                            <span class="selection__label">{{ format }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     <div class="submission">
         <button type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
