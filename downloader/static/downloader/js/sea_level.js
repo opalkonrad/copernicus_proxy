@@ -8,7 +8,7 @@ jQuery(function ($) {
 
     function updateType(type) {
         let selectedList = [];
-        if (type in numericTypes) {
+        if (numericTypes.includes(type)) {
             let selectedOptions = $('.field--' + type).find('.dropped');
             for (let i = 0; i < selectedOptions.length; i++) {
                 let tmpValue = selectedOptions.get(i).getAttribute('data-value');

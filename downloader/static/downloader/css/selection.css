@@ -30,6 +30,13 @@ body {
     max-width: 60vw;
 }
 
+.field--form-type {
+    margin: 0.2vw 1vw;
+    margin-top: 1vw;
+    min-width: 60vw;
+    max-width: 60vw;
+}
+
 .field__errors {
     color: #ff0000;
     margin: 0.5em 0;
@@ -205,4 +212,9 @@ body {
 
 .categorySelection > * {
     margin: 1.5em;
+}
+
+.formSelection {
+    display: flex;
+    flex-direction: row;
 }
