@@ -60,13 +60,15 @@
                     Filters
                 </div>
             </div>
-            <div>Category</div>
-            <select class="filter__select">
-                <option>--</option>
-                {% for category in options.categories %}
-                    <option value="{{ category.codename }}">{{ category.name }}</option>
-                {% endfor %}
-            </select>
+            <div class="categorySelection">
+                <div>Category</div>
+                <select class="filter__select">
+                    <option>--</option>
+                    {% for category in options.categories %}
+                        <option value="{{ category.codename }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="filters__container" style="display: none;">
                 <div class="filters__section">
                     <div>Options</div>
