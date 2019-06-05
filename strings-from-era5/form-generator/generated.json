@@ -1,272 +1,281 @@
 [
-  {
-    "product": [
-      "ensemble_mean"
-    ],
-    "filters": [
-      "mean_convective_precipitation_rate",
-      "eastward_gravity_wave_surface_stress",
-      "mean_period_of_total_swell"
-    ],
-    "years": [
-      "1983",
-      "2014"
-    ],
-    "months": [
-      "09",
-      "06"
-    ],
-    "days": [
-      "21"
-    ],
-    "hours": [
-      "06:00"
-    ],
-    "format": [
-      "grib"
-    ]
-  },
-  {
-    "product": [
-      "ensemble_members"
-    ],
-    "filters": [
-      "mean_surface_downward_long_wave_radiation_flux",
-      "vertical_integral_of_eastward_heat_flux",
-      "top_net_thermal_radiation"
-    ],
-    "years": [
-      "1979",
-      "2008"
-    ],
-    "months": [
-      "11",
-      "04"
-    ],
-    "days": [
-      "17"
-    ],
-    "hours": [
-      "06:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  },
-  {
-    "product": [
-      "ensemble_mean"
-    ],
-    "filters": [
-      "total_totals_index",
-      "soil_type",
-      "mean_surface_downward_short_wave_radiation_flux"
-    ],
-    "years": [
-      "2016",
-      "2010"
-    ],
-    "months": [
-      "06",
-      "01"
-    ],
-    "days": [
-      "21"
-    ],
-    "hours": [
-      "15:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  },
-  {
-    "product": [
-      "ensemble_mean"
-    ],
-    "filters": [
-      "mean_top_net_short_wave_radiation_flux_clear_sky",
-      "eastward_gravity_wave_surface_stress",
-      "10m_wind_gust_since_previous_post_processing"
-    ],
-    "years": [
-      "2001",
-      "1993"
-    ],
-    "months": [
-      "10",
-      "06"
-    ],
-    "days": [
-      "7"
-    ],
-    "hours": [
-      "06:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  },
-  {
-    "product": [
-      "reanalysis"
-    ],
-    "filters": [
-      "normalized_stress_into_ocean",
-      "convective_precipitation",
-      "mean_potential_evaporation_rate"
-    ],
-    "years": [
-      "1996",
-      "1983"
-    ],
-    "months": [
-      "03",
-      "05"
-    ],
-    "days": [
-      "6"
-    ],
-    "hours": [
-      "00:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  },
-  {
-    "product": [
-      "ensemble_mean"
-    ],
-    "filters": [
-      "runoff",
-      "model_bathymetry",
-      "volumetric_soil_water_layer_1"
-    ],
-    "years": [
-      "1992",
-      "1995"
-    ],
-    "months": [
-      "12",
-      "05"
-    ],
-    "days": [
-      "28"
-    ],
-    "hours": [
-      "18:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  },
-  {
-    "product": [
-      "reanalysis"
-    ],
-    "filters": [
-      "mean_surface_net_short_wave_radiation_flux",
-      "mean_wave_direction_of_third_swell_partition",
-      "mean_wave_period_of_first_swell_partition"
-    ],
-    "years": [
-      "1981",
-      "2009"
-    ],
-    "months": [
-      "01",
-      "12"
-    ],
-    "days": [
-      "1"
-    ],
-    "hours": [
-      "06:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  },
-  {
-    "product": [
-      "reanalysis"
-    ],
-    "filters": [
-      "surface_net_solar_radiation",
-      "vertical_integral_of_eastward_cloud_frozen_water_flux",
-      "forecast_albedo"
-    ],
-    "years": [
-      "1993",
-      "1999"
-    ],
-    "months": [
-      "08",
-      "10"
-    ],
-    "days": [
-      "26"
-    ],
-    "hours": [
-      "21:00"
-    ],
-    "format": [
-      "grib"
-    ]
-  },
-  {
-    "product": [
-      "ensemble_mean"
-    ],
-    "filters": [
-      "lake_bottom_temperature",
-      "slope_of_sub_gridscale_orography",
-      "volumetric_soil_water_layer_4"
-    ],
-    "years": [
-      "2009",
-      "2012"
-    ],
-    "months": [
-      "04",
-      "06"
-    ],
-    "days": [
-      "28"
-    ],
-    "hours": [
-      "00:00"
-    ],
-    "format": [
-      "grib"
-    ]
-  },
-  {
-    "product": [
-      "reanalysis"
-    ],
-    "filters": [
-      "mean_boundary_layer_dissipation",
-      "mean_surface_direct_short_wave_radiation_flux_clear_sky",
-      "mean_convective_precipitation_rate"
-    ],
-    "years": [
-      "1999",
-      "1993"
-    ],
-    "months": [
-      "02",
-      "05"
-    ],
-    "days": [
-      "22"
-    ],
-    "hours": [
-      "15:00"
-    ],
-    "format": [
-      "netcdf"
-    ]
-  }
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "reanalysis"
+      ],
+      "variable": [
+        "large_scale_precipitation_fraction"
+      ],
+      "year": [
+        "2000",
+        "2012"
+      ],
+      "month": [
+        "02",
+        "04"
+      ],
+      "day": [
+        "23"
+      ],
+      "time": [
+        "09:00"
+      ],
+      "format": [
+        "grib"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "reanalysis"
+      ],
+      "variable": [
+        "snow_density"
+      ],
+      "year": [
+        "2001",
+        "1999"
+      ],
+      "month": [
+        "05",
+        "03"
+      ],
+      "day": [
+        "04"
+      ],
+      "time": [
+        "21:00"
+      ],
+      "format": [
+        "grib"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "reanalysis"
+      ],
+      "variable": [
+        "mean_wave_direction"
+      ],
+      "year": [
+        "1988",
+        "1997"
+      ],
+      "month": [
+        "01",
+        "10"
+      ],
+      "day": [
+        "27"
+      ],
+      "time": [
+        "15:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "reanalysis"
+      ],
+      "variable": [
+        "mean_evaporation_rate"
+      ],
+      "year": [
+        "1994",
+        "2010"
+      ],
+      "month": [
+        "07"
+      ],
+      "day": [
+        "06"
+      ],
+      "time": [
+        "12:00"
+      ],
+      "format": [
+        "grib"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "ensemble_spread"
+      ],
+      "variable": [
+        "vertical_integral_of_northward_water_vapour_flux"
+      ],
+      "year": [
+        "2001",
+        "1980"
+      ],
+      "month": [
+        "05",
+        "11"
+      ],
+      "day": [
+        "13"
+      ],
+      "time": [
+        "15:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "reanalysis"
+      ],
+      "variable": [
+        "mean_wave_period_of_second_swell_partition"
+      ],
+      "year": [
+        "2000",
+        "2010"
+      ],
+      "month": [
+        "02",
+        "11"
+      ],
+      "day": [
+        "24"
+      ],
+      "time": [
+        "03:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "reanalysis"
+      ],
+      "variable": [
+        "vertical_integral_of_divergence_of_moisture_flux"
+      ],
+      "year": [
+        "2012",
+        "1988"
+      ],
+      "month": [
+        "04",
+        "11"
+      ],
+      "day": [
+        "25"
+      ],
+      "time": [
+        "00:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "ensemble_mean"
+      ],
+      "variable": [
+        "model_bathymetry"
+      ],
+      "year": [
+        "1994",
+        "1988"
+      ],
+      "month": [
+        "01",
+        "11"
+      ],
+      "day": [
+        "22"
+      ],
+      "time": [
+        "09:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "ensemble_spread"
+      ],
+      "variable": [
+        "skin_reservoir_content"
+      ],
+      "year": [
+        "2003",
+        "2008"
+      ],
+      "month": [
+        "08",
+        "11"
+      ],
+      "day": [
+        "21"
+      ],
+      "time": [
+        "12:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ],
+  [
+    "reanalysis-era5-single-levels",
+    {
+      "product_type": [
+        "ensemble_members"
+      ],
+      "variable": [
+        "snow_depth"
+      ],
+      "year": [
+        "1991",
+        "2005"
+      ],
+      "month": [
+        "11",
+        "10"
+      ],
+      "day": [
+        "25"
+      ],
+      "time": [
+        "18:00"
+      ],
+      "format": [
+        "netcdf"
+      ]
+    }
+  ]
 ]

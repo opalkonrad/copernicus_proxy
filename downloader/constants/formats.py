@@ -6,9 +6,7 @@ class Format:
 
 list_sea_level = [
     Format('.zip file', ('.zip', 'zip')),
-    Format('compressed .tar file', ('.tar.gz', 'tgz')),
-    Format('GRIB', ('.grib', 'grib')),
-    Format('NetCDF (experimental)', ('.nc', 'netcdf'))
+    Format('compressed .tar file', ('.tar.gz', 'tgz'))
 ]
 
 list_era5 = [

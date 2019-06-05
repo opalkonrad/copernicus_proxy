@@ -250,8 +250,6 @@
     </div>
 
     <div class="format__container">
-        <input type="hidden" name="format" id="id_format">
-
         <div class="field field--format_sea_level" style="display: none;">
             <div class="field__name">
                 Format
@@ -260,7 +258,7 @@
                 {% for value, format in options.formats_sea_level %}
                     <li class="selection__format">
                         <label>
-                            <input name="format" type="radio"
+                            <input name="format_sea_level" type="radio"
                                    value="{{ value }}">
                             <span class="selection__label">{{ format }}</span>
                         </label>
@@ -277,7 +275,7 @@
                 {% for value, format in options.formats_era5 %}
                     <li class="selection__format">
                         <label>
-                            <input name="format" type="radio"
+                            <input name="format_era5" type="radio"
                                    value="{{ value }}">
                             <span class="selection__label">{{ format }}</span>
                         </label>
@@ -287,7 +285,7 @@
         </div>
     </div>
     <div class="submission">
-        <button type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
+        <button id="submit" type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
         <button type="button" class="field__button field__button--submit">Save draft</button>
     </div>
 </form>

@@ -21,10 +21,10 @@ for i in range(hours.MIN, hours.MAX + 1):
     hours_list.append((i, "{:02d}".format(i) + ":00"))
 
 for f in formats.list_sea_level:
-    formats_list_sea_level.append((f.extension[0], f.name))
+    formats_list_sea_level.append((f.extension[1], f.name))
 
 for f in formats.list_era5:
-    formats_list_era5.append((f.extension[0], f.name))
+    formats_list_era5.append((f.extension[1], f.name))
 
 product_types = tuple(product_types.product_types_list)
 years = tuple(years_list)

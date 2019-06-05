@@ -6,6 +6,22 @@ jQuery(function ($) {
         "days": -2,
     };
 
+    function getType(type) {
+        let value = $('#id_' + type).val();
+        if (value)
+            return JSON.parse(value);
+        else
+            return "";
+    }
+
+    function getFormat(type) {
+        let value = $('input[name="' + type + '"]:checked').val();
+        if (value)
+            return value;
+        else
+            return "";
+    }
+
     function updateType(type) {
         let selectedList = [];
         if (type === "filters") {
@@ -140,7 +156,6 @@ jQuery(function ($) {
 
     $('#dataset_select').on('change', function () {
         let dataset = $(this).val();
-        $('#id_dataset').val(dataset);
         if (dataset === 'reanalysis-era5-single-levels') {
             $('.field').show();
             $('.field--format_sea_level').hide();
@@ -151,5 +166,38 @@ jQuery(function ($) {
             $('.field--hours').hide();
             $('.field--format_era5').hide();
         }
+    });
+
+    $('#submit').click(function (event) {
+        event.preventDefault();
+        let dataset = $('#dataset_select').val();
+        let dictionary;
+        let formData = [];
+        formData.push(dataset);
+        switch (dataset) {
+            case 'reanalysis-era5-single-levels':
+                dictionary = {
+                    product_type: getType('product_types'),
+                    variable: getType('filters'),
+                    year: getType('years'),
+                    month: getType('months'),
+                    day: getType('days'),
+                    time: getType('hours'),
+                    format: getFormat('format_era5')
+                };
+                formData.push(dictionary);
+                break;
+            case 'satellite-sea-level-mediterranean':
+                dictionary = {
+                    variable: "all",
+                    year: getType('years'),
+                    month: getType('months'),
+                    day: getType('days'),
+                    format: getFormat('format_sea_level')
+                };
+                formData.push(dictionary);
+                break;
+        }
+        console.log(JSON.stringify(formData));
     });
 });
