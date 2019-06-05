@@ -26,7 +26,7 @@ class SeaLevelView(FormView):
         return context
 
     def form_valid(self, form):
-        # form.cleaned_data - tuple of dataset name and filled options of the form
+        # form.cleaned_data - tuple of data_set name and filled options of the form
         query_validation(form.cleaned_data)
         return super().form_valid(form)
 
@@ -39,7 +39,7 @@ class TestView(FormView):
     def post(self, request):
         if request.method == 'POST':
             json_text = request.POST.get('textfield', None)
-            full_data = json.loads(json_text) # json with ((dataset_name, filled_form_json), ...)
+            full_data = json.loads(json_text)  # array with [(data_set_name, filled_form_json), ...]
 
             for data in full_data:
                 query_validation(data)
@@ -60,9 +60,12 @@ class DatabaseBrowser(ListView):
         task = Task.objects.get(id=pk)
 
         if "download" in request.POST:
-            task.status = "waiting in queue"
-            task.save()
+            # check if task is appropriate
+            if task.status != "error":
+                task.status = "waiting in queue"
+                task.msg = ""
+                task.save()
 
-            download_from_cdsapi.delay(task.json_content, pk)
+                download_from_cdsapi.delay(task.json_content, pk)
 
-            return redirect("/downloader/db_browser")
+        return redirect("/downloader/db_browser")
