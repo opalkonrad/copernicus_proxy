@@ -1,1 +1,1 @@
-[["satellite-sea-level-mediterranean", {"variable": ["all"], "year": ["1994"], "month": ["02"], "day": ["14"], "format": ["zip"]}]]
+[["reanalysis-era5-single-levels", {"product_type": ["reanalysis"], "variable": ["100m_u_component_of_wind"], "year": ["1993", "1984"], "month": ["09", "08"], "day": ["17"], "time": ["18:00"], "format": ["netcdf"]}]]

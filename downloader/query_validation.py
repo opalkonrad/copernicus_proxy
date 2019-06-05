@@ -25,8 +25,8 @@ def query_validation(data):
 
     except ObjectDoesNotExist:
         curr_task = Task(json_content=json.dumps(result), data_set=data[0])
-        curr_task.status = 'error'
-        curr_task.msg = 'no matching data set'
+        curr_task.status = "error"
+        curr_task.msg = "no matching data set"
         curr_task.save()
         return
 
@@ -53,7 +53,7 @@ def query_validation(data):
     except ValidationError as e:
         # update request's status in database to error
         curr_task = Task(json_content=json.dumps(result), data_set=data[0])
-        curr_task.status = 'error'
+        curr_task.status = "error"
         curr_task.msg = e
         curr_task.save()
         return

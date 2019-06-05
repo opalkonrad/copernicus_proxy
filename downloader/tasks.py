@@ -1,5 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-
 from celery import shared_task
 from django.db import models
 from django.http import HttpResponse
@@ -19,8 +18,8 @@ from downloader.constants import formats
 @shared_task
 def download_from_cdsapi(form_content, pk):
     # get information about task
-    data = json.loads(form_content)
     curr_task = Task.objects.get(id=pk)
+    data = json.loads(form_content)
     data_set = curr_task.data_set
     save_format = ""
 
