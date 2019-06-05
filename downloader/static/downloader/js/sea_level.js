@@ -22,38 +22,52 @@ jQuery(function ($) {
             return "";
     }
 
-    function updateType(type) {
+    function updateFilters(all = false) {
+        let type = 'filters';
         let selectedList = [];
+        let category = $('.filter__select').val();
+        let selectedOptions;
+        let unselectedOptions;
+        if (all)
+            selectedOptions = $('.filters__options').find('.dropped:not(.active)');
+        else
+            selectedOptions = $('.filters__options .filters--' + category).find('.dropped:not(.active)');
+        selectedOptions.each(function () {
+            let currentValue = $(this).attr('data-value');
+            let sameSelectedOptions = $('.filters__container .filters__options').find('li[data-value="' + currentValue + '"]');
+            sameSelectedOptions.each(function () {
+                let localCategory = $(this).attr('data-category');
+                $(this).addClass('dropped');
+                $(this).parent().detach().appendTo('.filters__selected .filters--' + localCategory + ' .selection__container--list');
+            });
+        });
+        if (all)
+            unselectedOptions = $('.filters__selected').find('.drop:not(.dropped):not(.active)');
+        else
+            unselectedOptions = $('.filters__selected .filters--' + category).find('.drop:not(.dropped):not(.active)');
+        unselectedOptions.each(function () {
+            let currentValue = $(this).attr('data-value');
+            let sameUnselectedOptions = $('.filters__container .filters__selected').find('li[data-value="' + currentValue + '"]');
+            sameUnselectedOptions.each(function () {
+                let localCategory = $(this).attr('data-category');
+                $(this).removeClass('dropped');
+                $(this).parent().detach().appendTo('.filters__options .filters--' + localCategory + ' .selection__container--list');
+            });
+        });
+        selectedOptions = $('.field--' + type).find('.dropped');
+        for (let i = 0; i < selectedOptions.length; i++) {
+            let tmpValue = selectedOptions.get(i).getAttribute('data-value');
+            if (!selectedList.includes(tmpValue))
+                selectedList.push(tmpValue);
+        }
+        $('#id_' + type).val(JSON.stringify(selectedList));
+    }
+
+    function updateType(type) {
         if (type === "filters") {
-            let category = $('.filter__select').val();
-            let selectedOptions = $('.filters__options .filters--' + category).find('.dropped:not(.active)');
-            selectedOptions.each(function () {
-                let currentValue = $(this).attr('data-value');
-                let sameSelectedOptions = $('.filters__container .filters__options').find('li[data-value="' + currentValue + '"]');
-                sameSelectedOptions.each(function () {
-                    let localCategory = $(this).attr('data-category');
-                    $(this).addClass('dropped');
-                    $(this).parent().detach().appendTo('.filters__selected .filters--' + localCategory + ' .selection__container--list');
-                });
-            });
-            let unselectedOptions = $('.filters__selected .filters--' + category).find('.drop:not(.dropped):not(.active)');
-            unselectedOptions.each(function () {
-                let currentValue = $(this).attr('data-value');
-                let sameUnselectedOptions = $('.filters__container .filters__selected').find('li[data-value="' + currentValue + '"]');
-                sameUnselectedOptions.each(function () {
-                    let localCategory = $(this).attr('data-category');
-                    $(this).removeClass('dropped');
-                    $(this).parent().detach().appendTo('.filters__options .filters--' + localCategory + ' .selection__container--list');
-                });
-            });
-            selectedOptions = $('.field--' + type).find('.dropped');
-            for (let i = 0; i < selectedOptions.length; i++) {
-                let tmpValue = selectedOptions.get(i).getAttribute('data-value');
-                if (!selectedList.includes(tmpValue))
-                    selectedList.push(tmpValue);
-            }
-            $('#id_' + type).val(JSON.stringify(selectedList));
+            updateFilters();
         } else {
+            let selectedList = [];
             let selectedOptions = $('.field--' + type).find('.dropped');
             for (let i = 0; i < selectedOptions.length; i++) {
                 let tmpValue = selectedOptions.get(i).getAttribute('data-value');
@@ -125,14 +139,21 @@ jQuery(function ($) {
 
     $('.field__button--select')
         .on('click', function () {
-            $(this).closest('.field').find('.drop').addClass('dropped');
-            $(this).closest('.field').find('.field__errors').html('');
-            updateFormData();
+            let field = $(this).closest('.field');
+            field.find('.drop').addClass('dropped');
+            if (field.hasClass('field--filters'))
+                updateFilters(true);
+            else
+                updateFormData();
         });
     $('.field__button--clear')
         .on('click', function () {
-            $(this).closest('.field').find('.drop').removeClass('dropped');
-            updateFormData();
+            let field = $(this).closest('.field');
+            field.find('.drop').removeClass('dropped');
+            if (field.hasClass('field--filters'))
+                updateFilters(true);
+            else
+                updateFormData();
         });
     $('.field--filters')
         .on('click', '.field__button--show', function () {
