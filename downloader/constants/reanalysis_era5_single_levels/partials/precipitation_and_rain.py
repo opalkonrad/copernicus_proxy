@@ -1,0 +1,12 @@
+filters = [["convective_precipitation", "Convective precipitation"], ["convective_rain_rate", "Convective rain rate"],
+           ["instantaneous_large_scale_surface_precipitation_fraction",
+            "Instantaneous large scale surface precipitation fraction"],
+           ["large_scale_precipitation", "Large scale precipitation"],
+           ["large_scale_precipitation_fraction", "Large scale precipitation fraction"],
+           ["large_scale_rain_rate", "Large scale rain rate"],
+           ["maximum_total_precipitation_rate_since_previous_post_processing",
+            "Maximum total precipitation rate since previous post processing"],
+           ["minimum_total_precipitation_rate_since_previous_post_processing",
+            "Minimum total precipitation rate since previous post processing"],
+           ["precipitation_type", "Precipitation type"], ["total_column_rain_water", "Total column rain water"],
+           ["total_precipitation", "Total precipitation"]]

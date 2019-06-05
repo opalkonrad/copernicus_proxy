@@ -24,11 +24,33 @@
 
 <form method="post">
     {% csrf_token %}
+
+    <div class="selection__form">
+        <input type="hidden" name="dataset" id="id_dataset" value="reanalysis-era5-single-levels">
+        <div class="field field--dataset">
+            <div class="selection__container selection__container--dataset formSelection">
+                <div class="field__title-bar">
+                    <div class="field__name">
+                        Form type
+                    </div>
+                </div>
+                <select id="dataset_select">
+                    <option value="satellite-sea-level-mediterranean">
+                        Sea level daily gridded data for the Mediterranean Sea from 1993 to present
+                    </option>
+                    <option value="reanalysis-era5-single-levels" selected>
+                        ERA5 hourly data on single levels from 1979 to present
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div class="selection__form">
         <div class="field field--product_types">
-            {{ form.product_types.as_hidden }}
+            <input type="hidden" name="product_types" id="id_product_types">
             <div class="field__name">
-                {{ form.product_types.label_tag }}
+                Product types
             </div>
             <ul class="selection__container selection__container--list">
                 {% for value, label in options.product_types %}
@@ -51,39 +73,75 @@
             </span>
             </div>
         </div>
-
-        <div class="field field--popular-filters">
-            {{ form.popular_filters.as_hidden }}
+    </div>
+    <div class="selection__form selection__form--filters">
+        <div class="field field--filters">
+            <input type="hidden" name="filters" id="id_filters">
             <div class="field__name">
-                {{ form.popular_filters.label_tag }}
+                Filters
             </div>
-            <ul class="selection__container selection__container--list">
-                {% for value, label in options.popular_filters %}
-                    <div class="selection__row selection__row--first">
-                        <li class="drop selection__popular-filters" data-value="{{ value }}">
-                            {{ label }}
-                        </li>
+            <div class="categorySelection">
+                <div>Category</div>
+                <select class="filter__select">
+                    <option>--</option>
+                    {% for category in options.categories %}
+                        <option value="{{ category.codename }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filters__container" style="display: none;">
+                <div class="filters__section">
+                    <div>Options</div>
+                    <!-- <button class="field__button field__button--filters field__button--show" type="button"
+                            data-filters="options">Show
+                    </button> -->
+                    <div class="selection__container selection__container--filters filters__options">
+                        {% for category in options.categories %}
+                            <div class="selection__form filters--{{ category.codename }}"
+                                 data-category="{{ category.codename }}" style="display: none;">
+                                <div class="selection__container selection__container--filters">
+                                    <ul class="selection__container selection__container--list selection__container--filters">
+                                        {% for value, label in category.filters %}
+                                            <div class="selection__row selection__row--first">
+                                                <li class="drop selection__filters enabledOption"
+                                                    data-value="{{ value }}"
+                                                    data-category="{{ category.codename }}">
+                                                    {{ label }}
+                                                </li>
+                                            </div>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </ul>
-            <div class="field__footer">
-                <div class="field__errors">
-                    {% if form.popular_filters.errors %}
-                        At least one option required.
-                    {% endif %}
                 </div>
-                <span>
-                <button class="field__button field__button--select" type="button">Select all</button>
-                <button class="field__button field__button--clear" type="button">Clear all</button>
-            </span>
+                <div class="filters__section">
+                    <div>Selected</div>
+                    <!-- <button class="field__button field__button--filters field__button--show" type="button"
+                            data-filters="selected">Show
+                    </button> -->
+                    <div class="selection__container selection__container--filters filters__selected">
+                        {% for category in options.categories %}
+                            <div class="selection__form filters--{{ category.codename }}"
+                                 data-category="{{ category.codename }}" style="display: none;">
+                                <div class="selection__container selection__container--filters">
+                                    <ul class="selection__container selection__container--list selection__container--filters">
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="selection__form">
         <div class="field field--years">
-            {{ form.years.as_hidden }}
+            <input type="hidden" name="years" id="id_years">
             <div class="field__name">
-                {{ form.years.label_tag }}
+                Years
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row selection__row--first">
@@ -105,21 +163,16 @@
                     </div>
             </ul>
             <div class="field__footer">
-                <div class="field__errors">
-                    {% if form.years.errors %}
-                        At least one option required.
-                    {% endif %}
-                </div>
                 <span>
-                <button class="field__button field__button--select" type="button">Select all</button>
-                <button class="field__button field__button--clear" type="button">Clear all</button>
-            </span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
             </div>
         </div>
         <div class="field field--months">
-            {{ form.months.as_hidden }}
+            <input type="hidden" name="months" id="id_months">
             <div class="field__name">
-                {{ form.months.label_tag }}
+                Months
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
@@ -135,21 +188,16 @@
                     </div>
             </ul>
             <div class="field__footer">
-                <div class="field__errors">
-                    {% if form.months.errors %}
-                        At least one option required.
-                    {% endif %}
-                </div>
                 <span>
-                <button class="field__button field__button--select" type="button">Select all</button>
-                <button class="field__button field__button--clear" type="button">Clear all</button>
-            </span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
             </div>
         </div>
         <div class="field field--days">
-            {{ form.days.as_hidden }}
+            <input type="hidden" name="days" id="id_days">
             <div class="field__name">
-                {{ form.days.label_tag }}
+                Days
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
@@ -168,21 +216,16 @@
                     </div>
             </ul>
             <div class="field__footer">
-                <div class="field__errors">
-                    {% if form.days.errors %}
-                        At least one option required.
-                    {% endif %}
-                </div>
                 <span>
-                <button class="field__button field__button--select" type="button">Select all</button>
-                <button class="field__button field__button--clear" type="button">Clear all</button>
-            </span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
             </div>
         </div>
         <div class="field field--hours">
-            {{ form.hours.as_hidden }}
+            <input type="hidden" name="hours" id="id_hours">
             <div class="field__name">
-                {{ form.hours.label_tag }}
+                Hours
             </div>
             <ul class="selection__container selection__container--list">
                 <div class="selection__row">
@@ -198,35 +241,49 @@
                     </div>
             </ul>
             <div class="field__footer">
-                <div class="field__errors">
-                    {% if form.hours.errors %}
-                        At least one option required.
-                    {% endif %}
-                </div>
                 <span>
-                <button class="field__button field__button--select" type="button">Select all</button>
-                <button class="field__button field__button--clear" type="button">Clear all</button>
-            </span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
             </div>
         </div>
     </div>
-    <div class="field">
-        <div class="field__name">
-            {{ form.format.label_tag }}
+
+    <div class="format__container">
+        <input type="hidden" name="format" id="id_format">
+
+        <div class="field field--format_sea_level" style="display: none;">
+            <div class="field__name">
+                Format
+            </div>
+            <ul class="selection__container--list">
+                {% for value, format in options.formats_sea_level %}
+                    <li class="selection__format">
+                        <label>
+                            <input name="format" type="radio"
+                                   value="{{ value }}">
+                            <span class="selection__label">{{ format }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
-        <ul class="selection__container--list">
-            {% for value, format in options.formats %}
-                <li class="selection__format">
-                    <label>
-                        <input name="format" type="radio" {% if value == '.zip' %} checked {% endif %}
-                               value="{{ value }}">
-                        <span class="selection__label">{{ format }}</span>
-                    </label>
-                </li>
-            {% endfor %}
-        </ul>
-        <div class="field__errors">
-            {{ form.format.errors }}
+
+        <div class="field field--format_era5">
+            <div class="field__name">
+                Format
+            </div>
+            <ul class="selection__container--list">
+                {% for value, format in options.formats_era5 %}
+                    <li class="selection__format">
+                        <label>
+                            <input name="format" type="radio"
+                                   value="{{ value }}">
+                            <span class="selection__label">{{ format }}</span>
+                        </label>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
     <div class="submission">

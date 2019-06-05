@@ -1,4 +1,5 @@
 jQuery(function ($) {
+    const numericTypes = ["years", "months", "days"];
     const sliceType = {
         "years": -4,
         "months": -2,
@@ -7,18 +8,48 @@ jQuery(function ($) {
 
     function updateType(type) {
         let selectedList = [];
-        let selectedOptions = $('.field--' + type).find('.dropped');
-        for (let i = 0; i < selectedOptions.length; i++) {
-            let tmpValue = selectedOptions.get(i).getAttribute('data-value');
-            selectedList.push(("0" + tmpValue).slice(sliceType[type]));
+        if (type === "filters") {
+            let category = $('.filter__select').val();
+            let selectedOptions = $('.filters__options .filters--' + category).find('.dropped:not(.active)');
+            selectedOptions.each(function () {
+                let currentValue = $(this).attr('data-value');
+                let sameSelectedOptions = $('.filters__container .filters__options').find('li[data-value="' + currentValue + '"]');
+                sameSelectedOptions.each(function () {
+                    let localCategory = $(this).attr('data-category');
+                    $(this).addClass('dropped');
+                    $(this).parent().detach().appendTo('.filters__selected .filters--' + localCategory + ' .selection__container--list');
+                });
+            });
+            let unselectedOptions = $('.filters__selected .filters--' + category).find('.drop:not(.dropped):not(.active)');
+            unselectedOptions.each(function () {
+                let currentValue = $(this).attr('data-value');
+                let sameUnselectedOptions = $('.filters__container .filters__selected').find('li[data-value="' + currentValue + '"]');
+                sameUnselectedOptions.each(function () {
+                    let localCategory = $(this).attr('data-category');
+                    $(this).removeClass('dropped');
+                    $(this).parent().detach().appendTo('.filters__options .filters--' + localCategory + ' .selection__container--list');
+                });
+            });
+        } else {
+            let selectedOptions = $('.field--' + type).find('.dropped');
+            for (let i = 0; i < selectedOptions.length; i++) {
+                let tmpValue = selectedOptions.get(i).getAttribute('data-value');
+                if (numericTypes.includes(type))
+                    selectedList.push(("0" + tmpValue).slice(sliceType[type]));
+                else
+                    selectedList.push(tmpValue);
+            }
+            $('#id_' + type).val(JSON.stringify(selectedList));
         }
-        $('.field--' + type).find('#id_' + type).val(JSON.stringify(selectedList));
     }
 
     function updateFormData() {
         updateType('years');
         updateType('months');
         updateType('days');
+        updateType('hours');
+        updateType('filters');
+        updateType('product_types');
     }
 
     $('.selection__form')
@@ -46,12 +77,12 @@ jQuery(function ($) {
         .drop(function (ev, dd) {
             $(this).toggleClass("dropped");
             $(this).closest('.field').find('.field__errors').html('');
-            updateFormData();
         })
         .drop("end", function () {
             $(this)
                 .removeClass("active")
                 .removeClass("mouseupListener");
+            updateFormData();
         })
         .on('mousedown', function (event) {
             if (event.which !== 1) return false;
@@ -59,7 +90,7 @@ jQuery(function ($) {
             $(this).addClass("mouseupListener");
         })
         .on('mouseup', function () {
-            $('.drop').removeClass('active');
+            $(this).removeClass('active');
             $('.mouseupListener')
                 .toggleClass("dropped")
                 .removeClass("mouseupListener");
@@ -68,7 +99,7 @@ jQuery(function ($) {
         });
 
     $.drop({multi: true});
-    
+
     $('.field__button--select')
         .on('click', function () {
             $(this).closest('.field').find('.drop').addClass('dropped');
@@ -80,4 +111,45 @@ jQuery(function ($) {
             $(this).closest('.field').find('.drop').removeClass('dropped');
             updateFormData();
         });
+    $('.field--filters')
+        .on('click', '.field__button--show', function () {
+            let filtersType = $(this).attr('data-filters');
+            $(this).addClass('field__button--hide');
+            $(this).removeClass('field__button--show');
+            $(this).html('Hide');
+            $(this).closest('.field--filters').find('.filters__' + filtersType).show();
+        })
+        .on('click', '.field__button--hide', function () {
+            let filtersType = $(this).attr('data-filters');
+            $(this).addClass('field__button--show');
+            $(this).removeClass('field__button--hide');
+            $(this).html('Show');
+            $(this).closest('.field--filters').find('.filters__' + filtersType).hide();
+        });
+
+    $('.filter__select').on('change', function () {
+        let category = $(this).val();
+        $('.filters__container .selection__form').hide();
+        if (category !== "--") {
+            $('.filters__container').show();
+            $('.filters__container .selection__form[data-category="' + category + '"]').show();
+        } else {
+            $('.filters__container').hide();
+        }
+    });
+
+    $('#dataset_select').on('change', function () {
+        let dataset = $(this).val();
+        $('#id_dataset').val(dataset);
+        if (dataset === 'reanalysis-era5-single-levels') {
+            $('.field').show();
+            $('.field--format_sea_level').hide();
+        } else if (dataset === 'satellite-sea-level-mediterranean') {
+            $('.field').show();
+            $('.field--filters').hide();
+            $('.field--product_types').hide();
+            $('.field--hours').hide();
+            $('.field--format_era5').hide();
+        }
+    });
 });
