@@ -22,9 +22,12 @@
     <a href="{% url 'db_browser' %}">Browse requests</a>
 </div>
 
-<form method="post">
+<form method="post" style="display: none;">
     {% csrf_token %}
+    {{  }}
+</form>
 
+<div>
     <div class="selection__form">
         <input type="hidden" name="dataset" id="id_dataset" value="reanalysis-era5-single-levels">
         <div class="field field--dataset">
@@ -288,7 +291,7 @@
         <button id="submit" type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
         <button type="button" class="field__button field__button--submit">Save draft</button>
     </div>
-</form>
+</div>
 
 </body>
 </html>
