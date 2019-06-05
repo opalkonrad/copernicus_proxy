@@ -63,6 +63,7 @@ class DatabaseBrowser(ListView):
             # check if task is appropriate
             if task.status != "error":
                 task.status = "waiting in queue"
+                task.msg = ""
                 task.save()
 
                 download_from_cdsapi.delay(task.json_content, pk)
