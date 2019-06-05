@@ -18,9 +18,9 @@ number_of_months = 2
 number_of_days = 2
 number_of_hours = 1
 
-#all_strings = open('all_strings.json')
-json_data = all_strings.read()
-list_of_strings = json.loads(json_data)
+# all_strings = open('all_strings.json')
+# json_data = all_strings.read()
+# list_of_strings = json.loads(json_data)
 
 # list_of_products = ['ensemble_mean','ensemble_members','ensemble_spread','reanalysis']
 # list_of_formats = ['zip', 'tgz']

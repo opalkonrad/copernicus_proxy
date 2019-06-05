@@ -20,8 +20,8 @@ def query_validation(data):
             result[key] = result[key][0]
 
     # check required attributes
-    # try:
-    #     db_form = DataSets.objects.get(data_set=data_set)
+    try:
+        db_form = DataSets.objects.get(data_set=data_set)
 
     except ObjectDoesNotExist:
         curr_task = Task(json_content=json.dumps(result), data_set=data[0])
