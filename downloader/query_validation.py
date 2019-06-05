@@ -20,43 +20,43 @@ def query_validation(data):
             result[key] = result[key][0]
 
     # check required attributes
-    try:
-        db_form = DataSets.objects.get(data_set=data_set)
+    # try:
+    #     db_form = DataSets.objects.get(data_set=data_set)
 
-    except ObjectDoesNotExist:
-        curr_task = Task(json_content=json.dumps(result), data_set=data[0])
-        curr_task.status = 'error'
-        curr_task.msg = 'no matching data set'
-        curr_task.save()
-        return
+    # except ObjectDoesNotExist:
+    #     curr_task = Task(json_content=json.dumps(result), data_set=data[0])
+    #     curr_task.status = 'error'
+    #     curr_task.msg = 'no matching data set'
+    #     curr_task.save()
+    #     return
 
     # load required attributes from db
-    attr_check = json.loads(db_form.attributes)
+    # attr_check = json.loads(db_form.attributes)
 
-    db_cntr = 0
-    internal_cntr = 0
+    # db_cntr = 0
+    # internal_cntr = 0
 
-    # check required attributes
-    try:
-        for attrs_db in attr_check:
-            db_cntr += 1
+    # # check required attributes
+    # try:
+    #     for attrs_db in attr_check:
+    #         db_cntr += 1
 
-            # look for attributes
-            for key in result:
-                if attrs_db == key:
-                    internal_cntr += 1
+    #         # look for attributes
+    #         for key in result:
+    #             if attrs_db == key:
+    #                 internal_cntr += 1
 
-            # lack of attribute in form needed for Copernicus
-            if db_cntr != internal_cntr:
-                raise ValidationError('lack of argument in form - ' + attrs_db)
+    #         # lack of attribute in form needed for Copernicus
+    #         if db_cntr != internal_cntr:
+    #             raise ValidationError('lack of argument in form - ' + attrs_db)
 
-    except ValidationError as e:
-        # update request's status in database to error
-        curr_task = Task(json_content=json.dumps(result), data_set=data[0])
-        curr_task.status = 'error'
-        curr_task.msg = e
-        curr_task.save()
-        return
+    # except ValidationError as e:
+    #     # update request's status in database to error
+    #     curr_task = Task(json_content=json.dumps(result), data_set=data[0])
+    #     curr_task.status = 'error'
+    #     curr_task.msg = e
+    #     curr_task.save()
+    #     return
 
     curr_task = Task(json_content=json.dumps(result), data_set=data[0])
     curr_task.save()
