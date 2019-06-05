@@ -18,7 +18,6 @@ class SeaLevelView(FormView):
     template_name = 'sea_level/sea_level.html'
     form_class = SeaLevelForm
     success_url = '/downloader/db_browser/'
-    #data_set = 'reanalysis-era5-single-levels'
 
     def get_context_data(self, **kwargs):
         context = super(SeaLevelView, self).get_context_data(**kwargs)
@@ -27,7 +26,8 @@ class SeaLevelView(FormView):
 
     def form_valid(self, form):
         # form.cleaned_data - tuple of data_set name and filled options of the form
-        query_validation(form.cleaned_data)
+        json_form = form.cleaned_data['serialized_form']
+        query_validation(json.loads(json_form))
         return super().form_valid(form)
 
 

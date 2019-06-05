@@ -46,6 +46,13 @@ jQuery(function ($) {
                     $(this).parent().detach().appendTo('.filters__options .filters--' + localCategory + ' .selection__container--list');
                 });
             });
+            selectedOptions = $('.field--' + type).find('.dropped');
+            for (let i = 0; i < selectedOptions.length; i++) {
+                let tmpValue = selectedOptions.get(i).getAttribute('data-value');
+                if (!selectedList.includes(tmpValue))
+                    selectedList.push(tmpValue);
+            }
+            $('#id_' + type).val(JSON.stringify(selectedList));
         } else {
             let selectedOptions = $('.field--' + type).find('.dropped');
             for (let i = 0; i < selectedOptions.length; i++) {
@@ -169,7 +176,6 @@ jQuery(function ($) {
     });
 
     $('#submit').click(function (event) {
-        event.preventDefault();
         let dataset = $('#dataset_select').val();
         let dictionary;
         let formData = [];
@@ -198,6 +204,7 @@ jQuery(function ($) {
                 formData.push(dictionary);
                 break;
         }
-        console.log(JSON.stringify(formData));
+        $('#id_serialized_form').val(JSON.stringify(formData));
+        $('#copernicus_form').submit();
     });
 });

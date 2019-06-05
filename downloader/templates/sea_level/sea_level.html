@@ -22,12 +22,12 @@
     <a href="{% url 'db_browser' %}">Browse requests</a>
 </div>
 
-<form method="post" style="display: none;">
+<form id="copernicus_form" method="post" style="display: none;">
     {% csrf_token %}
-    {{  }}
+    {{ form.serialized_form.as_hidden }}
 </form>
 
-<div>
+<form>
     <div class="selection__form">
         <input type="hidden" name="dataset" id="id_dataset" value="reanalysis-era5-single-levels">
         <div class="field field--dataset">
@@ -288,10 +288,10 @@
         </div>
     </div>
     <div class="submission">
-        <button id="submit" type="submit" class="field__button field__button--submit" value="Submit">Submit</button>
+        <button id="submit" type="button" class="field__button field__button--submit" value="Submit">Submit</button>
         <button type="button" class="field__button field__button--submit">Save draft</button>
     </div>
-</div>
+</form>
 
 </body>
 </html>
