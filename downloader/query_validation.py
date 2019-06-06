@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 def query_validation(data):
     # tmp0 = DataSets(data_set='satellite-sea-level-mediterranean',
-    #                 attributes='{"variable": "all", "format": "null", "day": "null, "year": "null", "month": "null"}')
+    #                 attributes='{"variable": "all", "format": "null", "day": "null", "year": "null", "month": "null"}')
     # tmp0.save()
     # tmp1 = DataSets(data_set='reanalysis-era5-single-levels',
     #                 attributes='{"product_type": "null", "format": "null", "variable": "at_least_one", "day": "null", "year": "null", "month": "null", "time": "null"}')
