@@ -6,12 +6,13 @@ from django.http import HttpResponse
 
 
 def query_validation(data):
-    # tmp0 = DataSets(data_set='satellite-sea-level-mediterranean',
-    #                 attributes='{"variable": "all", "format": "null", "day": "null", "year": "null", "month": "null"}')
-    # tmp0.save()
-    # tmp1 = DataSets(data_set='reanalysis-era5-single-levels',
-    #                 attributes='{"product_type": "null", "format": "null", "variable": "at_least_one", "day": "null", "year": "null", "month": "null", "time": "null"}')
-    # tmp1.save()
+    if not DataSets.objects.exists():
+        tmp0 = DataSets(data_set='satellite-sea-level-mediterranean',
+                        attributes='{"variable": "all", "format": "null", "day": "null", "year": "null", "month": "null"}')
+        tmp0.save()
+        tmp1 = DataSets(data_set='reanalysis-era5-single-levels',
+                        attributes='{"product_type": "null", "format": "null", "variable": "at_least_one", "day": "null", "year": "null", "month": "null", "time": "null"}')
+        tmp1.save()
 
     data_set = data[0]  # string that defines a data_set
     result = data[1]  # dictionary that contains filled options of the form
@@ -38,6 +39,7 @@ def query_validation(data):
     db_cntr = 0  # next attribute from db
     internal_cntr = 0  # for compare if attr from db exists in form
 
+    # change it later to set(dict_1.keys()) == set(dict_2.keys())
     # check required attributes
     try:
         for attr_db in attr_check:

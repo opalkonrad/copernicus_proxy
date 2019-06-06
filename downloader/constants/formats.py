@@ -13,3 +13,5 @@ list_era5 = [
     Format('GRIB', ('.grib', 'grib')),
     Format('NetCDF (experimental)', ('.nc', 'nc'))
 ]
+
+list = list_sea_level + list_era5
