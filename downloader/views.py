@@ -8,6 +8,8 @@ from .tasks import download_from_cdsapi
 from django.shortcuts import redirect
 import json
 from .query_validation import query_validation
+from django.urls import reverse
+import requests
 
 
 def index(request):
@@ -28,6 +30,9 @@ class SeaLevelView(FormView):
         # form.cleaned_data - tuple of data_set name and filled options of the form
         json_form = form.cleaned_data['serialized_form']
         query_validation(json.loads(json_form))
+        task_list_url = self.request.build_absolute_uri(reverse('task_list'))
+        r = requests.post(task_list_url, auth=('serialized_form', json_form))
+        raise ValueError(r)
         return super().form_valid(form)
 
 

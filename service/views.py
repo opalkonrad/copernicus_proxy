@@ -3,6 +3,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from sea_level.settings import BASE_DIR
+from .query_validation import query_validation
+import json
 import os
 
 
@@ -24,7 +26,11 @@ class TaskList(CsrfFreeView):
         return HttpResponse(status=200)
 
     def post(self, request):
-        return HttpResponse(status=200)
+        json_form = request.POST.get('serialized_form', '')
+        if query_validation(json.loads(json_form)):
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=400)
 
 
 class Task(CsrfFreeView):
