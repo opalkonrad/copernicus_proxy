@@ -49,7 +49,7 @@ class TestView(FormView):
             for data in full_data:
                 query_validation(data)
 
-        return redirect("/downloader/db_browser")
+        return redirect('/downloader/db_browser/')
 
 
 class DatabaseBrowser(ListView):
@@ -73,4 +73,4 @@ class DatabaseBrowser(ListView):
 
                 download_from_cdsapi.delay(task.json_content, pk)
 
-        return redirect("/downloader/db_browser")
+        return redirect('/downloader/db_browser/')
