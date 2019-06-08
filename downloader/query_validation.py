@@ -2,7 +2,6 @@ from .models import DataSets
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 import json
 from downloader.models import Task
-from django.http import HttpResponse
 
 
 def query_validation(data):

@@ -2,7 +2,6 @@ from django.http import HttpResponse
 from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
-from downloader.models import Task
 import downloader.forms.sea_level_choices as options
 from .tasks import download_from_cdsapi
 from django.shortcuts import redirect
@@ -13,7 +12,9 @@ import requests
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the downloader index.")
+    task_list_url = request.build_absolute_uri(reverse('task_list'))
+    r = requests.get(task_list_url)
+    return HttpResponse(str(r.status_code) + ": " + str(r.text))
 
 
 class SeaLevelView(FormView):
@@ -31,8 +32,7 @@ class SeaLevelView(FormView):
         json_form = form.cleaned_data['serialized_form']
         query_validation(json.loads(json_form))
         task_list_url = self.request.build_absolute_uri(reverse('task_list'))
-        r = requests.post(task_list_url, auth=('serialized_form', json_form))
-        raise ValueError(r)
+        r = requests.post(task_list_url, data={'serialized_form': json_form})
         return super().form_valid(form)
 
 
@@ -58,7 +58,9 @@ class DatabaseBrowser(ListView):
     success_url = '/downloader/sea_level/'
 
     def get_queryset(self):
-        return Task.objects.all()
+        task_list_url = self.request.build_absolute_uri(reverse('task_list'))
+        r = requests.get(task_list_url)
+        return json.loads(r.text)
 
     def post(self, request, *args, **kwargs):
         pk = request.POST.get("id")
