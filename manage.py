@@ -5,11 +5,11 @@ import subprocess
 
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sea_level.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'copernicus_proxy.settings')
     # print("DEBUGGER 1")
-    # os.system("celery -A sea_level control shutdown &")
+    # os.system("celery -A copernicus_proxy control shutdown &")
     # print("DEBUGGER 2")
-    # os.system("celery -A sea_level worker --loglevel=INFO --concurrency=2 -n seaworker &")
+    # os.system("celery -A copernicus_proxy worker --loglevel=INFO --concurrency=2 -n seaworker &")
     # print("DEBUGGER 3")
     try:
         from django.core.management import execute_from_command_line

@@ -1,5 +1,5 @@
 """
-WSGI config for sea_level project.
+WSGI config for copernicus_proxy project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sea_level.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'copernicus_proxy.settings')
 
 application = get_wsgi_application()

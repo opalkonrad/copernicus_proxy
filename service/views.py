@@ -3,7 +3,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
-from sea_level.settings import BASE_DIR
+from copernicus_proxy.settings import BASE_DIR
 from service.models import Task as TaskModel
 from service.constants import formats
 import os

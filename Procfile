@@ -1,1 +1,1 @@
-web: gunicorn sea_level.wsgi
+web: gunicorn copernicus_proxy.wsgi
