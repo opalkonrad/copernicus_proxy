@@ -24,7 +24,7 @@
 
 <form id="copernicus_form" method="post" style="display: none;">
     {% csrf_token %}
-    {{ form.serialized_form.as_hidden }}
+    {{ form.json_content.as_hidden }}
 </form>
 
 <form>

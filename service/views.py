@@ -2,10 +2,9 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
+from django.core.exceptions import ValidationError
 from sea_level.settings import BASE_DIR
-from .query_validation import query_validation
 from .models import Task as TaskModel
-import json
 import os
 
 
@@ -27,20 +26,29 @@ class TaskList(CsrfFreeView):
         return JsonResponse(TaskModel.list_all(), safe=False)
 
     def post(self, request):
-        json_form = request.POST.get('serialized_form', '')
-        if query_validation(json.loads(json_form)):
-            return HttpResponse(json_form, status=200)
-        else:
+        json_content = request.POST.get('json_content', '')
+        try:
+            task = TaskModel(json_content=json_content)
+            task.full_clean()
+            task.save()
+            return JsonResponse({'task_id': task.pk})
+        except ValidationError as error:
+            task = TaskModel(json_content=json_content, status='error', msg=error)
+            task.save()
             return HttpResponse(status=400)
 
 
 class Task(CsrfFreeView):
     """
-    View for displaying (GET) single task indicated by 'id' in the URL
+    View for displaying (GET) all information about single task indicated by 'id' in the URL
     """
 
     def get(self, request, url_id):
-        return HttpResponse(status=200)
+        try:
+            task = TaskModel.objects.get(id=url_id)
+            return JsonResponse(task.to_dict())
+        except TaskModel.DoesNotExist:
+            return HttpResponse(status=404)
 
 
 class File(View):

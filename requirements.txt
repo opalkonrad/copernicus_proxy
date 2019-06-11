@@ -4,3 +4,4 @@ django-heroku
 gunicorn
 jsonfield
 celery
+requests

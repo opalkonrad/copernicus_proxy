@@ -28,11 +28,9 @@ class SeaLevelView(FormView):
         return context
 
     def form_valid(self, form):
-        # form.cleaned_data - tuple of data_set name and filled options of the form
-        json_form = form.cleaned_data['serialized_form']
-        query_validation(json.loads(json_form))
+        json_content = form.cleaned_data['json_content']
         task_list_url = self.request.build_absolute_uri(reverse('task_list'))
-        r = requests.post(task_list_url, data={'serialized_form': json_form})
+        requests.post(task_list_url, data={'json_content': json_content})
         return super().form_valid(form)
 
 

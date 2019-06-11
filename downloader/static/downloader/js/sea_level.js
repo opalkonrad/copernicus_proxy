@@ -225,7 +225,7 @@ jQuery(function ($) {
                 formData.push(dictionary);
                 break;
         }
-        $('#id_serialized_form').val(JSON.stringify(formData));
+        $('#id_json_content').val(JSON.stringify(formData));
         $('#copernicus_form').submit();
     });
 });
