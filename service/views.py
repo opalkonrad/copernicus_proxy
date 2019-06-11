@@ -5,7 +5,9 @@ from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
 from sea_level.settings import BASE_DIR
 from service.models import Task as TaskModel, DataSet as DataSetModel
+from service.constants import formats
 import os
+import json
 
 
 # Create your views here.
@@ -58,15 +60,27 @@ class File(View):
 
     def get(self, request, url_id):
 
-        file_location = os.path.join(BASE_DIR, 'files', '1.txt')
+        requested_file = TaskModel.objects.get(id=url_id)
+
+        json_string = json.loads(requested_file.json_content)
+
+        data_set = json_string[0]
+        file_format = json_string[1]['format']
+
+
+        for f in formats.list:
+                if f.extension[1] == file_format:
+                    file_format = f.extension[0]
+
+        file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
 
         try:
-            with open(file_location, 'r') as f:
+            with open(file_location, 'rb') as f:
                 file_data = f.read()
 
             # sending response
-            response = HttpResponse(file_data, content_type='text/plain ')
-            response['Content-Disposition'] = 'attachment; filename="1.txt"'
+            response = HttpResponse(file_data, content_type='application/octet-stream')
+            response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
             return response
 
         except IOError:
