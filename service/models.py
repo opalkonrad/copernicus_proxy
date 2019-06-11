@@ -67,21 +67,21 @@ class DataSet(models.Model):
         default0 = cls(
             data_set='satellite-sea-level-mediterranean',
             attributes='{"variable": "all", '
-                       '"format": "null", '
-                       '"day": "null", '
-                       '"year": "null", '
-                       '"month": "null"}'
+                       '"format": "one", '
+                       '"day": "at_least_one", '
+                       '"year": "at_least_one", '
+                       '"month": "at_least_one"}'
         )
         default0.save()
         default1 = cls(
             data_set='reanalysis-era5-single-levels',
-            attributes='{"product_type": "null", '
-                       '"format": "null", '
+            attributes='{"product_type": "at_least_one", '
+                       '"format": "one", '
                        '"variable": "at_least_one", '
-                       '"day": "null", '
-                       '"year": "null", '
-                       '"month": "null", '
-                       '"time": "null"}'
+                       '"day": "at_least_one", '
+                       '"year": "at_least_one", '
+                       '"month": "at_least_one", '
+                       '"time": "at_least_one"}'
         )
         default1.save()
 
@@ -97,6 +97,22 @@ class DataSet(models.Model):
             return data_set
         except ObjectDoesNotExist:
             return None
+
+    def to_dict(self):
+        data_set_dict = {
+            'id': self.pk,
+            'data_set': self.data_set,
+            'attributes': json.loads(self.attributes)
+        }
+        return data_set_dict
+
+    @classmethod
+    def list_all(cls):
+        data_set_list = []
+        for record in cls.objects.all():
+            data_set_list.append(record.to_dict())
+        return data_set_list
+
 
 # DataSets Foreign Key TBA
 # DownloadedFile Foreign Key TBA
