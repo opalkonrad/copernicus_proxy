@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
 from sea_level.settings import BASE_DIR
-from .models import Task as TaskModel
+from service.models import Task as TaskModel
 import os
 
 

@@ -6,7 +6,7 @@ from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
 from django.utils import timezone
-from downloader.models import DataSets, Task
+from service.models import Task
 import downloader.forms.sea_level_choices as options
 import cdsapi
 import json
@@ -16,11 +16,12 @@ from downloader.constants import formats
 
 
 @shared_task
-def download_from_cdsapi(form_content, pk):
+def download_from_cdsapi(pk):
     # get information about task
     curr_task = Task.objects.get(id=pk)
-    data = json.loads(form_content)
-    data_set = curr_task.data_set
+    content = json.loads(curr_task.json_content)
+    data_set = content[0]
+    data = content[1]
     save_format = ""
 
     # update task's status in database

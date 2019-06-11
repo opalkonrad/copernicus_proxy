@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 import json
 from .query_validation import query_validation
 from django.urls import reverse
+from service.models import Task as TaskModel
 import requests
 
 
@@ -62,7 +63,7 @@ class DatabaseBrowser(ListView):
 
     def post(self, request, *args, **kwargs):
         pk = request.POST.get("id")
-        task = Task.objects.get(id=pk)
+        task = TaskModel.objects.get(id=pk)
 
         if "download" in request.POST:
             # check if task is appropriate
@@ -70,7 +71,6 @@ class DatabaseBrowser(ListView):
                 task.status = "waiting in queue"
                 task.msg = ""
                 task.save()
-
-                download_from_cdsapi.delay(task.json_content, pk)
+                download_from_cdsapi.delay(pk)
 
         return redirect('/downloader/db_browser/')
