@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
 from copernicus_proxy.settings import BASE_DIR
-from service.models import Task as TaskModel
+from service.models import Task as TaskModel, DataSet as DataSetModel
 from service.constants import formats
 import os
 import json
@@ -93,13 +93,22 @@ class File(View):
         #    return HttpResponse(status=404)
 
 
-class DataSet(CsrfFreeView):
+class DataSetList(CsrfFreeView):
     """
-    View for creating (POST) or editing (PUT) dataset indicated by 'id' in the URL
+    View for displaying all records (GET) and creating new record (POST)
     """
+
+    def get(self, request):
+        return JsonResponse(DataSetModel.list_all(), safe=False)
 
     def post(self, request, url_id):
         return HttpResponse(status=200)
+
+
+class DataSet(CsrfFreeView):
+    """
+    View for editing single record indicated by 'id' (PUT)
+    """
 
     def put(self, request, url_id):
         return HttpResponse(status=200)
