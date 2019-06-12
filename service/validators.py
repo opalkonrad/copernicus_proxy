@@ -57,3 +57,10 @@ def validate_json_content(value):
     unwrap_single_element_lists(options)
     required_options = json.loads(data_set.attributes)
     validate_options(options, required_options)
+
+
+def validate_json(value):
+    try:
+        data = json.loads(value)
+    except json.JSONDecodeError:
+        raise ValidationError('JSON decoding failed')

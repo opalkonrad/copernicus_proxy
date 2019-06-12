@@ -3,11 +3,13 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from sea_level.settings import BASE_DIR
 from service.models import Task as TaskModel, DataSet as DataSetModel
 from service.constants import formats
 import os
 import json
+import requests
 
 
 # Create your views here.
@@ -67,10 +69,9 @@ class File(View):
         data_set = json_string[0]
         file_format = json_string[1]['format']
 
-
         for f in formats.list:
-                if f.extension[1] == file_format:
-                    file_format = f.extension[0]
+            if f.extension[1] == file_format:
+                file_format = f.extension[0]
 
         file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
 
@@ -101,8 +102,16 @@ class DataSetList(CsrfFreeView):
     def get(self, request):
         return JsonResponse(DataSetModel.list_all(), safe=False)
 
-    def post(self, request, url_id):
-        return HttpResponse(status=200)
+    def post(self, request):
+        ds = request.POST.get('data_set', '')
+        attrs = request.POST.get('attributes', '')
+        try:
+            new_data_set = DataSetModel(data_set=ds, attributes=attrs)
+            new_data_set.full_clean()
+            new_data_set.save()
+            return HttpResponse(status=200)
+        except ValidationError as e:
+            return HttpResponse(e, status=400)
 
 
 class DataSet(CsrfFreeView):
