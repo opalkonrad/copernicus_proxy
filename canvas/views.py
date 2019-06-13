@@ -1,13 +1,13 @@
 from django.http import HttpResponse
-from downloader.forms.sea_level_form import SeaLevelForm
+from canvas.forms.canvas_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
-import downloader.forms.sea_level_choices as options
+import canvas.forms.canvas_choices as options
 from django.shortcuts import redirect
-import json
 from django.urls import reverse
-from service.models import Task as TaskModel
+from service.management.commands.restartworkers import reset_task_queue, reset_workers
 import requests
+import json
 
 
 def index(request):
@@ -16,13 +16,13 @@ def index(request):
     return HttpResponse(str(r.status_code) + ": " + str(r.text))
 
 
-class SeaLevelView(FormView):
-    template_name = 'sea_level/sea_level.html'
+class CopernicusView(FormView):
+    template_name = 'canvas/copernicus.html'
     form_class = SeaLevelForm
-    success_url = '/downloader/db_browser/'
+    success_url = '/canvas/db_browser/'
 
     def get_context_data(self, **kwargs):
-        context = super(SeaLevelView, self).get_context_data(**kwargs)
+        context = super(CopernicusView, self).get_context_data(**kwargs)
         context['options'] = options
         return context
 
@@ -34,15 +34,15 @@ class SeaLevelView(FormView):
 
 
 class TestView(FormView):
-    template_name = 'sea_level/testing.html'
+    template_name = 'canvas/testing.html'
     form_class = SeaLevelForm
-    success_url = '/downloader/db_browser/'
+    success_url = '/canvas/db_browser/'
 
 
 class DatabaseBrowser(ListView):
-    template_name = 'sea_level/db_browser.html'
+    template_name = 'canvas/db_browser.html'
     context_object_name = 'tasks'
-    success_url = '/downloader/sea_level/'
+    success_url = '/canvas/canvas/'
 
     def get_queryset(self):
         task_list_url = self.request.build_absolute_uri(reverse('task_list'))
@@ -55,4 +55,6 @@ class DatabaseBrowser(ListView):
         if action == 'delete':
             task_url = self.request.build_absolute_uri(reverse('task', kwargs={'url_id': task_id}))
             requests.delete(task_url)
-        return redirect('/downloader/db_browser/')
+            reset_workers(10)
+            reset_task_queue()
+        return redirect('/canvas/db_browser/')

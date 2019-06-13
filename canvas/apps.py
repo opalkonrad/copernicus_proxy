@@ -3,7 +3,7 @@ import os
 
 
 class DownloaderConfig(AppConfig):
-    name = 'downloader'
+    name = 'canvas'
 
 
 DOWNLOADER_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -1,5 +1,5 @@
-from downloader.constants import formats, hours, days, months, years, product_types
-from downloader.constants.reanalysis_era5_single_levels import filters as era5_filters
+from canvas.constants import formats, hours, days, months, years, product_types
+from canvas.constants.reanalysis_era5_single_levels import filters as era5_filters
 
 years_list = []
 months_list = []

@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 from service.models import Task
-from downloader.constants import formats
+from service.constants import formats
 import cdsapi
 import json
 import os
@@ -50,5 +50,5 @@ def download_from_cdsapi(pk):
     # update request's status in database to downloaded
     curr_task.status = "downloaded"
     curr_task.msg = "success"
-    curr_task.file_size = os.path.getsize(filename)
+    curr_task.bytes = os.path.getsize(filename)
     curr_task.save()
