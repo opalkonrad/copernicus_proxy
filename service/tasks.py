@@ -31,12 +31,13 @@ def download_from_cdsapi(pk):
 
     # API REQUEST
     c = cdsapi.Client()
+    filename = "./files/" + data_set + "/file_id_" + str(pk) + save_format
 
     try:
         c.retrieve(
             data_set,
             data,
-            "./files/" + data_set + "/file_id_" + str(pk) + save_format
+            filename
         )
 
     except Exception as e:
@@ -49,4 +50,5 @@ def download_from_cdsapi(pk):
     # update request's status in database to downloaded
     curr_task.status = "downloaded"
     curr_task.msg = "success"
+    curr_task.file_size = os.path.getsize(filename)
     curr_task.save()

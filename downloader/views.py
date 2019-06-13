@@ -3,10 +3,8 @@ from downloader.forms.sea_level_form import SeaLevelForm
 from django.views.generic.edit import FormView
 from django.views.generic import ListView
 import downloader.forms.sea_level_choices as options
-from .tasks import download_from_cdsapi
 from django.shortcuts import redirect
 import json
-from .query_validation import query_validation
 from django.urls import reverse
 from service.models import Task as TaskModel
 import requests
@@ -40,16 +38,6 @@ class TestView(FormView):
     form_class = SeaLevelForm
     success_url = '/downloader/db_browser/'
 
-    def post(self, request):
-        if request.method == 'POST':
-            json_text = request.POST.get('textfield', None)
-            full_data = json.loads(json_text)  # array with [(data_set_name, filled_form_json), ...]
-
-            for data in full_data:
-                query_validation(data)
-
-        return redirect('/downloader/db_browser/')
-
 
 class DatabaseBrowser(ListView):
     template_name = 'sea_level/db_browser.html'
@@ -61,16 +49,10 @@ class DatabaseBrowser(ListView):
         r = requests.get(task_list_url)
         return json.loads(r.text)
 
-    def post(self, request, *args, **kwargs):
-        pk = request.POST.get("id")
-        task = TaskModel.objects.get(id=pk)
-
-        if "download" in request.POST:
-            # check if task is appropriate
-            if task.status != "error":
-                task.status = "waiting in queue"
-                task.msg = ""
-                task.save()
-                download_from_cdsapi.delay(pk)
-
+    def post(self, request):
+        action = request.POST.get('action', '')
+        task_id = request.POST.get('task_id', '')
+        if action == 'delete':
+            task_url = self.request.build_absolute_uri(reverse('task', kwargs={'url_id': task_id}))
+            requests.delete(task_url)
         return redirect('/downloader/db_browser/')

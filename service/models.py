@@ -37,16 +37,22 @@ class Task(models.Model):
         default="",
         blank=True
     )
+    bytes = models.IntegerField(
+        default=0,
+        blank=True
+    )
 
     def to_dict(self):
         task_date = self.task_date.replace(tzinfo=None).strftime(DATETIME_FORMAT)
+        json_content = json.loads(self.json_content)
         task_dict = {
             'id': self.pk,
-            'json_content': json.loads(self.json_content),
+            'data_set': json_content[0],
+            'json_content': json_content,
             'status': self.status,
-            # 'data_set': self.data_set,
             'task_date': task_date,
-            'msg': self.msg
+            'msg': self.msg,
+            'bytes': self.bytes
         }
         return task_dict
 
