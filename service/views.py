@@ -2,14 +2,14 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError
+from django.http import QueryDict
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from sea_level.settings import BASE_DIR
 from service.models import Task as TaskModel, DataSet as DataSetModel
 from service.constants import formats
+from django.core.exceptions import ValidationError
 import os
 import json
-import requests
 
 
 # Create your views here.
@@ -109,7 +109,8 @@ class DataSetList(CsrfFreeView):
             new_data_set = DataSetModel(data_set=ds, attributes=attrs)
             new_data_set.full_clean()
             new_data_set.save()
-            return HttpResponse(status=200)
+            return HttpResponse(status=201)
+
         except ValidationError as e:
             return HttpResponse(e, status=400)
 
@@ -120,4 +121,33 @@ class DataSet(CsrfFreeView):
     """
 
     def put(self, request, url_id):
-        return HttpResponse(status=200)
+        try:
+            req_json = json.loads(request.body)
+            attrs = '{'
+            for key, val in req_json["attributes"].items():
+                attrs += '"' + key + '":'
+                attrs += '"' + val + '",'
+            attrs = attrs[:-1] + '}'
+
+            existing_db_record = DataSetModel.objects.get(id=url_id)
+            existing_db_record.data_set = req_json["data_set"]
+            existing_db_record.attributes = attrs
+            existing_db_record.full_clean()
+            existing_db_record.save()
+            return HttpResponse(status=200)
+
+        except json.JSONDecodeError as e:
+            return HttpResponse(e, status=400)
+
+        except ObjectDoesNotExist as e:
+            return HttpResponse(e, status=400)
+
+        except ValidationError as e:
+            return HttpResponse(e, status=400)
+
+    def delete(self, request, url_id):
+        try:
+            DataSetModel.objects.get(id=url_id).delete()
+            return HttpResponse(status=200)
+        except ObjectDoesNotExist as e:
+            return HttpResponse(e, status=400)
