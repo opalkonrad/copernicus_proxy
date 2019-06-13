@@ -37,7 +37,7 @@ class Command(BaseCommand):
         if n < 1:
             raise CommandError('Number of workers must be bigger than 0')
         elif n > 100:
-            raise CommandError('Number of workers must be lower than ' + str(WORKERS_LIMIT))
+            raise CommandError('Maximum number of workers is ' + str(WORKERS_LIMIT))
 
         reset_workers(n)
         reset_task_queue()
