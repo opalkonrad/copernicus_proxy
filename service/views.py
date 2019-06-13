@@ -34,6 +34,19 @@ class TaskList(CsrfFreeView):
             task_count = TaskModel.objects.count()
             if task_count >= 6:
                 task_to_remove = TaskModel.objects.all().order_by("id")[0]
+
+                task_id = task_to_remove.id
+                json_string = json.loads(task_to_remove.json_content)
+                data_set = json_string[0]
+                file_format = json_string[1]['format']
+
+                for f in formats.list:
+                    if f.extension[1] == file_format:
+                        file_format = f.extension[0]
+
+                file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(task_id) + file_format)
+                os.remove(file_location)
+
                 task_to_remove.delete()
 
             task = TaskModel(json_content=json_content)
