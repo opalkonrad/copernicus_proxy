@@ -125,3 +125,7 @@ dmypy.json
 # PyCharm and Visual Studio
 .vscode/
 .idea/
+
+# Downloaded files
+files/*
+!files/.gitkeep
