@@ -45,12 +45,21 @@ class TaskList(CsrfFreeView):
 class Task(CsrfFreeView):
     """
     View for displaying (GET) all information about single task indicated by 'id' in the URL
+    and deleting (DELETE) specified task
     """
 
     def get(self, request, url_id):
         try:
             task = TaskModel.objects.get(id=url_id)
             return JsonResponse(task.to_dict())
+        except TaskModel.DoesNotExist:
+            return HttpResponse(status=404)
+
+    def delete(self, request, url_id):
+        try:
+            task = TaskModel.objects.get(id=url_id)
+            task.delete()
+            return HttpResponse(status=204)
         except TaskModel.DoesNotExist:
             return HttpResponse(status=404)
 
@@ -86,12 +95,6 @@ class File(View):
 
         except IOError:
             return HttpResponse(status=404)
-        # handle file not exist case here
-        # search for file indicated by id, if none return 404
-        # try:
-        #    task = FileModel.objects.get(id=url_id)
-        # except:
-        #    return HttpResponse(status=404)
 
 
 class DataSetList(CsrfFreeView):
