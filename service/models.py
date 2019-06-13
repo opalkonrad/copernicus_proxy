@@ -138,17 +138,3 @@ class DataSet(models.Model):
         for record in cls.objects.all():
             data_set_list.append(record.to_dict())
         return data_set_list
-
-# DataSets Foreign Key TBA
-# DownloadedFile Foreign Key TBA
-# DownloadedFile TBA
-
-
-# class DownloadedFile(models.Model):
-#     date = models.DateTimeField(default=timezone.now)
-#     path = models.CharField(max_length=255)
-#     size = models.CharField(max_length=31)
-#     fk = models.ForeignKey(Task, on_delete=models.CASCADE)
-
-#     def set_path(self, category):
-#         self.path = "./files/" + category + "/file_id_" + self.fk

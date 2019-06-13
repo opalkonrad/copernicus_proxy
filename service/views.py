@@ -75,9 +75,7 @@ class File(View):
     """
 
     def get(self, request, url_id):
-
         requested_file = TaskModel.objects.get(id=url_id)
-
         json_string = json.loads(requested_file.json_content)
 
         data_set = json_string[0]
@@ -88,19 +86,15 @@ class File(View):
                 file_format = f.extension[0]
 
         file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
-
         try:
             if requested_file.status != 'downloaded':
-                raise IOError('file isnt fully downloaded yet')
-
+                raise IOError('file is not fully downloaded yet')
             with open(file_location, 'rb') as f:
                 file_data = f.read()
 
-            # sending response
             response = HttpResponse(file_data, content_type='application/octet-stream')
             response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
             return response
-
         except IOError:
             return HttpResponse(status=404)
 
@@ -141,13 +135,10 @@ class DataSet(CsrfFreeView):
             existing_db_record.full_clean()
             existing_db_record.save()
             return HttpResponse(status=200)
-
         except json.JSONDecodeError as e:
             return HttpResponse(e, status=400)
-
         except ObjectDoesNotExist as e:
             return HttpResponse(e, status=400)
-
         except ValidationError as e:
             return HttpResponse(e, status=400)
 
