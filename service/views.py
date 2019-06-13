@@ -31,6 +31,11 @@ class TaskList(CsrfFreeView):
     def post(self, request):
         json_content = request.POST.get('json_content', '')
         try:
+            task_count = TaskModel.objects.count()
+            if task_count >= 6:
+                task_to_remove = TaskModel.objects.all().order_by("id")[0]
+                task_to_remove.delete()
+
             task = TaskModel(json_content=json_content)
             task.full_clean()
             task.save()
@@ -85,6 +90,9 @@ class File(View):
         file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
 
         try:
+            if requested_file.status != 'downloaded':
+                raise IOError('file isnt fully downloaded yet')
+
             with open(file_location, 'rb') as f:
                 file_data = f.read()
 
