@@ -57,6 +57,19 @@ class Task(models.Model):
             tasks_list.append(task.to_dict())
         return tasks_list
 
+    @classmethod
+    def mark_being_downloaded_as_pending(cls):
+        for task in cls.objects.filter(status="being downloaded"):
+            task.status = "pending"
+            task.save()
+
+    @classmethod
+    def get_all_pending(cls):
+        pending_list = []
+        for task in cls.objects.filter(status="pending"):
+            pending_list.append(task.pk)
+        return pending_list
+
 
 class DataSet(models.Model):
     data_set = models.CharField(max_length=DATA_SET_MAX_LENGTH, unique=True)
