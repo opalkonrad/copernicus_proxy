@@ -2,7 +2,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from copernicus_proxy.settings import BASE_DIR
 from service.models import Task as TaskModel, DataSet as DataSetModel
 from service.constants import formats
@@ -35,11 +35,11 @@ class TaskList(CsrfFreeView):
             task.full_clean()
             task.save()
             download_from_cdsapi.delay(task.pk)
-            return JsonResponse({'task_id': task.pk})
-        except ValidationError as error:
-            task = TaskModel(json_content=json_content, status='error', msg=error)
+            return JsonResponse({'task_id': task.pk}, status=201)
+        except ValidationError as e:
+            task = TaskModel(json_content=json_content, status='error', msg=e)
             task.save()
-            return HttpResponse(status=400)
+            return HttpResponse(e, status=400)
 
 
 class Task(CsrfFreeView):
@@ -105,8 +105,16 @@ class DataSetList(CsrfFreeView):
     def get(self, request):
         return JsonResponse(DataSetModel.list_all(), safe=False)
 
-    def post(self, request, url_id):
-        return HttpResponse(status=200)
+    def post(self, request):
+        ds = request.POST.get('data_set', '')
+        attrs = request.POST.get('attributes', '')
+        try:
+            new_data_set = DataSetModel(data_set=ds, attributes=attrs)
+            new_data_set.full_clean()
+            new_data_set.save()
+            return JsonResponse({'data_set_id': new_data_set.pk}, status=201)
+        except ValidationError as e:
+            return HttpResponse(e, status=400)
 
 
 class DataSet(CsrfFreeView):
@@ -115,4 +123,29 @@ class DataSet(CsrfFreeView):
     """
 
     def put(self, request, url_id):
-        return HttpResponse(status=200)
+        try:
+            req_json = json.loads(request.body)
+            attrs = json.dumps(req_json['attributes'])
+
+            existing_db_record = DataSetModel.objects.get(id=url_id)
+            existing_db_record.data_set = req_json["data_set"]
+            existing_db_record.attributes = attrs
+            existing_db_record.full_clean()
+            existing_db_record.save()
+            return HttpResponse(status=200)
+
+        except json.JSONDecodeError as e:
+            return HttpResponse(e, status=400)
+
+        except ObjectDoesNotExist as e:
+            return HttpResponse(e, status=400)
+
+        except ValidationError as e:
+            return HttpResponse(e, status=400)
+
+    def delete(self, request, url_id):
+        try:
+            DataSetModel.objects.get(id=url_id).delete()
+            return HttpResponse(status=200)
+        except ObjectDoesNotExist as e:
+            return HttpResponse(e, status=400)

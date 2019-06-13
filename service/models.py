@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import validators
-from service.validators import validate_json_content
+from service.validators import validate_json_content, validate_json
 import json
 
 DATA_SET_MAX_LENGTH = 128
@@ -78,8 +78,15 @@ class Task(models.Model):
 
 
 class DataSet(models.Model):
-    data_set = models.CharField(max_length=DATA_SET_MAX_LENGTH, unique=True)
-    attributes = models.CharField(max_length=ATTRIBUTES_MAX_LENGTH)
+    data_set = models.CharField(
+        max_length=DATA_SET_MAX_LENGTH,
+        validators=[validators.MaxLengthValidator(DATA_SET_MAX_LENGTH)],
+        unique=True
+    )
+    attributes = models.CharField(
+        max_length=ATTRIBUTES_MAX_LENGTH,
+        validators=[validate_json, validators.MaxLengthValidator(ATTRIBUTES_MAX_LENGTH)],
+    )
 
     @classmethod
     def add_default_data_sets(cls):

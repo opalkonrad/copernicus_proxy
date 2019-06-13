@@ -14,32 +14,30 @@ def validate_data_set(data_set):
 
 
 def validate_options(options, required_options):
-    required_options_counter = 0  # next attribute from db
-    options_counter = 0  # for compare if attr from db exists in form
+    # compare keys and if different show the difference
+    if set(options.keys()) != set(required_options.keys()):
+        diff_keys = ''
+        for key in required_options.keys():
+            if key not in options.keys():
+                diff_keys += key + ','
 
-    # change it later to set(dict_1.keys()) == set(dict_2.keys())
+        diff_keys = diff_keys[:-1]
+        raise ValidationError('lack of required keys: ' + diff_keys)
+
     # check required attributes
-    for single_required_option in required_options:
-        required_options_counter += 1
+    for req_attr, req_value in required_options.items():
+        # check if variable is always "all", "at_least_one" or "one"
+        if req_value == 'all':
+            if options[req_attr] != 'all':
+                raise ValidationError(req_attr + ' should be "all"')
 
-        # look for attributes
-        for key in options:
-            if single_required_option == key:
-                options_counter += 1
+        if req_value == 'at_least_one':
+            if len(options[req_attr]) <= 0:
+                raise ValidationError('you have to choose at least one option for attribute: ' + req_attr)
 
-        # check if variable is always "all" or "at_least_one"
-        if single_required_option == 'variable':
-            if required_options["variable"] == 'at_least_one':
-                if len(options["variable"]) <= 0:
-                    raise ValidationError('you have to choose at least one option for variable')
-
-            if required_options["variable"] == 'all':
-                if options["variable"] != 'all':
-                    raise ValidationError('variable should be "all"')
-
-        # lack of attribute in form needed for Copernicus
-        if required_options_counter != options_counter:
-            raise ValidationError('lack of argument in form - ' + single_required_option)
+        if req_value == 'one':
+            if type(options[req_attr]) != str:  # it should be changed to str while unwrapping if contained one option
+                raise ValidationError(req_attr + ' should contain only one selected option')
 
 
 def validate_json_content(value):
@@ -57,3 +55,10 @@ def validate_json_content(value):
     unwrap_single_element_lists(options)
     required_options = json.loads(data_set.attributes)
     validate_options(options, required_options)
+
+
+def validate_json(value):
+    try:
+        json.loads(value)
+    except json.JSONDecodeError:
+        raise ValidationError('JSON decoding failed')
