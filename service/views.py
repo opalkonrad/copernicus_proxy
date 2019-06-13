@@ -2,7 +2,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from copernicus_proxy.settings import BASE_DIR
 from service.models import Task as TaskModel, DataSet as DataSetModel
 from service.constants import formats
@@ -54,10 +54,10 @@ class TaskList(CsrfFreeView):
             task.save()
             download_from_cdsapi.delay(task.pk)
             return JsonResponse({'task_id': task.pk}, status=201)
-        except ValidationError as e:
+        except ValidationError:
             task = TaskModel(json_content=json_content, status='error', msg=e)
             task.save()
-            return HttpResponse(e, status=400)
+            return HttpResponse(status=400)
 
 
 class Task(CsrfFreeView):
@@ -88,19 +88,20 @@ class File(View):
     """
 
     def get(self, request, url_id):
-        requested_file = TaskModel.objects.get(id=url_id)
-        json_string = json.loads(requested_file.json_content)
-
-        data_set = json_string[0]
-        file_format = json_string[1]['format']
-
-        for f in formats.list:
-            if f.extension[1] == file_format:
-                file_format = f.extension[0]
-
-        file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
         try:
-            if requested_file.status != 'downloaded':
+            task = TaskModel.objects.get(id=url_id)
+            json_string = json.loads(task.json_content)
+
+            data_set = json_string[0]
+            file_format = json_string[1]['format']
+
+            for f in formats.list:
+                if f.extension[1] == file_format:
+                    file_format = f.extension[0]
+
+            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
+
+            if task.status != 'downloaded':
                 raise IOError('file is not fully downloaded yet')
             with open(file_location, 'rb') as f:
                 file_data = f.read()
@@ -108,7 +109,7 @@ class File(View):
             response = HttpResponse(file_data, content_type='application/octet-stream')
             response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
             return response
-        except IOError:
+        except (IOError, TaskModel.DoesNotExist):
             return HttpResponse(status=404)
 
 
@@ -128,8 +129,8 @@ class DataSetList(CsrfFreeView):
             new_data_set.full_clean()
             new_data_set.save()
             return JsonResponse({'data_set_id': new_data_set.pk}, status=201)
-        except ValidationError as e:
-            return HttpResponse(e, status=400)
+        except ValidationError:
+            return HttpResponse(status=400)
 
 
 class DataSet(CsrfFreeView):
@@ -148,16 +149,12 @@ class DataSet(CsrfFreeView):
             existing_db_record.full_clean()
             existing_db_record.save()
             return HttpResponse(status=200)
-        except json.JSONDecodeError as e:
-            return HttpResponse(e, status=400)
-        except ObjectDoesNotExist as e:
-            return HttpResponse(e, status=400)
-        except ValidationError as e:
-            return HttpResponse(e, status=400)
+        except (json.JSONDecodeError, DataSet.DoesNotExist, ValidationError):
+            return HttpResponse(status=400)
 
     def delete(self, request, url_id):
         try:
             DataSetModel.objects.get(id=url_id).delete()
             return HttpResponse(status=200)
-        except ObjectDoesNotExist as e:
-            return HttpResponse(e, status=400)
+        except DataSet.DoesNotExist:
+            return HttpResponse(status=400)

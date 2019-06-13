@@ -15,12 +15,9 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 class Task(models.Model):
-    task_date = models.DateTimeField(default=timezone.now)
-    # TODO: data_set field as foreign key to DataSet table
-    #
-    # data_set = models.TextField(
-    #     max_length=DATA_SET_MAX_LENGTH,
-    #     validators=[validate_data_set, validators.MaxLengthValidator(DATA_SET_MAX_LENGTH)],
+    # data_set = models.ForeignKey(
+    #     'DataSet',
+    #     on_delete=models.PROTECT,
     # )
     json_content = models.CharField(
         max_length=JSON_CONTENT_MAX_LENGTH,
@@ -31,6 +28,7 @@ class Task(models.Model):
         validators=[validators.MaxLengthValidator(STATUS_MAX_LENGTH)],
         default="pending"
     )
+    task_date = models.DateTimeField(default=timezone.now)
     msg = models.CharField(
         max_length=MSG_MAX_LENGTH,
         validators=[validators.MaxLengthValidator(MSG_MAX_LENGTH)],
@@ -38,8 +36,9 @@ class Task(models.Model):
         blank=True
     )
     bytes = models.IntegerField(
-        default=0,
-        blank=True
+        default=None,
+        blank=True,
+        null=True
     )
 
     def to_dict(self):
