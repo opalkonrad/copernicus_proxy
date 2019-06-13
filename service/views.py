@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from copernicus_proxy.settings import BASE_DIR
 from service.models import Task as TaskModel, DataSet as DataSetModel
 from service.constants import formats
+from service.tasks import download_from_cdsapi
 import os
 import json
 
@@ -33,6 +34,7 @@ class TaskList(CsrfFreeView):
             task = TaskModel(json_content=json_content)
             task.full_clean()
             task.save()
+            download_from_cdsapi.delay(task.pk)
             return JsonResponse({'task_id': task.pk})
         except ValidationError as error:
             task = TaskModel(json_content=json_content, status='error', msg=error)
@@ -67,10 +69,9 @@ class File(View):
         data_set = json_string[0]
         file_format = json_string[1]['format']
 
-
         for f in formats.list:
-                if f.extension[1] == file_format:
-                    file_format = f.extension[0]
+            if f.extension[1] == file_format:
+                file_format = f.extension[0]
 
         file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
 

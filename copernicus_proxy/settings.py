@@ -12,15 +12,6 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import django_heroku
-import celery
-
-# Broker Settings
-BROKER_HOST = "localhost"
-BROKER_PORT = 5672
-BROKER_USER = "guest"
-BROKER_PASSWORD = "guest"
-BROKER_VHOST = "/"
-BROKER_URL = 'django://'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -46,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_celery_results',
+    'django.contrib.staticfiles'
 ]
 
 MIDDLEWARE = [
@@ -130,12 +120,10 @@ STATIC_URL = '/static/'
 
 django_heroku.settings(locals())
 
-# Django Celery Results
-
-CELERY_RESULT_BACKEND = 'django-db'
-
-CELERY_CACHE_BACKEND = 'django-cache'
-
 # Disabling slash appending
 
 APPEND_SLASH = False
+
+# Celery
+
+CELERY_BROKER_URL = 'amqp://localhost'

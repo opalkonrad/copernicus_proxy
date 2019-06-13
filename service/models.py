@@ -6,7 +6,7 @@ from service.validators import validate_json_content
 import json
 
 DATA_SET_MAX_LENGTH = 128
-JSON_CONTENT_MAX_LENGTH = 2048
+JSON_CONTENT_MAX_LENGTH = 16384
 STATUS_MAX_LENGTH = 16
 MSG_MAX_LENGTH = 512
 
@@ -112,7 +112,6 @@ class DataSet(models.Model):
         for record in cls.objects.all():
             data_set_list.append(record.to_dict())
         return data_set_list
-
 
 # DataSets Foreign Key TBA
 # DownloadedFile Foreign Key TBA
