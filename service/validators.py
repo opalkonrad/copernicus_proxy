@@ -59,6 +59,6 @@ def validate_json_content(value):
 
 def validate_json(value):
     try:
-        data = json.loads(value)
+        json.loads(value)
     except json.JSONDecodeError:
         raise ValidationError('JSON decoding failed')

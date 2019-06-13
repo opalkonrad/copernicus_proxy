@@ -35,7 +35,7 @@ class TaskList(CsrfFreeView):
             task = TaskModel(json_content=json_content)
             task.full_clean()
             task.save()
-            return JsonResponse({'task_id': task.pk})
+            return JsonResponse({'task_id': task.pk}, status=201)
         except ValidationError as e:
             task = TaskModel(json_content=json_content, status='error', msg=e)
             task.save()
@@ -109,8 +109,7 @@ class DataSetList(CsrfFreeView):
             new_data_set = DataSetModel(data_set=ds, attributes=attrs)
             new_data_set.full_clean()
             new_data_set.save()
-            return HttpResponse(status=201)
-
+            return JsonResponse({'data_set_id': new_data_set.pk}, status=201)
         except ValidationError as e:
             return HttpResponse(e, status=400)
 
@@ -123,11 +122,7 @@ class DataSet(CsrfFreeView):
     def put(self, request, url_id):
         try:
             req_json = json.loads(request.body)
-            attrs = '{'
-            for key, val in req_json["attributes"].items():
-                attrs += '"' + key + '":'
-                attrs += '"' + val + '",'
-            attrs = attrs[:-1] + '}'
+            attrs = json.dumps(req_json['attributes'])
 
             existing_db_record = DataSetModel.objects.get(id=url_id)
             existing_db_record.data_set = req_json["data_set"]
