@@ -36,10 +36,10 @@ class TaskList(CsrfFreeView):
             task.full_clean()
             task.save()
             return JsonResponse({'task_id': task.pk})
-        except ValidationError as error:
-            task = TaskModel(json_content=json_content, status='error', msg=error)
+        except ValidationError as e:
+            task = TaskModel(json_content=json_content, status='error', msg=e)
             task.save()
-            return HttpResponse(status=400)
+            return HttpResponse(e, status=400)
 
 
 class Task(CsrfFreeView):
