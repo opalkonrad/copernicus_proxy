@@ -1,0 +1,179 @@
+swagger: '2.0'
+info:
+  description: Data Proxy to Copernicus Climate Data Store API (cdsapi)
+  version: 1.0.0
+  title: Copernicus Data Proxy API
+  contact:
+    name: Team "6" (Wojciech Fabjańczuk, Wiktor Michalski, Konrad Opaliński)
+    email: wojciechfabjanczuk@gmail.com
+  
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+# tags are used for organizing operations
+tags:
+- name: TaskList
+  description: Displaying all Copernicus requests (Tasks) and adding new task to the list
+- name: Task
+  description: Displaying all information about existing single Copernicus request (Task) and deleting specified Copernicus request
+- name: File
+  description: Downloading files
+- name: DataSetList
+  description: Displaying all data sets and creating new one
+- name: DataSet
+  description: Displaying, editing or deleting single data set
+
+paths:
+  /task:
+    get:
+      tags:
+      - TaskList
+      summary: Displaying all Copernicus requests (Tasks)
+      produces:
+      - application/json
+      responses:
+        200:
+          description: List of Copernicus requests received by the API (possibly empty [])
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+    post:
+      tags:
+      - TaskList
+      operationId: addInventory
+      summary: Adds new Copernicus request (Task)
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: JsonContent
+        description: Copernicus request (Task) data to add it to the list
+        schema:
+          $ref: '#/definitions/JsonContent'
+      responses:
+        200:
+          description: Copernicus request (Task) created
+          schema:
+            type: object
+            properties:
+              task_id:
+                type: integer
+                example: 2
+        400:
+          description: ValidationError
+  /task/{url_id}:
+    parameters:
+      - in: path
+        name: url_id
+        type: integer
+        required: true
+        description: Numeric ID of the Copernicus request to get
+    get:
+      tags:
+      - Task
+      summary: Displaying all information about single Copernicus request (Task) indicated by url_id
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Information about task
+          schema:
+            $ref: '#/definitions/Task'
+        404:
+          description: Copernicus request with url_id not found
+    delete:
+      tags:
+      - Task
+      summary: Softly deleting Copernicus request (Task) indicated by url_id
+      description: If task is being downloaded in the moment of the deletion, it will be finished unless workers are restarted.
+      produces:
+      - application/json
+      responses:
+        204:
+          description: Copernicus request with url_id deleted
+        404:
+          description: Copernicus request with url_id not found      
+definitions:
+  JsonContent:
+    type: object
+    properties:
+      data_set:
+        type: string
+        example: reanalysis-era5-single-levels
+      options:
+        type: object
+        properties:
+          product_type:
+            type: array
+            items:
+              type: string
+              example: "ensemble_mean"
+          variable:
+            type: array
+            items:
+              type: string
+              example: "large_scale_snowfall"
+          year:
+            type: array
+            items:
+              type: string
+              example: "2000"
+          month:
+            type: array
+            items:
+              type: string
+              example: "04"
+          day:
+            type: array
+            items:
+              type: string
+              example: "07"
+          time:
+            type: array
+            items:
+              type: string
+              example: "07"
+          format:
+            type: string
+            example: "grib"
+  Task:
+    type: object
+    required:
+    - id
+    - data_set
+    - json_content
+    - status
+    - task_date
+    - msg
+    - bytes
+    properties:
+      id:
+        type: integer
+        example: 2
+      data_set:
+        type: string
+        example: reanalysis-era5-single-levels
+      json_content:
+        $ref: '#/definitions/JsonContent'
+      status:
+        type: string
+        example: "being downloaded"
+      task_date:
+        type: string
+        format: "%Y-%m-%d %H:%M:%S"
+        example: "2019-06-13 18:56:13"
+      msg: 
+        type: string
+        example: ""
+      bytes: 
+        type: integer
+        example: 0
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /wfabjanczuk/copernicus_proxy/1.0.0
+schemes:
+ - https
