@@ -17,6 +17,14 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt install python3.7
 ```
 
+and pip can be installed using:
+
+```
+sudo add-apt-repository universe
+sudo apt-get update
+sudo apt install python3-pip
+```
+
 2. Other required system packages can be installed using:
 
 ```
