@@ -25,7 +25,7 @@ sudo apt-get install libpq-dev libpython3.7-dev rabbitmq-server
 python3.7 -m pip install -r requirements.txt
 ```
 
-4. To authorize connection with the Climate Data Store, CDS API Key must be added in `$HOME/.cdsapirc` (via https://cds.climate.copernicus.eu/api-how-to). CDS API Client is already installed alongside other requirements in (3).
+4. To authorize connection with the Climate Data Store, CDS API Key must be added in `$HOME/.cdsapirc` (via https://cds.climate.copernicus.eu/api-how-to). At this moment only the Key is missing, since CDS API Client is already installed alongside other requirements in (3).
 
 ## Usage
 
