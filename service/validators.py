@@ -60,3 +60,10 @@ def validate_task_json_content(value):
     unwrap_single_element_lists(options)
     required_options = json.loads(data_set.attributes)
     validate_options(options, required_options)
+
+
+def validate_attributes(value):
+    attrs_json = json.loads(value)
+    for key, val in attrs_json.items():
+        if val not in ('all', 'at_least_one', 'one'):
+            raise ValidationError('wrong attributes values')

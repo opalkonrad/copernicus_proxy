@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import validators
-from service.validators import validate_data_set, validate_task_json_content, validate_json
+from service.validators import validate_data_set, validate_task_json_content, validate_json, validate_attributes
 from service.constants import formats
 from copernicus_proxy.settings import BASE_DIR
 import json
@@ -130,7 +130,7 @@ class DataSet(models.Model):
     )
     attributes = models.CharField(
         max_length=ATTRIBUTES_MAX_LENGTH,
-        validators=[validate_json, validators.MaxLengthValidator(ATTRIBUTES_MAX_LENGTH)],
+        validators=[validate_json, validate_attributes, validators.MaxLengthValidator(ATTRIBUTES_MAX_LENGTH)],
     )
 
     @classmethod

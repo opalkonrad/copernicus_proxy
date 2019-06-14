@@ -129,7 +129,7 @@ class DataSet(CsrfFreeView):
 
     def get(self, request, url_id):
         try:
-            return JsonResponse(DataSetModel.to_dict(DataSetModel.objects.get(id=url_id)), safe=False)
+            return JsonResponse(DataSetModel.objects.get(id=url_id).to_dict(), safe=False)
         except DataSetModel.DoesNotExist:
             return HttpResponse(status=400)
 
