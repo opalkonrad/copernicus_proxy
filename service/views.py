@@ -29,13 +29,13 @@ class TaskList(CsrfFreeView):
         return JsonResponse(TaskModel.list_all(), safe=False)
 
     def post(self, request):
+        json_content = request.body
         try:
-            TaskModel.delete_first_if_count_bigger_than(10000)
-            json_content = request.body.decode('utf-8')
             task = TaskModel.create_from_json(json_content)
             download_from_cdsapi.delay(task.pk)
+            TaskModel.delete_first_if_count_bigger_than(10000)
             return JsonResponse({'task_id': task.pk}, status=200)
-        except (UnicodeDecodeError, DataSetModel.DoesNotExist, ValidationError, json.JSONDecodeError) as e:
+        except ValidationError as e:
             task = TaskModel(json_content=json_content, status='error', msg=e)
             task.data_set = None
             task.save()
@@ -97,7 +97,7 @@ class File(View):
 
 class DataSetList(CsrfFreeView):
     """
-    View for displaying all records (GET) and creating new record (POST)
+    View for displaying (GET) all Data Sets and creating (POST) new Data Set
     """
 
     def get(self, request):
@@ -117,8 +117,10 @@ class DataSetList(CsrfFreeView):
 
 class DataSet(CsrfFreeView):
     """
-    View for editing single record indicated by 'id' (PUT)
+    View for displaying (GET) information about, editing (PUT) and deleting (DELETE) single Data Set indicated by 'id'
     """
+
+    # TODO: def get(self, request, url_id)
 
     def put(self, request, url_id):
         try:

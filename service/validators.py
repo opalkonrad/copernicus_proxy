@@ -40,13 +40,17 @@ def validate_options(options, required_options):
                 raise ValidationError(req_attr + ' should contain only one selected option')
 
 
-def validate_json_content(value):
-    from service.models import DataSet
+def validate_json(value):
     try:
-        data = json.loads(value)
+        return json.loads(value)
     except json.JSONDecodeError:
         raise ValidationError('JSON decoding failed')
 
+
+def validate_task_json_content(value):
+    from service.models import DataSet
+
+    data = validate_json(value)
     data_set = DataSet.get_by_name(data['data_set'])  # string that defines a data_set
     validate_data_set(data_set)
 
@@ -54,10 +58,3 @@ def validate_json_content(value):
     unwrap_single_element_lists(options)
     required_options = json.loads(data_set.attributes)
     validate_options(options, required_options)
-
-
-def validate_json(value):
-    try:
-        json.loads(value)
-    except json.JSONDecodeError:
-        raise ValidationError('JSON decoding failed')

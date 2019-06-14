@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import validators
-from service.validators import validate_data_set, validate_json_content, validate_json
+from service.validators import validate_data_set, validate_task_json_content, validate_json
 from service.constants import formats
 from copernicus_proxy.settings import BASE_DIR
 import json
@@ -26,7 +26,7 @@ class Task(models.Model):
     )
     json_content = models.CharField(
         max_length=JSON_CONTENT_MAX_LENGTH,
-        validators=[validate_json_content, validators.MaxLengthValidator(JSON_CONTENT_MAX_LENGTH)]
+        validators=[validate_task_json_content, validators.MaxLengthValidator(JSON_CONTENT_MAX_LENGTH)]
     )
     status = models.CharField(
         max_length=STATUS_MAX_LENGTH,
@@ -65,10 +65,13 @@ class Task(models.Model):
 
     @classmethod
     def create_from_json(cls, json_content):
+        validate_task_json_content(json_content)
         init_data = json.loads(json_content)
+
         data_set_name = init_data['data_set']
         DataSet.initialize_data_sets()
         data_set = DataSet.get_by_name(data_set_name)
+
         task = cls(json_content=json_content)
         task.data_set = data_set
         task.full_clean()
