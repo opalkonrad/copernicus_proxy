@@ -18,7 +18,6 @@ def download_from_cdsapi(pk):
 
     # update task's status in database
     curr_task.status = "being downloaded"
-    curr_task.msg = ""
     curr_task.save()
 
     # find the right notation for the given format (needed for api -> format)

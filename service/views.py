@@ -72,10 +72,10 @@ class File(View):
     def get(self, request, url_id):
         try:
             task = TaskModel.objects.get(id=url_id)
-            json_string = json.loads(task.json_content)
+            json_content = json.loads(task.json_content)
 
-            data_set = json_string[0]
-            file_format = json_string[1]['format']
+            data_set = json_content['data_set']
+            file_format = json_content['options']['format']
 
             for f in formats.list:
                 if f.extension[1] == file_format:
