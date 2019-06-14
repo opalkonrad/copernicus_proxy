@@ -28,7 +28,7 @@ sudo apt install python3-pip
 2. Other required system packages can be installed using:
 
 ```
-sudo apt-get install libpq-dev libpython3.7-dev rabbitmq-server
+sudo apt-get install libpq-dev libpython3.7-dev rabbitmq-server python-celery-common
 ```
 
 3. Copernicus Proxy requirements must also be installed. It can be done by the following commands executed in `copernicus_proxy/` (where the `requirements.txt` is located):
