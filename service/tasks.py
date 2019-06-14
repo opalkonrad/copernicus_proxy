@@ -12,8 +12,8 @@ def download_from_cdsapi(pk):
     # get information about task
     curr_task = Task.objects.get(id=pk)
     content = json.loads(curr_task.json_content)
-    data_set = content[0]
-    data = content[1]
+    data_set = content['data_set']
+    options = content['options']
     save_format = ""
 
     # update task's status in database
@@ -23,7 +23,7 @@ def download_from_cdsapi(pk):
 
     # find the right notation for the given format (needed for api -> format)
     for f in formats.list:
-        if f.extension[1] == data['format']:
+        if f.extension[1] == options['format']:
             save_format = f.extension[0]
 
     # create file directory
@@ -36,7 +36,7 @@ def download_from_cdsapi(pk):
     try:
         c.retrieve(
             data_set,
-            data,
+            options,
             filename
         )
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import validators
-from service.validators import validate_json_content, validate_json
+from service.validators import validate_data_set, validate_json_content, validate_json
 import json
 
 DATA_SET_MAX_LENGTH = 128
@@ -15,10 +15,12 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 class Task(models.Model):
-    # data_set = models.ForeignKey(
-    #     'DataSet',
-    #     on_delete=models.PROTECT,
-    # )
+    data_set = models.ForeignKey(
+        'DataSet',
+        on_delete=models.PROTECT,
+        validators=[validate_data_set],
+        null=True
+    )
     json_content = models.CharField(
         max_length=JSON_CONTENT_MAX_LENGTH,
         validators=[validate_json_content, validators.MaxLengthValidator(JSON_CONTENT_MAX_LENGTH)]
@@ -32,7 +34,8 @@ class Task(models.Model):
     msg = models.CharField(
         max_length=MSG_MAX_LENGTH,
         validators=[validators.MaxLengthValidator(MSG_MAX_LENGTH)],
-        default="",
+        default=None,
+        null=True,
         blank=True
     )
     bytes = models.IntegerField(
@@ -43,17 +46,31 @@ class Task(models.Model):
 
     def to_dict(self):
         task_date = self.task_date.replace(tzinfo=None).strftime(DATETIME_FORMAT)
-        json_content = json.loads(self.json_content)
+        data_set_name = None
+        if self.data_set:
+            data_set_name = self.data_set.name
         task_dict = {
             'id': self.pk,
-            'data_set': json_content[0],
-            'json_content': json_content,
+            'data_set': data_set_name,
+            'json_content': json.loads(self.json_content),
             'status': self.status,
             'task_date': task_date,
             'msg': self.msg,
             'bytes': self.bytes
         }
         return task_dict
+
+    @classmethod
+    def create_from_json(cls, json_content):
+        init_data = json.loads(json_content)
+        data_set_name = init_data['data_set']
+        DataSet.initialize_data_sets()
+        data_set = DataSet.get_by_name(data_set_name)
+        task = cls(json_content=json_content)
+        task.data_set = data_set
+        task.full_clean()
+        task.save()
+        return task
 
     @classmethod
     def list_all(cls):
@@ -77,7 +94,7 @@ class Task(models.Model):
 
 
 class DataSet(models.Model):
-    data_set = models.CharField(
+    name = models.CharField(
         max_length=DATA_SET_MAX_LENGTH,
         validators=[validators.MaxLengthValidator(DATA_SET_MAX_LENGTH)],
         unique=True
@@ -90,7 +107,7 @@ class DataSet(models.Model):
     @classmethod
     def add_default_data_sets(cls):
         default0 = cls(
-            data_set='satellite-sea-level-mediterranean',
+            name='satellite-sea-level-mediterranean',
             attributes='{"variable": "all", '
                        '"format": "one", '
                        '"day": "at_least_one", '
@@ -99,7 +116,7 @@ class DataSet(models.Model):
         )
         default0.save()
         default1 = cls(
-            data_set='reanalysis-era5-single-levels',
+            name='reanalysis-era5-single-levels',
             attributes='{"product_type": "at_least_one", '
                        '"format": "one", '
                        '"variable": "at_least_one", '
@@ -118,7 +135,7 @@ class DataSet(models.Model):
     @classmethod
     def get_by_name(cls, data_set_name):
         try:
-            data_set = cls.objects.get(data_set=data_set_name)
+            data_set = cls.objects.get(name=data_set_name)
             return data_set
         except ObjectDoesNotExist:
             return None
@@ -126,7 +143,7 @@ class DataSet(models.Model):
     def to_dict(self):
         data_set_dict = {
             'id': self.pk,
-            'data_set': self.data_set,
+            'data_set': self.name,
             'attributes': json.loads(self.attributes)
         }
         return data_set_dict

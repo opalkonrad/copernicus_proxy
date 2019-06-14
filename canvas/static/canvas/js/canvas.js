@@ -197,11 +197,11 @@ jQuery(function ($) {
     });
 
     $('#submit').click(function (event) {
-        let dataset = $('#dataset_select').val();
+        let dataSet = $('#dataset_select').val();
         let dictionary;
-        let formData = [];
-        formData.push(dataset);
-        switch (dataset) {
+        let formData = {};
+        formData['data_set'] = dataSet;
+        switch (dataSet) {
             case 'reanalysis-era5-single-levels':
                 dictionary = {
                     product_type: getType('product_types'),
@@ -212,7 +212,7 @@ jQuery(function ($) {
                     time: getType('hours'),
                     format: getFormat('format_era5')
                 };
-                formData.push(dictionary);
+                formData['options'] = dictionary;
                 break;
             case 'satellite-sea-level-mediterranean':
                 dictionary = {
@@ -222,7 +222,7 @@ jQuery(function ($) {
                     day: getType('days'),
                     format: getFormat('format_sea_level')
                 };
-                formData.push(dictionary);
+                formData['options'] = dictionary;
                 break;
         }
         $('#id_json_content').val(JSON.stringify(formData));

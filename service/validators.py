@@ -47,11 +47,10 @@ def validate_json_content(value):
     except json.JSONDecodeError:
         raise ValidationError('JSON decoding failed')
 
-    DataSet.initialize_data_sets()
-    data_set = DataSet.get_by_name(data[0])  # string that defines a data_set
+    data_set = DataSet.get_by_name(data['data_set'])  # string that defines a data_set
     validate_data_set(data_set)
 
-    options = data[1]  # dictionary that contains filled options of the form
+    options = data['options']  # dictionary that contains filled options of the form
     unwrap_single_element_lists(options)
     required_options = json.loads(data_set.attributes)
     validate_options(options, required_options)
