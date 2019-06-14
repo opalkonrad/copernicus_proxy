@@ -41,6 +41,12 @@ python3.7 -m pip install -r requirements.txt
 
 ## Usage
 
+At first do not forget to initialize Django database:
+
+```
+python3.7 manage.py migrate
+```
+
 To restart workers and task queue use the following commands in `copernicus_proxy/` (where the `manage.py` is located):
 
 ```
@@ -49,7 +55,7 @@ python3.7 manage.py restartworkers <number_of_workers>
 
 where **<number_of_workers>** is an integer from 1 to 30 specifying how many background processes will be created to handle download requests to Copernicus Climate Data Store.
 
-To start the Copernicus Data Proxy API itself, use standard Django runserver command (again in `copernicus_proxy/`)
+To start the Copernicus Data Proxy API itself, use standard Django runserver command (again in `copernicus_proxy/`):
 
 ```
 python3.7 manage.py runserver
