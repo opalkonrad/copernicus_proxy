@@ -6,7 +6,7 @@ info:
   contact:
     name: Team "6" (Wojciech Fabjańczuk, Wiktor Michalski, Konrad Opaliński)
     email: wojciechfabjanczuk@gmail.com
-  
+
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -53,7 +53,7 @@ paths:
         name: JsonContent
         description: Copernicus request (Task) data to add it to the list
         schema:
-          $ref: '#/definitions/JsonContent'
+          $ref: '#/definitions/TaskJsonContent'
       responses:
         200:
           description: Copernicus request (Task) created
@@ -96,7 +96,7 @@ paths:
         204:
           description: Copernicus request with url_id deleted
         404:
-          description: Copernicus request with url_id not found      
+          description: Copernicus request with url_id not found
   /file/{url_id}:
     parameters:
       - in: path
@@ -116,7 +116,7 @@ paths:
         404:
           description: File not found
 definitions:
-  JsonContent:
+  TaskJsonContent:
     type: object
     properties:
       data_set:
@@ -176,7 +176,7 @@ definitions:
         type: string
         example: reanalysis-era5-single-levels
       json_content:
-        $ref: '#/definitions/JsonContent'
+        $ref: '#/definitions/TaskJsonContent'
       status:
         type: string
         example: "being downloaded"
