@@ -109,9 +109,11 @@ class DataSetList(CsrfFreeView):
         return JsonResponse(DataSetModel.list_all(), safe=False)
 
     def post(self, request):
-        ds = request.POST.get('data_set', '')
-        attrs = request.POST.get('attributes', '')
         try:
+            req_json = json.loads(request.body)
+            ds = req_json["data_set"]
+            attrs = json.dumps(req_json["attributes"])
+
             new_data_set = DataSetModel(name=ds, attributes=attrs)
             new_data_set.full_clean()
             new_data_set.save()
@@ -125,25 +127,30 @@ class DataSet(CsrfFreeView):
     View for displaying (GET) information about, editing (PUT) and deleting (DELETE) single Data Set indicated by 'id'
     """
 
-    # TODO: def get(self, request, url_id)
+    def get(self, request, url_id):
+        try:
+            return JsonResponse(DataSetModel.to_dict(DataSetModel.objects.get(id=url_id)), safe=False)
+        except DataSetModel.DoesNotExist:
+            return HttpResponse(status=400)
 
     def put(self, request, url_id):
         try:
             req_json = json.loads(request.body)
-            attrs = json.dumps(req_json['attributes'])
+            ds = req_json["data_set"]
+            attrs = json.dumps(req_json["attributes"])
 
             existing_db_record = DataSetModel.objects.get(id=url_id)
-            existing_db_record.data_set = req_json["data_set"]
+            existing_db_record.name = ds
             existing_db_record.attributes = attrs
             existing_db_record.full_clean()
             existing_db_record.save()
             return HttpResponse(status=200)
-        except (json.JSONDecodeError, DataSet.DoesNotExist, ValidationError):
+        except (json.JSONDecodeError, DataSetModel.DoesNotExist, ValidationError):
             return HttpResponse(status=400)
 
     def delete(self, request, url_id):
         try:
             DataSetModel.objects.get(id=url_id).delete()
             return HttpResponse(status=200)
-        except DataSet.DoesNotExist:
+        except DataSetModel.DoesNotExist:
             return HttpResponse(status=400)
