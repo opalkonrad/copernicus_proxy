@@ -6,7 +6,7 @@ Swagger documentation: https://app.swaggerhub.com/apis-docs/wfabjanczuk/copernic
 
 Interface prototype: https://intense-island-59212.herokuapp.com/downloader/sea_level/
 
-## Installation process (Ubuntu 18.04)
+## Installation process (Ubuntu 18.04 and Python 3.7)
 
 1. Python 3.7 is required and can be installed using (via https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/): 
 
@@ -17,7 +17,7 @@ sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt install python3.7
 ```
 
-and pip can be installed using:
+and pip for Python 3.7 can be installed using:
 
 ```
 sudo add-apt-repository universe
