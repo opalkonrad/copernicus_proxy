@@ -50,12 +50,17 @@ class Task(models.Model):
     def to_dict(self):
         task_date = self.task_date.replace(tzinfo=None).strftime(DATETIME_FORMAT)
         data_set_name = None
+        json_content = None
         if self.data_set:
             data_set_name = self.data_set.name
+        if self.status == 'error':
+            json_content = self.json_content
+        else:
+            json_content = json.loads(self.json_content)
         task_dict = {
             'id': self.pk,
             'data_set': data_set_name,
-            'json_content': json.loads(self.json_content),
+            'json_content': json_content,
             'status': self.status,
             'task_date': task_date,
             'msg': self.msg,
@@ -65,11 +70,11 @@ class Task(models.Model):
 
     @classmethod
     def create_from_json(cls, json_content):
+        DataSet.initialize_data_sets()
         validate_task_json_content(json_content)
         init_data = json.loads(json_content)
 
         data_set_name = init_data['data_set']
-        DataSet.initialize_data_sets()
         data_set = DataSet.get_by_name(data_set_name)
 
         task = cls(json_content=json_content)

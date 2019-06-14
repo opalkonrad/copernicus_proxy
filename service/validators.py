@@ -42,7 +42,7 @@ def validate_options(options, required_options):
 
 def validate_json(value):
     try:
-        return json.loads(value)
+        json.loads(value)
     except json.JSONDecodeError:
         raise ValidationError('JSON decoding failed')
 
@@ -50,7 +50,9 @@ def validate_json(value):
 def validate_task_json_content(value):
     from service.models import DataSet
 
-    data = validate_json(value)
+    validate_json(value)
+    data = json.loads(value)
+
     data_set = DataSet.get_by_name(data['data_set'])  # string that defines a data_set
     validate_data_set(data_set)
 

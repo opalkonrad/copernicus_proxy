@@ -11,7 +11,12 @@ import os
 import json
 
 
-# Create your views here.
+def get_decoded_string_from_body(body):
+    try:
+        return body.decode('utf-8')
+    except UnicodeDecodeError:
+        raise ValidationError('request body can not be decoded to utf-8')
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CsrfFreeView(View):
@@ -29,14 +34,14 @@ class TaskList(CsrfFreeView):
         return JsonResponse(TaskModel.list_all(), safe=False)
 
     def post(self, request):
-        json_content = request.body
         try:
+            json_content = get_decoded_string_from_body(request.body)
             task = TaskModel.create_from_json(json_content)
             download_from_cdsapi.delay(task.pk)
             TaskModel.delete_first_if_count_bigger_than(10000)
             return JsonResponse({'task_id': task.pk}, status=200)
         except ValidationError as e:
-            task = TaskModel(json_content=json_content, status='error', msg=e)
+            task = TaskModel(json_content=request.body, status='error', msg=e)
             task.data_set = None
             task.save()
             return HttpResponse(status=400)
