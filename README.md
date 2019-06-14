@@ -4,7 +4,7 @@ RESTful API for download management of data from Copernicus Climate Data Store: 
 
 ## Installation process (Ubuntu 18.04)
 
-1. Python 3.7 is needed and can be installed using (via https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/): 
+1. Python 3.7 is required and can be installed using (via https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/): 
 
 ```
 sudo apt update
@@ -25,7 +25,7 @@ sudo apt-get install libpq-dev libpython3.7-dev rabbitmq-server
 python3.7 -m pip install -r requirements.txt
 ```
 
-4. To authorize connection with the Climate Data Store, CDS API Key must be added in `$HOME/.cdsapirc` (https://cds.climate.copernicus.eu/api-how-to). CDS API Client is already installed alongside other requirements in (3).
+4. To authorize connection with the Climate Data Store, CDS API Key must be added in `$HOME/.cdsapirc` (via https://cds.climate.copernicus.eu/api-how-to). CDS API Client is already installed alongside other requirements in (3).
 
 ## Usage
 
