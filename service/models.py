@@ -3,7 +3,10 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import validators
 from service.validators import validate_data_set, validate_json_content, validate_json
+from service.constants import formats
+from copernicus_proxy.settings import BASE_DIR
 import json
+import os
 
 DATA_SET_MAX_LENGTH = 128
 JSON_CONTENT_MAX_LENGTH = 16384
@@ -71,6 +74,24 @@ class Task(models.Model):
         task.full_clean()
         task.save()
         return task
+
+    @classmethod
+    def delete_first_if_count_bigger_than(cls, maximum_count):
+        task_count = cls.objects.count()
+        if task_count >= maximum_count:
+            task_to_remove = cls.objects.all().order_by("id")[0]
+            task_id = task_to_remove.id
+            json_content = json.loads(task_to_remove.json_content)
+            data_set = json_content['data_set']
+            file_format = json_content['options']['format']
+            for f in formats.list:
+                if f.extension[1] == file_format:
+                    file_format = f.extension[0]
+
+            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(task_id) + file_format)
+            if os.path.exists(file_location):
+                os.remove(file_location)
+            task_to_remove.delete()
 
     @classmethod
     def list_all(cls):

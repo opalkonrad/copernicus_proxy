@@ -29,7 +29,7 @@ class CopernicusView(FormView):
     def form_valid(self, form):
         json_content = form.cleaned_data['json_content']
         task_list_url = self.request.build_absolute_uri(reverse('task_list'))
-        requests.post(task_list_url, data={'json_content': json_content})
+        requests.post(task_list_url, data=json_content)
         return super().form_valid(form)
 
 
