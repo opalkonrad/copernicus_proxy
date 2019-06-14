@@ -2,6 +2,10 @@
 
 RESTful API for download management of data from Copernicus Climate Data Store: https://cds.climate.copernicus.eu/
 
+Swagger documentation: https://app.swaggerhub.com/apis-docs/wfabjanczuk/copernicus_proxy/1.0.0
+
+Interface prototype: https://intense-island-59212.herokuapp.com/downloader/sea_level/
+
 ## Installation process (Ubuntu 18.04)
 
 1. Python 3.7 is required and can be installed using (via https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/): 
