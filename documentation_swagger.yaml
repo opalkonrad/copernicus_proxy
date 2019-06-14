@@ -97,6 +97,24 @@ paths:
           description: Copernicus request with url_id deleted
         404:
           description: Copernicus request with url_id not found      
+  /file/{url_id}:
+    parameters:
+      - in: path
+        name: url_id
+        type: integer
+        required: true
+        description: Numeric ID of the downloaded file (same as its Copernicus request) to get
+    get:
+      tags:
+      - File
+      summary: Sends downloaded files
+      produces:
+      - application/octet-stream
+      responses:
+        200:
+          description: Downloaded file sent
+        404:
+          description: File not found
 definitions:
   JsonContent:
     type: object
@@ -166,10 +184,10 @@ definitions:
         type: string
         format: "%Y-%m-%d %H:%M:%S"
         example: "2019-06-13 18:56:13"
-      msg: 
+      msg:
         type: string
         example: ""
-      bytes: 
+      bytes:
         type: integer
         example: 0
 # Added by API Auto Mocking Plugin
