@@ -2,6 +2,5 @@ cdsapi
 Django
 django-heroku
 gunicorn
-jsonfield
-celery
+Celery
 requests
