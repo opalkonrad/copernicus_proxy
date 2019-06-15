@@ -41,7 +41,11 @@ class TaskList(CsrfFreeView):
             TaskModel.delete_first_if_count_bigger_than(10000)
             return JsonResponse({'task_id': task.pk}, status=200)
         except (KeyError, ValidationError) as e:
-            task = TaskModel(json_content=request.body, status='error', msg=e)
+            try:
+                json_content = get_decoded_string_from_body(request.body)
+                task = TaskModel(json_content=json_content, status='error', msg=e)
+            except ValidationError:
+                task = TaskModel(json_content=request.body, status='error', msg=e)
             task.data_set = None
             task.save()
             return HttpResponse(status=400)

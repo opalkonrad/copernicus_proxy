@@ -89,16 +89,19 @@ class Task(models.Model):
         if task_count >= maximum_count:
             task_to_remove = cls.objects.all().order_by("id")[0]
             task_id = task_to_remove.id
-            json_content = json.loads(task_to_remove.json_content)
-            data_set = json_content['data_set']
-            file_format = json_content['options']['format']
-            for f in formats.list:
-                if f.extension[1] == file_format:
-                    file_format = f.extension[0]
+            try:
+                json_content = json.loads(task_to_remove.json_content)
+                data_set = json_content['data_set']
+                file_format = json_content['options']['format']
+                for f in formats.list:
+                    if f.extension[1] == file_format:
+                        file_format = f.extension[0]
 
-            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(task_id) + file_format)
-            if os.path.exists(file_location):
-                os.remove(file_location)
+                file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(task_id) + file_format)
+                if os.path.exists(file_location):
+                    os.remove(file_location)
+            except:
+                pass
             task_to_remove.delete()
 
     @classmethod
