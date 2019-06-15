@@ -18,7 +18,7 @@ number_of_months = 2
 number_of_days = 2
 number_of_hours = 1
 
-# all_strings = open('all_strings.json')
+# all_strings = open('all_era5_filters.json')
 # json_data = all_strings.read()
 # list_of_strings = json.loads(json_data)
 

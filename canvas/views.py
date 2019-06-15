@@ -6,14 +6,10 @@ import canvas.forms.copernicus_choices as options
 from django.shortcuts import redirect
 from django.urls import reverse
 from service.management.commands.restartworkers import reset_task_queue, reset_workers
+from canvas.random.random_sea_level import generate_sea_level
+from canvas.random.random_era5 import generate_era5
 import requests
 import json
-
-
-def index(request):
-    task_list_url = request.build_absolute_uri(reverse('task_list'))
-    r = requests.get(task_list_url)
-    return HttpResponse(str(r.status_code) + ": " + str(r.text))
 
 
 class CopernicusView(FormView):
@@ -29,14 +25,20 @@ class CopernicusView(FormView):
     def form_valid(self, form):
         json_content = form.cleaned_data['json_content']
         filling_type = form.cleaned_data['filling_type']
+        task_list_url = self.request.build_absolute_uri(reverse('task_list'))
         if filling_type == 'manual':
-            task_list_url = self.request.build_absolute_uri(reverse('task_list'))
             requests.post(task_list_url, data=json_content, headers={'content-type': 'application/json'})
         elif filling_type == 'random':
-            data_set = json.loads(json_content)['data_set']
             number_of_forms = form.cleaned_data['number_of_forms']
-            for i in range(1, number_of_forms + 1):
-                raise ValueError(number_of_forms)
+            data_set = json.loads(json_content)['data_set']
+            tasks = []
+            if data_set == 'satellite-sea-level-mediterranean':
+                tasks = generate_sea_level(number_of_forms)
+            elif data_set == 'reanalysis-era5-single-levels':
+                tasks = generate_era5(number_of_forms)
+            for task in tasks:
+                json_content = json.dumps(task)
+                requests.post(task_list_url, data=json_content, headers={'content-type': 'application/json'})
         return super().form_valid(form)
 
 
