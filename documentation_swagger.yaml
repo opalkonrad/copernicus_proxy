@@ -23,9 +23,11 @@ tags:
   description: Displaying all data sets and creating new one
 - name: DataSet
   description: Displaying, editing or deleting single data set
+- name: MockInterface
+  description: Interface prototype for testing (Enable by uncommenting "path('canvas/', include('canvas.urls'))," in copernicus_proxy/urls.py)
 
 paths:
-  /task:
+  /service/task:
     get:
       tags:
       - TaskList
@@ -64,7 +66,7 @@ paths:
                 example: 2
         400:
           description: ValidationError
-  /task/{url_id}:
+  /service/task/{url_id}:
     parameters:
       - in: path
         name: url_id
@@ -96,7 +98,7 @@ paths:
           description: Copernicus request with url_id deleted
         404:
           description: Copernicus request with url_id not found
-  /file/{url_id}:
+  /service/file/{url_id}:
     parameters:
       - in: path
         name: url_id
@@ -114,7 +116,7 @@ paths:
           description: Downloaded file sent
         404:
           description: File not found
-  /dataset:
+  /service/dataset:
     get:
       tags:
       - DataSetList
@@ -155,7 +157,7 @@ paths:
                 example: 2
         400:
           description: ValidationError
-  /dataset/{url_id}:
+  /service/dataset/{url_id}:
     parameters:
       - in: path
         name: url_id
@@ -209,6 +211,24 @@ paths:
           description: Copernicus Data Set configuration indicated by url_id deleted
         404:
           description: Copernicus Data Set configuration indicated by url_id not found
+  /canvas/copernicus:
+    get:
+      tags:
+      - MockInterface
+      summary: Copernicus request (Task) builder
+      description: Enable by uncommenting "path('canvas/', include('canvas.urls'))," in copernicus_proxy/urls.py
+      responses:
+        200:
+          description: Generated view
+  /canvas/db_browser:
+    get:
+      tags:
+      - MockInterface
+      summary: Database table with all Copernicus requests (Tasks) data
+      description: Enable by uncommenting "path('canvas/', include('canvas.urls'))," in copernicus_proxy/urls.py
+      responses:
+        200:
+          description: Generated view
 definitions:
   TaskJsonContent:
     type: object
