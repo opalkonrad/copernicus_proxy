@@ -1,4 +1,5 @@
 from __future__ import absolute_import, unicode_literals
+from copernicus_proxy.settings import BASE_DIR
 from celery import shared_task
 from service.models import Task
 from service.constants import formats
@@ -26,11 +27,11 @@ def download_from_cdsapi(pk):
             save_format = f.extension[0]
 
     # create file directory
-    os.makedirs("./files/" + data_set, exist_ok=True)
+    os.makedirs(BASE_DIR + "/files/" + data_set, exist_ok=True)
 
     # API REQUEST
     c = cdsapi.Client()
-    filename = "./files/" + data_set + "/file_id_" + str(pk) + save_format
+    filename = BASE_DIR + "/files/" + data_set + "/file_id_" + str(pk) + save_format
 
     try:
         c.retrieve(
