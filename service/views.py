@@ -40,7 +40,7 @@ class TaskList(CsrfFreeView):
             download_from_cdsapi.delay(task.pk)
             TaskModel.delete_first_if_count_bigger_than(10000)
             return JsonResponse({'task_id': task.pk}, status=200)
-        except ValidationError as e:
+        except (KeyError, ValidationError) as e:
             task = TaskModel(json_content=request.body, status='error', msg=e)
             task.data_set = None
             task.save()
@@ -96,7 +96,7 @@ class File(View):
             response = HttpResponse(file_data, content_type='application/octet-stream')
             response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
             return response
-        except (IOError, TaskModel.DoesNotExist):
+        except (KeyError, IOError, TaskModel.DoesNotExist):
             return HttpResponse(status=404)
 
 
@@ -118,7 +118,7 @@ class DataSetList(CsrfFreeView):
             new_data_set.full_clean()
             new_data_set.save()
             return JsonResponse({'data_set_id': new_data_set.pk}, status=200)
-        except ValidationError:
+        except (KeyError, ValidationError):
             return HttpResponse(status=400)
 
 
@@ -145,7 +145,7 @@ class DataSet(CsrfFreeView):
             existing_db_record.full_clean()
             existing_db_record.save()
             return HttpResponse(status=200)
-        except (json.JSONDecodeError, DataSetModel.DoesNotExist, ValidationError):
+        except (KeyError, json.JSONDecodeError, DataSetModel.DoesNotExist, ValidationError):
             return HttpResponse(status=400)
 
     def delete(self, request, url_id):
