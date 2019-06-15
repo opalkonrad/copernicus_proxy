@@ -64,7 +64,7 @@ class Task(CsrfFreeView):
         try:
             task = TaskModel.objects.get(id=url_id)
             task.delete()
-            return HttpResponse(status=204)
+            return HttpResponse(status=200)
         except TaskModel.DoesNotExist:
             return HttpResponse(status=404)
 
@@ -131,7 +131,7 @@ class DataSet(CsrfFreeView):
         try:
             return JsonResponse(DataSetModel.objects.get(id=url_id).to_dict(), safe=False)
         except DataSetModel.DoesNotExist:
-            return HttpResponse(status=400)
+            return HttpResponse(status=404)
 
     def put(self, request, url_id):
         try:
@@ -145,12 +145,14 @@ class DataSet(CsrfFreeView):
             existing_db_record.full_clean()
             existing_db_record.save()
             return HttpResponse(status=200)
-        except (KeyError, json.JSONDecodeError, DataSetModel.DoesNotExist, ValidationError):
+        except (KeyError, json.JSONDecodeError, ValidationError):
             return HttpResponse(status=400)
+        except DataSetModel.DoesNotExist:
+            return HttpResponse(status=404)
 
     def delete(self, request, url_id):
         try:
             DataSetModel.objects.get(id=url_id).delete()
             return HttpResponse(status=200)
         except DataSetModel.DoesNotExist:
-            return HttpResponse(status=400)
+            return HttpResponse(status=404)
