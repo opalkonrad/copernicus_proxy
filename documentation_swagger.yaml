@@ -42,7 +42,6 @@ paths:
     post:
       tags:
       - TaskList
-      operationId: addInventory
       summary: Adds new Copernicus request (Task)
       consumes:
       - application/json
@@ -93,7 +92,7 @@ paths:
       produces:
       - application/json
       responses:
-        204:
+        200:
           description: Copernicus request with url_id deleted
         404:
           description: Copernicus request with url_id not found
@@ -115,6 +114,101 @@ paths:
           description: Downloaded file sent
         404:
           description: File not found
+  /dataset:
+    get:
+      tags:
+      - DataSetList
+      summary: Displaying all Data Set configurations
+      description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+      produces:
+      - application/json
+      responses:
+        200:
+          description: List of Copernicus Data Set configurations (possibly empty [])
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DataSet'
+    post:
+      tags:
+      - DataSetList
+      summary: Adds new Copernicus Data Set configuration
+      description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: DataSetJson
+        description: Copernicus Data Set configuration data to add it to the list
+        schema:
+          $ref: '#/definitions/DataSetJson'
+      responses:
+        200:
+          description: Copernicus Data Set configuration created
+          schema:
+            type: object
+            properties:
+              data_set_id:
+                type: integer
+                example: 2
+        400:
+          description: ValidationError
+  /dataset/{url_id}:
+    parameters:
+      - in: path
+        name: url_id
+        type: integer
+        required: true
+        description: Numeric ID of the Copernicus Data Set configuration
+    get:
+      tags:
+      - DataSet
+      summary: Displaying all information about single Copernicus Data Set configuration indicated by url_id
+      description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Information about Copernicus Data Set configuration indicated by url_id
+          schema:
+              $ref: '#/definitions/DataSet'
+        404:
+          description: Copernicus Data Set configuration indicated by url_id does not found
+    put:
+      tags:
+      - DataSet
+      summary: Edit Copernicus Data Set configuration indicated by url_id
+      description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: DataSetJson
+        description: Copernicus Data Set configuration data to replace old one indicated by url_id
+        schema:
+          $ref: '#/definitions/DataSetJson'
+      responses:
+        200:
+          description: Copernicus Data Set configuration replaced
+        400:
+          description: ValidationError
+        404:
+          description: Copernicus Data Set configuration indicated by url_id does not found
+    delete:
+      tags:
+      - DataSet
+      summary: Deleting Copernicus Data Set configuration indicated by url_id
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Copernicus Data Set configuration indicated by url_id deleted
+        404:
+          description: Copernicus Data Set configuration indicated by url_id not found
 definitions:
   TaskJsonContent:
     type: object
@@ -190,6 +284,64 @@ definitions:
       bytes:
         type: integer
         example: 0
+  DataSet:
+    type: object
+    description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+    required:
+    - id
+    - data_set
+    - attributes
+    properties:
+      id:
+        type: integer
+        example: 2
+      data_set:
+        type: string
+        example: reanalysis-era5-single-levels
+      attributes:
+        $ref: '#/definitions/DataSetAttributeList'
+  DataSetJson:
+    type: object
+    description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+    required:
+    - data_set
+    - attributes
+    properties:
+      data_set:
+        type: string
+        example: reanalysis-era5-single-levels
+      attributes:
+        $ref: '#/definitions/DataSetAttributeList'
+  DataSetAttributeList:
+    type: object
+    description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
+    required:
+    - id
+    - data_set
+    - attributes
+    properties:
+      product_type:
+        type: string
+        example: "at_least_one"
+      format:
+        type: string
+        example: "one"
+      variable:
+        type: string
+        example: "at_least_one"
+      day:
+        type: string
+        example: "at_least_one"
+      month:
+        type: string
+        example: "at_least_one"
+      year:
+        type: string
+        example: "at_least_one"
+      time:
+        type: string
+        example: "at_least_one"
+
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /wfabjanczuk/copernicus_proxy/1.0.0
