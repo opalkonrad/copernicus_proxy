@@ -8,6 +8,8 @@ Interface prototype: https://intense-island-59212.herokuapp.com/downloader/sea_l
 
 ## Installation process (Ubuntu 18.04 and Python 3.7)
 
+Full installation script is available in file `install_ubuntu_18-04.sh` in the project root folder.
+
 1. Python 3.7 is required and can be installed using (via https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/): 
 
 ```
@@ -31,7 +33,7 @@ sudo apt install python3-pip
 sudo apt-get install libpq-dev libpython3.7-dev rabbitmq-server python-celery-common
 ```
 
-3. Copernicus Proxy requirements must also be installed. It can be done by the following commands executed in `copernicus_proxy/` (where the `requirements.txt` is located):
+3. Copernicus Proxy requirements must also be installed. It can be done by the following commands executed in the project root folder (where the `requirements.txt` is located):
 
 ```
 python3.7 -m pip install -r requirements.txt
@@ -44,13 +46,13 @@ double installation is required due to module visibility reasons.
 
 ## Usage
 
-At first do not forget to initialize Django database:
+At first do not forget to initialize Django database in the project root folder (where the `manage.py` is located):
 
 ```
 python3.7 manage.py migrate
 ```
 
-To restart workers and task queue use the following commands in `copernicus_proxy/` (where the `manage.py` is located):
+To restart workers and task queue use the following commands:
 
 ```
 python3.7 manage.py restartworkers <number_of_workers>
@@ -58,7 +60,7 @@ python3.7 manage.py restartworkers <number_of_workers>
 
 where **<number_of_workers>** is an integer from 1 to 30 specifying how many background processes will be created to handle download requests to Copernicus Climate Data Store.
 
-To start the Copernicus Data Proxy API itself, use standard Django runserver command (again in `copernicus_proxy/`):
+To start the Copernicus Data Proxy API itself, use standard Django runserver command:
 
 ```
 python3.7 manage.py runserver
