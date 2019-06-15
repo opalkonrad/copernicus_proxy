@@ -37,8 +37,8 @@ class TaskList(CsrfFreeView):
         try:
             json_content = get_decoded_string_from_body(request.body)
             task = TaskModel.create_from_json(json_content)
-            download_from_cdsapi.delay(task.pk)
-            TaskModel.delete_first_if_count_bigger_than(10000)
+            # download_from_cdsapi.delay(task.pk)
+            TaskModel.delete_first_if_count_bigger_than(20)
             return JsonResponse({'task_id': task.pk}, status=200)
         except (KeyError, ValidationError) as e:
             try:
@@ -73,35 +73,35 @@ class Task(CsrfFreeView):
             return HttpResponse(status=404)
 
 
-class File(View):
-    """
-    View for downloading (GET) single file indicated by 'id' in the URL
-    """
-
-    def get(self, request, url_id):
-        try:
-            task = TaskModel.objects.get(id=url_id)
-            json_content = json.loads(task.json_content)
-
-            data_set = json_content['data_set']
-            file_format = json_content['options']['format']
-
-            for f in formats.list:
-                if f.extension[1] == file_format:
-                    file_format = f.extension[0]
-
-            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
-
-            if task.status != 'downloaded':
-                raise IOError('file is not fully downloaded yet')
-            with open(file_location, 'rb') as f:
-                file_data = f.read()
-
-            response = HttpResponse(file_data, content_type='application/octet-stream')
-            response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
-            return response
-        except (KeyError, IOError, TaskModel.DoesNotExist):
-            return HttpResponse(status=404)
+# class File(View):
+#     """
+#     View for downloading (GET) single file indicated by 'id' in the URL
+#     """
+#
+#     def get(self, request, url_id):
+#         try:
+#             task = TaskModel.objects.get(id=url_id)
+#             json_content = json.loads(task.json_content)
+#
+#             data_set = json_content['data_set']
+#             file_format = json_content['options']['format']
+#
+#             for f in formats.list:
+#                 if f.extension[1] == file_format:
+#                     file_format = f.extension[0]
+#
+#             file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
+#
+#             if task.status != 'downloaded':
+#                 raise IOError('file is not fully downloaded yet')
+#             with open(file_location, 'rb') as f:
+#                 file_data = f.read()
+#
+#             response = HttpResponse(file_data, content_type='application/octet-stream')
+#             response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
+#             return response
+#         except (KeyError, IOError, TaskModel.DoesNotExist):
+#             return HttpResponse(status=404)
 
 
 class DataSetList(CsrfFreeView):

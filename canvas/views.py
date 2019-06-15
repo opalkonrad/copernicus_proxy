@@ -33,6 +33,8 @@ class CopernicusView(FormView):
             requests.post(task_list_url, data=json_content, headers={'content-type': 'application/json'})
         elif filling_type == 'random':
             number_of_forms = form.cleaned_data['number_of_forms']
+            if number_of_forms > 20:
+                number_of_forms = 20
             data_set = json.loads(json_content)['data_set']
             tasks = []
             if data_set == 'satellite-sea-level-mediterranean':
@@ -61,13 +63,13 @@ class DatabaseBrowser(ListView):
         if action == 'delete':
             task_url = self.request.build_absolute_uri(reverse('task', kwargs={'url_id': task_id}))
             requests.delete(task_url)
-            reset_workers(number_of_workers)
-            reset_task_queue()
+            # reset_workers(number_of_workers)
+            # reset_task_queue()
         elif action == 'delete_all':
             TaskModel.objects.all().delete()
             file_location = os.path.join(BASE_DIR, 'files')
             if os.path.exists(file_location):
                 shutil.rmtree(file_location)
-            reset_workers(number_of_workers)
-            reset_task_queue()
+            # reset_workers(number_of_workers)
+            # reset_task_queue()
         return redirect('/canvas/db_browser/')
