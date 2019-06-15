@@ -12,3 +12,4 @@ sudo apt install python3-pip
 sudo apt-get install libpq-dev libpython3.7-dev rabbitmq-server python-celery-common
 
 python3.7 -m pip install -r requirements.txt
+pip3 install -r requirements.txt
