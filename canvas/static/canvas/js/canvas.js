@@ -196,6 +196,18 @@ jQuery(function ($) {
         }
     });
 
+    $('#fillingtype_select').on('change', function () {
+        let fillingType = $(this).val();
+        $('#id_fillingtype').val(fillingType);
+        if (fillingType === 'manual') {
+            $('.manual').removeClass('hide');
+            $('.random').addClass('hide');
+        } else if (fillingType === 'random') {
+            $('.manual').addClass('hide');
+            $('.random').removeClass('hide');
+        }
+    });
+
     $('#submit').click(function (event) {
         let dataSet = $('#dataset_select').val();
         let dictionary;
@@ -225,7 +237,17 @@ jQuery(function ($) {
                 formData['options'] = dictionary;
                 break;
         }
+
+        let fillingType = $('#id_fillingtype').val();
+        if (fillingType === 'manual') {
+            $('#id_number_of_forms').val(1);
+        } else if (fillingType === 'random') {
+            $('#id_number_of_forms').val($('#numberofforms_select').val());
+            formData['options'] = {};
+        }
+        $('#id_filling_type').val(fillingType);
         $('#id_json_content').val(JSON.stringify(formData));
+
         $('#copernicus_form').submit();
     });
 });

@@ -25,9 +25,32 @@
 <form id="copernicus_form" method="post" style="display: none;">
     {% csrf_token %}
     {{ form.json_content.as_hidden }}
+    {{ form.filling_type.as_hidden }}
+    {{ form.number_of_forms.as_hidden }}
 </form>
 
 <form>
+    <div class="selection__form">
+        <input type="hidden" name="fillingtype" id="id_fillingtype" value="manual">
+        <div class="field field--fillingtype">
+            <div class="selection__container selection__container--fillingtype formSelection">
+                <div class="field__title-bar">
+                    <div class="field__name">
+                        Filling type
+                    </div>
+                </div>
+                <select id="fillingtype_select" value="manual">
+                    <option value="manual" selected>
+                        Manual
+                    </option>
+                    <option value="random">
+                        Generate random requests
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
     <div class="selection__form">
         <input type="hidden" name="dataset" id="id_dataset" value="reanalysis-era5-single-levels">
         <div class="field field--dataset">
@@ -49,250 +72,269 @@
         </div>
     </div>
 
-    <div class="selection__form">
-        <div class="field field--product_types">
-            <input type="hidden" name="product_types" id="id_product_types">
-            <div class="field__name">
-                Product types
-            </div>
-            <ul class="selection__container selection__container--list">
-                {% for value, label in options.product_types %}
-                    <div class="selection__row selection__row--first">
-                        <li class="drop selection__product-types" data-value="{{ value }}">
-                            {{ label }}
-                        </li>
-                    </div>
-                {% endfor %}
-            </ul>
-            <div class="field__footer">
-                <div class="field__errors">
-                    {% if form.product_types.errors %}
-                        At least one option required.
-                    {% endif %}
+    <div class="manual">
+        <div class="selection__form">
+            <div class="field field--product_types">
+                <input type="hidden" name="product_types" id="id_product_types">
+                <div class="field__name">
+                    Product types
                 </div>
-                <span>
+                <ul class="selection__container selection__container--list">
+                    {% for value, label in options.product_types %}
+                        <div class="selection__row selection__row--first">
+                            <li class="drop selection__product-types" data-value="{{ value }}">
+                                {{ label }}
+                            </li>
+                        </div>
+                    {% endfor %}
+                </ul>
+                <div class="field__footer">
+                    <div class="field__errors">
+                        {% if form.product_types.errors %}
+                            At least one option required.
+                        {% endif %}
+                    </div>
+                    <span>
                 <button class="field__button field__button--select" type="button">Select all</button>
                 <button class="field__button field__button--clear" type="button">Clear all</button>
             </span>
-            </div>
-        </div>
-    </div>
-    <div class="selection__form selection__form--filters">
-        <div class="field field--filters">
-            <input type="hidden" name="filters" id="id_filters">
-            <div class="field__name">
-                Filters
-            </div>
-            <div class="categorySelection">
-                <div>Category</div>
-                <select class="filter__select">
-                    <option>--</option>
-                    {% for category in options.categories %}
-                        <option value="{{ category.codename }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="filters__container" style="display: none;">
-                <div class="filters__section">
-                    <div>Options</div>
-                    <!-- <button class="field__button field__button--filters field__button--show" type="button"
-                            data-filters="options">Show
-                    </button> -->
-                    <div class="selection__container selection__container--filters filters__options">
-                        {% for category in options.categories %}
-                            <div class="selection__form filters--{{ category.codename }}"
-                                 data-category="{{ category.codename }}" style="display: none;">
-                                <div class="selection__container selection__container--filters">
-                                    <ul class="selection__container selection__container--list selection__container--filters">
-                                        {% for value, label in category.filters %}
-                                            <div class="selection__row selection__row--first">
-                                                <li class="drop selection__filters enabledOption"
-                                                    data-value="{{ value }}"
-                                                    data-category="{{ category.codename }}">
-                                                    {{ label }}
-                                                </li>
-                                            </div>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="filters__section">
-                    <div>Selected</div>
-                    <!-- <button class="field__button field__button--filters field__button--show" type="button"
-                            data-filters="selected">Show
-                    </button> -->
-                    <div class="selection__container selection__container--filters filters__selected">
-                        {% for category in options.categories %}
-                            <div class="selection__form filters--{{ category.codename }}"
-                                 data-category="{{ category.codename }}" style="display: none;">
-                                <div class="selection__container selection__container--filters">
-                                    <ul class="selection__container selection__container--list selection__container--filters">
-                                    </ul>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
                 </div>
             </div>
-            <div class="field__footer">
+        </div>
+        <div class="selection__form selection__form--filters">
+            <div class="field field--filters">
+                <input type="hidden" name="filters" id="id_filters">
+                <div class="field__name">
+                    Filters
+                </div>
+                <div class="categorySelection">
+                    <div>Category</div>
+                    <select class="filter__select">
+                        <option>--</option>
+                        {% for category in options.categories %}
+                            <option value="{{ category.codename }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filters__container" style="display: none;">
+                    <div class="filters__section">
+                        <div>Options</div>
+                        <!-- <button class="field__button field__button--filters field__button--show" type="button"
+                                data-filters="options">Show
+                        </button> -->
+                        <div class="selection__container selection__container--filters filters__options">
+                            {% for category in options.categories %}
+                                <div class="selection__form filters--{{ category.codename }}"
+                                     data-category="{{ category.codename }}" style="display: none;">
+                                    <div class="selection__container selection__container--filters">
+                                        <ul class="selection__container selection__container--list selection__container--filters">
+                                            {% for value, label in category.filters %}
+                                                <div class="selection__row selection__row--first">
+                                                    <li class="drop selection__filters enabledOption"
+                                                        data-value="{{ value }}"
+                                                        data-category="{{ category.codename }}">
+                                                        {{ label }}
+                                                    </li>
+                                                </div>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="filters__section">
+                        <div>Selected</div>
+                        <!-- <button class="field__button field__button--filters field__button--show" type="button"
+                                data-filters="selected">Show
+                        </button> -->
+                        <div class="selection__container selection__container--filters filters__selected">
+                            {% for category in options.categories %}
+                                <div class="selection__form filters--{{ category.codename }}"
+                                     data-category="{{ category.codename }}" style="display: none;">
+                                    <div class="selection__container selection__container--filters">
+                                        <ul class="selection__container selection__container--list selection__container--filters">
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="field__footer">
                 <span>
                     <button class="field__button field__button--select" type="button">Select all</button>
                     <button class="field__button field__button--clear" type="button">Clear all</button>
                 </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="selection__form">
+            <div class="field field--years">
+                <input type="hidden" name="years" id="id_years">
+                <div class="field__name">
+                    Years
+                </div>
+                <ul class="selection__container selection__container--list">
+                    <div class="selection__row selection__row--first">
+                        {% for num in options.years|rest_range:5 %}
+                            <li class="selection__year--invisible"></li>
+                        {% endfor %}
+                        {% for value, year in options.years %}
+                            <li class="drop selection__year" data-value="{{ value }}">
+                                {{ year }}
+                            </li>
+                            {% if year|modulo:5 == 0 %}
+                                </div>
+                                <div class="selection__row">
+                            {% endif %}
+                        {% endfor %}
+                        {% for num in 2|times %}
+                            <li class="selection__year--invisible"></li>
+                        {% endfor %}
+                        </div>
+                </ul>
+                <div class="field__footer">
+                <span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
+                </div>
+            </div>
+            <div class="field field--months">
+                <input type="hidden" name="months" id="id_months">
+                <div class="field__name">
+                    Months
+                </div>
+                <ul class="selection__container selection__container--list">
+                    <div class="selection__row">
+                        {% for value, month in options.months %}
+                            <li class="drop selection__month" data-value="{{ value }}">
+                                {{ month }}
+                            </li>
+                            {% if value|modulo:3 == 0 %}
+                                </div>
+                                <div class="selection__row">
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                </ul>
+                <div class="field__footer">
+                <span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
+                </div>
+            </div>
+            <div class="field field--days">
+                <input type="hidden" name="days" id="id_days">
+                <div class="field__name">
+                    Days
+                </div>
+                <ul class="selection__container selection__container--list">
+                    <div class="selection__row">
+                        {% for value, day in options.days %}
+                            <li class="drop" data-value="{{ day }}">
+                                {{ day }}
+                            </li>
+                            {% if day|modulo:7 == 0 %}
+                                </div>
+                                <div class="selection__row">
+                            {% endif %}
+                        {% endfor %}
+                        {% for num in 4|times %}
+                            <li class="selection__day--invisible"></li>
+                        {% endfor %}
+                        </div>
+                </ul>
+                <div class="field__footer">
+                <span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
+                </div>
+            </div>
+            <div class="field field--hours">
+                <input type="hidden" name="hours" id="id_hours">
+                <div class="field__name">
+                    Hours
+                </div>
+                <ul class="selection__container selection__container--list">
+                    <div class="selection__row">
+                        {% for iterator, hour in options.hours %}
+                            <li class="drop" data-value="{{ hour }}">
+                                {{ hour }}
+                            </li>
+                            {% if iterator|modulo:6 == 5 %}
+                                </div>
+                                <div class="selection__row">
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                </ul>
+                <div class="field__footer">
+                <span>
+                    <button class="field__button field__button--select" type="button">Select all</button>
+                    <button class="field__button field__button--clear" type="button">Clear all</button>
+                </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="format__container">
+            <div class="field field--format_sea_level" style="display: none;">
+                <div class="field__name">
+                    Format
+                </div>
+                <ul class="selection__container--list">
+                    {% for value, format in options.formats_sea_level %}
+                        <li class="selection__format">
+                            <label>
+                                <input name="format_sea_level" type="radio"
+                                       value="{{ value }}">
+                                <span class="selection__label">{{ format }}</span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="field field--format_era5">
+                <div class="field__name">
+                    Format
+                </div>
+                <ul class="selection__container--list">
+                    {% for value, format in options.formats_era5 %}
+                        <li class="selection__format">
+                            <label>
+                                <input name="format_era5" type="radio"
+                                       value="{{ value }}">
+                                <span class="selection__label">{{ format }}</span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
 
-    <div class="selection__form">
-        <div class="field field--years">
-            <input type="hidden" name="years" id="id_years">
-            <div class="field__name">
-                Years
-            </div>
-            <ul class="selection__container selection__container--list">
-                <div class="selection__row selection__row--first">
-                    {% for num in options.years|rest_range:5 %}
-                        <li class="selection__year--invisible"></li>
-                    {% endfor %}
-                    {% for value, year in options.years %}
-                        <li class="drop selection__year" data-value="{{ value }}">
-                            {{ year }}
-                        </li>
-                        {% if year|modulo:5 == 0 %}
-                            </div>
-                            <div class="selection__row">
-                        {% endif %}
-                    {% endfor %}
-                    {% for num in 2|times %}
-                        <li class="selection__year--invisible"></li>
-                    {% endfor %}
+    <div class="random hide">
+        <div class="selection__form">
+            <input type="hidden" name="numberofforms" id="id_numberofforms" value="manual">
+            <div class="field field--numberofforms">
+                <div class="selection__container selection__container--numberofforms formSelection">
+                    <div class="field__title-bar">
+                        <div class="field__name">
+                            Number of forms
+                        </div>
                     </div>
-            </ul>
-            <div class="field__footer">
-                <span>
-                    <button class="field__button field__button--select" type="button">Select all</button>
-                    <button class="field__button field__button--clear" type="button">Clear all</button>
-                </span>
-            </div>
-        </div>
-        <div class="field field--months">
-            <input type="hidden" name="months" id="id_months">
-            <div class="field__name">
-                Months
-            </div>
-            <ul class="selection__container selection__container--list">
-                <div class="selection__row">
-                    {% for value, month in options.months %}
-                        <li class="drop selection__month" data-value="{{ value }}">
-                            {{ month }}
-                        </li>
-                        {% if value|modulo:3 == 0 %}
-                            </div>
-                            <div class="selection__row">
-                        {% endif %}
-                    {% endfor %}
-                    </div>
-            </ul>
-            <div class="field__footer">
-                <span>
-                    <button class="field__button field__button--select" type="button">Select all</button>
-                    <button class="field__button field__button--clear" type="button">Clear all</button>
-                </span>
-            </div>
-        </div>
-        <div class="field field--days">
-            <input type="hidden" name="days" id="id_days">
-            <div class="field__name">
-                Days
-            </div>
-            <ul class="selection__container selection__container--list">
-                <div class="selection__row">
-                    {% for value, day in options.days %}
-                        <li class="drop" data-value="{{ day }}">
-                            {{ day }}
-                        </li>
-                        {% if day|modulo:7 == 0 %}
-                            </div>
-                            <div class="selection__row">
-                        {% endif %}
-                    {% endfor %}
-                    {% for num in 4|times %}
-                        <li class="selection__day--invisible"></li>
-                    {% endfor %}
-                    </div>
-            </ul>
-            <div class="field__footer">
-                <span>
-                    <button class="field__button field__button--select" type="button">Select all</button>
-                    <button class="field__button field__button--clear" type="button">Clear all</button>
-                </span>
-            </div>
-        </div>
-        <div class="field field--hours">
-            <input type="hidden" name="hours" id="id_hours">
-            <div class="field__name">
-                Hours
-            </div>
-            <ul class="selection__container selection__container--list">
-                <div class="selection__row">
-                    {% for iterator, hour in options.hours %}
-                        <li class="drop" data-value="{{ hour }}">
-                            {{ hour }}
-                        </li>
-                        {% if iterator|modulo:6 == 5 %}
-                            </div>
-                            <div class="selection__row">
-                        {% endif %}
-                    {% endfor %}
-                    </div>
-            </ul>
-            <div class="field__footer">
-                <span>
-                    <button class="field__button field__button--select" type="button">Select all</button>
-                    <button class="field__button field__button--clear" type="button">Clear all</button>
-                </span>
+                    <input id="numberofforms_select" type="number" value="1" min="1" max="100" step="1">
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="format__container">
-        <div class="field field--format_sea_level" style="display: none;">
-            <div class="field__name">
-                Format
-            </div>
-            <ul class="selection__container--list">
-                {% for value, format in options.formats_sea_level %}
-                    <li class="selection__format">
-                        <label>
-                            <input name="format_sea_level" type="radio"
-                                   value="{{ value }}">
-                            <span class="selection__label">{{ format }}</span>
-                        </label>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <div class="field field--format_era5">
-            <div class="field__name">
-                Format
-            </div>
-            <ul class="selection__container--list">
-                {% for value, format in options.formats_era5 %}
-                    <li class="selection__format">
-                        <label>
-                            <input name="format_era5" type="radio"
-                                   value="{{ value }}">
-                            <span class="selection__label">{{ format }}</span>
-                        </label>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
     <div class="submission">
         <button id="submit" type="button" class="field__button field__button--submit" value="Submit">Submit</button>
         <button type="button" class="field__button field__button--submit">Save draft</button>

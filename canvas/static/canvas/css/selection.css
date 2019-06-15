@@ -30,7 +30,9 @@ body {
     max-width: 60vw;
 }
 
-.field--dataset {
+.field--dataset,
+.field--fillingtype,
+.field--numberofforms {
     margin: 0.2vw 1vw;
     margin-top: 1vw;
     min-width: 60vw;
@@ -217,4 +219,8 @@ body {
 .formSelection {
     display: flex;
     flex-direction: row;
+}
+
+.hide {
+    display: none;
 }
