@@ -90,7 +90,7 @@ class File(View):
                 if f.extension[1] == file_format:
                     file_format = f.extension[0]
 
-            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format)
+            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format[0])
 
             if task.status != 'downloaded':
                 raise IOError('file is not fully downloaded yet')
@@ -98,7 +98,7 @@ class File(View):
                 file_data = f.read()
 
             response = HttpResponse(file_data, content_type='application/octet-stream')
-            response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format
+            response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format[0]
             return response
         except (KeyError, IOError, TaskModel.DoesNotExist):
             return HttpResponse(status=404)
