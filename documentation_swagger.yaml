@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   title: Copernicus Data Proxy API
   contact:
-    name: Team "6" (Wojciech Fabjańczuk, Wiktor Michalski, Konrad Opaliński)
+    name: programmers from Team "6" (Wojciech Fabjańczuk, Wiktor Michalski, Konrad Opaliński)
     email: wojciechfabjanczuk@gmail.com
 
   license:
@@ -13,24 +13,18 @@ info:
 
 # tags are used for organizing operations
 tags:
-- name: TaskList
-  description: Displaying all Copernicus requests (Tasks) and adding new task to the list
-- name: Task
-  description: Displaying all information about existing single Copernicus request (Task) and deleting specified Copernicus request
-- name: File
+- name: Tasks
+  description: Copernicus requests (Tasks)
+- name: Files
   description: Downloading files
-- name: DataSetList
-  description: Displaying all data sets and creating new one
-- name: DataSet
-  description: Displaying, editing or deleting single data set
-- name: MockInterface
-  description: Interface prototype for testing (Enable by uncommenting "path('canvas/', include('canvas.urls'))," in copernicus_proxy/urls.py)
+- name: Data Sets
+  description: Copernicus Data Sets
 
 paths:
-  /service/task:
+  /service/tasks:
     get:
       tags:
-      - TaskList
+      - Tasks
       summary: Displaying all Copernicus requests (Tasks)
       produces:
       - application/json
@@ -43,7 +37,7 @@ paths:
               $ref: '#/definitions/Task'
     post:
       tags:
-      - TaskList
+      - Tasks
       summary: Adds new Copernicus request (Task)
       consumes:
       - application/json
@@ -66,17 +60,17 @@ paths:
                 example: 2
         400:
           description: ValidationError
-  /service/task/{url_id}:
+  /service/tasks/{task_id}:
     parameters:
       - in: path
-        name: url_id
+        name: task_id
         type: integer
         required: true
         description: Numeric ID of the Copernicus request to get
     get:
       tags:
-      - Task
-      summary: Displaying all information about single Copernicus request (Task) indicated by url_id
+      - Tasks
+      summary: Displaying all information about single Copernicus request (Task) indicated by task_id
       produces:
       - application/json
       responses:
@@ -85,29 +79,29 @@ paths:
           schema:
             $ref: '#/definitions/Task'
         404:
-          description: Copernicus request with url_id not found
+          description: Copernicus request with task_id not found
     delete:
       tags:
-      - Task
-      summary: Softly deleting Copernicus request (Task) indicated by url_id
+      - Tasks
+      summary: Softly deleting Copernicus request (Task) indicated by task_id
       description: If task is being downloaded in the moment of the deletion, it will be finished unless workers are restarted.
       produces:
       - application/json
       responses:
         200:
-          description: Copernicus request with url_id deleted
+          description: Copernicus request with task_id deleted
         404:
-          description: Copernicus request with url_id not found
-  /service/file/{url_id}:
+          description: Copernicus request with task_id not found
+  /service/files/{file_id}:
     parameters:
       - in: path
-        name: url_id
+        name: file_id
         type: integer
         required: true
         description: Numeric ID of the downloaded file (same as its Copernicus request) to get
     get:
       tags:
-      - File
+      - Files
       summary: Sends downloaded files
       produces:
       - application/octet-stream
@@ -116,10 +110,10 @@ paths:
           description: Downloaded file sent
         404:
           description: File not found
-  /service/dataset:
+  /service/datasets:
     get:
       tags:
-      - DataSetList
+      - Data Sets
       summary: Displaying all Data Set configurations
       description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
       produces:
@@ -133,7 +127,7 @@ paths:
               $ref: '#/definitions/DataSet'
     post:
       tags:
-      - DataSetList
+      - Data Sets
       summary: Adds new Copernicus Data Set configuration
       description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
       consumes:
@@ -157,31 +151,31 @@ paths:
                 example: 2
         400:
           description: ValidationError
-  /service/dataset/{url_id}:
+  /service/datasets/{dataset_id}:
     parameters:
       - in: path
-        name: url_id
+        name: dataset_id
         type: integer
         required: true
         description: Numeric ID of the Copernicus Data Set configuration
     get:
       tags:
-      - DataSet
-      summary: Displaying all information about single Copernicus Data Set configuration indicated by url_id
+      - Data Sets
+      summary: Displaying all information about single Copernicus Data Set configuration indicated by dataset_id
       description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
       produces:
       - application/json
       responses:
         200:
-          description: Information about Copernicus Data Set configuration indicated by url_id
+          description: Information about Copernicus Data Set configuration indicated by dataset_id
           schema:
               $ref: '#/definitions/DataSet'
         404:
-          description: Copernicus Data Set configuration indicated by url_id does not found
+          description: Copernicus Data Set configuration indicated by dataset_id does not found
     put:
       tags:
-      - DataSet
-      summary: Edit Copernicus Data Set configuration indicated by url_id
+      - Data Sets
+      summary: Edit Copernicus Data Set configuration indicated by dataset_id
       description: DataSetAttributeList properties can have values "all", "at_least_one" or "one". Note that string "all" validates TaskJsonContent option value equal to "all", not ANY value!
       consumes:
       - application/json
@@ -190,7 +184,7 @@ paths:
       parameters:
       - in: body
         name: DataSetJson
-        description: Copernicus Data Set configuration data to replace old one indicated by url_id
+        description: Copernicus Data Set configuration data to replace old one indicated by dataset_id
         schema:
           $ref: '#/definitions/DataSetJson'
       responses:
@@ -199,36 +193,18 @@ paths:
         400:
           description: ValidationError
         404:
-          description: Copernicus Data Set configuration indicated by url_id does not found
+          description: Copernicus Data Set configuration indicated by dataset_id does not found
     delete:
       tags:
-      - DataSet
-      summary: Deleting Copernicus Data Set configuration indicated by url_id
+      - Data Sets
+      summary: Deleting Copernicus Data Set configuration indicated by dataset_id
       produces:
       - application/json
       responses:
         200:
-          description: Copernicus Data Set configuration indicated by url_id deleted
+          description: Copernicus Data Set configuration indicated by dataset_id deleted
         404:
-          description: Copernicus Data Set configuration indicated by url_id not found
-  /canvas/copernicus:
-    get:
-      tags:
-      - MockInterface
-      summary: Copernicus request (Task) builder
-      description: Enable by uncommenting "path('canvas/', include('canvas.urls'))," in copernicus_proxy/urls.py
-      responses:
-        200:
-          description: Generated view
-  /canvas/db_browser:
-    get:
-      tags:
-      - MockInterface
-      summary: Database table with all Copernicus requests (Tasks) data
-      description: Enable by uncommenting "path('canvas/', include('canvas.urls'))," in copernicus_proxy/urls.py
-      responses:
-        200:
-          description: Generated view
+          description: Copernicus Data Set configuration indicated by dataset_id not found
 definitions:
   TaskJsonContent:
     type: object

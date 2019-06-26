@@ -15,7 +15,7 @@ def reset_workers(n):
     )
 
 
-def reset_task_queue():
+def reload_task_queue():
     TaskModel.mark_being_downloaded_as_pending()
     pending_list = sorted(TaskModel.get_all_pending())
     for pk in pending_list:
@@ -40,4 +40,4 @@ class Command(BaseCommand):
             raise CommandError('Maximum number of workers is ' + str(WORKERS_LIMIT))
 
         reset_workers(n)
-        reset_task_queue()
+        reload_task_queue()

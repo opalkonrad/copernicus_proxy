@@ -5,7 +5,7 @@ from django.views.generic import ListView
 import canvas.forms.copernicus_choices as options
 from django.shortcuts import redirect
 from django.urls import reverse
-from service.management.commands.restartworkers import reset_task_queue, reset_workers
+from service.management.commands.restartworkers import reload_task_queue, reset_workers
 from service.models import Task as TaskModel
 from canvas.random.random_sea_level import generate_sea_level
 from canvas.random.random_era5 import generate_era5
@@ -62,12 +62,12 @@ class DatabaseBrowser(ListView):
             task_url = self.request.build_absolute_uri(reverse('task', kwargs={'url_id': task_id}))
             requests.delete(task_url)
             reset_workers(number_of_workers)
-            reset_task_queue()
+            reload_task_queue()
         elif action == 'delete_all':
             TaskModel.objects.all().delete()
             file_location = os.path.join(BASE_DIR, 'files')
             if os.path.exists(file_location):
                 shutil.rmtree(file_location)
             reset_workers(number_of_workers)
-            reset_task_queue()
+            reload_task_queue()
         return redirect('/canvas/db_browser/')
