@@ -57,16 +57,16 @@ class Task(CsrfFreeView):
     and deleting (DELETE) specified task
     """
 
-    def get(self, request, url_id):
+    def get(self, request, task_id):
         try:
-            task = TaskModel.objects.get(id=url_id)
+            task = TaskModel.objects.get(id=task_id)
             return JsonResponse(task.to_dict())
         except TaskModel.DoesNotExist:
             return HttpResponse(status=404)
 
-    def delete(self, request, url_id):
+    def delete(self, request, task_id):
         try:
-            task = TaskModel.objects.get(id=url_id)
+            task = TaskModel.objects.get(id=task_id)
             task.delete()
             return HttpResponse(status=200)
         except TaskModel.DoesNotExist:
@@ -78,9 +78,9 @@ class File(View):
     View for downloading (GET) single file indicated by 'id' in the URL
     """
 
-    def get(self, request, url_id):
+    def get(self, request, file_id):
         try:
-            task = TaskModel.objects.get(id=url_id)
+            task = TaskModel.objects.get(id=file_id)
             json_content = json.loads(task.json_content)
 
             data_set = json_content['data_set']
@@ -90,7 +90,7 @@ class File(View):
                 if f.extension[1] == file_format:
                     file_format = f.extension[0]
 
-            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(url_id) + file_format[0])
+            file_location = os.path.join(BASE_DIR, 'files', data_set, 'file_id_' + str(file_id) + file_format)
 
             if task.status != 'downloaded':
                 raise IOError('file is not fully downloaded yet')
@@ -98,7 +98,7 @@ class File(View):
                 file_data = f.read()
 
             response = HttpResponse(file_data, content_type='application/octet-stream')
-            response['Content-Disposition'] = 'attachment; filename="file_id_' + str(url_id) + file_format[0]
+            response['Content-Disposition'] = 'attachment; filename="file_id_' + str(file_id) + file_format
             return response
         except (KeyError, IOError, TaskModel.DoesNotExist):
             return HttpResponse(status=404)
@@ -131,19 +131,19 @@ class DataSet(CsrfFreeView):
     View for displaying (GET) information about, editing (PUT) and deleting (DELETE) single Data Set indicated by 'id'
     """
 
-    def get(self, request, url_id):
+    def get(self, request, dataset_id):
         try:
-            return JsonResponse(DataSetModel.objects.get(id=url_id).to_dict(), safe=False)
+            return JsonResponse(DataSetModel.objects.get(id=dataset_id).to_dict(), safe=False)
         except DataSetModel.DoesNotExist:
             return HttpResponse(status=404)
 
-    def put(self, request, url_id):
+    def put(self, request, dataset_id):
         try:
             req_json = json.loads(request.body)
             ds = req_json["data_set"]
             attrs = json.dumps(req_json["attributes"])
 
-            existing_db_record = DataSetModel.objects.get(id=url_id)
+            existing_db_record = DataSetModel.objects.get(id=dataset_id)
             existing_db_record.name = ds
             existing_db_record.attributes = attrs
             existing_db_record.full_clean()
@@ -154,9 +154,9 @@ class DataSet(CsrfFreeView):
         except DataSetModel.DoesNotExist:
             return HttpResponse(status=404)
 
-    def delete(self, request, url_id):
+    def delete(self, request, dataset_id):
         try:
-            DataSetModel.objects.get(id=url_id).delete()
+            DataSetModel.objects.get(id=dataset_id).delete()
             return HttpResponse(status=200)
         except DataSetModel.DoesNotExist:
             return HttpResponse(status=404)

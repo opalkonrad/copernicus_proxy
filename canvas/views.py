@@ -59,7 +59,7 @@ class DatabaseBrowser(ListView):
         task_id = request.POST.get('task_id', '')
         number_of_workers = int(request.POST.get('number_of_workers', '5'))
         if action == 'delete':
-            task_url = self.request.build_absolute_uri(reverse('task', kwargs={'url_id': task_id}))
+            task_url = self.request.build_absolute_uri(reverse('task', kwargs={'task_id': task_id}))
             requests.delete(task_url)
             reset_workers(number_of_workers)
             reload_task_queue()
