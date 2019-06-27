@@ -5,8 +5,8 @@ RESTful API for download management of data from Copernicus Climate Data Store: 
 Swagger documentation: https://app.swaggerhub.com/apis-docs/wfabjanczuk/copernicus_proxy/1.0.0
 
 Mock interface for testing purposes is available at URL `canvas/copernicus/`. Enable it by:
-- setting `Debug = True` in `settings.py`
-- uncommenting `path('canvas/', include('canvas.urls')),` in `copernicus_proxy/urls.py`. 
+- uncommenting `path('canvas/', include('canvas.urls')),` in `copernicus_proxy/urls.py`,
+- entering command `python3.7 manage.py collectstatic` in the project root folder.
 
 Online demo (debug mode, no downloading and 20 maximum tasks) can be seen here: https://intense-island-59212.herokuapp.com/canvas/copernicus/
 
