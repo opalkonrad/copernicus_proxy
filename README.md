@@ -22,7 +22,7 @@ At first do not forget to initialize Django database in the project root folder 
 python3.7 manage.py migrate
 ```
 
-To restart workers and reload task queue use the following commands (unfinished tasks will be restarted):
+To start or restart workers and reload task queue use the following commands (unfinished tasks will be restarted):
 
 ```
 python3.7 manage.py restartworkers <number_of_workers>
